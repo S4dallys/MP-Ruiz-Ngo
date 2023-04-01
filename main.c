@@ -2,524 +2,566 @@
 
 /*******************************************/
 
+// main header
 #include "main.h"
 
-int main() 
+// main
+int 
+main() 
 {
-  userType user_Database [MAX_USERS];
-  itemType item_Database [MAX_ITEMS];
-  itemType user_Cart[10];
+    userType  user_Database [MAX_USERS];
+    itemType  item_Database [MAX_ITEMS];
 
-  char choice;
+    long long user_ID;
+    long long item_ID;
+    long long addend;
 
-  int user_Database_Count;
-  int item_Database_Count;
-  int item_Cart_Count;
+    int  user_Database_Count;
+    int  item_Database_Count;
+    int  item_Cart_Count;
 
-  int user_Product_Indices[20];
-  int user_Product_Count;
+    int  user_Product_Indices[20];
+    int  user_Product_Count;
 
-  int item_Index;
+    itemType  user_Cart[10];
+    String30  user_Cart_Name;
+    String15  password;
 
-  int i;
+    boolean  done;
+    boolean  user_Done;
+    boolean  sell_Done;
+    boolean  buy_Done;
+    boolean  edit_Stock_Done;
+    boolean  edit_Cart_Done;
+    boolean  check_Out_Done;
+    boolean  admin_Done;
+    boolean  valid_Input;
+    boolean  has_Inputted;
 
-  boolean done;
-  boolean user_Done;
-  boolean sell_Done;
-  boolean buy_Done;
-  boolean edit_Stock_Done;
-  boolean edit_Cart_Done;
-  boolean check_Out_Done;
-  boolean admin_Done;
-  boolean valid_Input;
-  boolean has_Inputted;
-  
-  FILE *user_File_Pointer;
-  FILE *item_File_Pointer;
-  FILE *cart_File_Pointer;
+    FILE *  user_File_Pointer;
+    FILE *  item_File_Pointer;
+    FILE *  cart_File_Pointer;
 
-  long long user_ID;
-  long long item_ID;
-  long long addend;
+    String30 main_Menu_Choices[4] =  {"Register as a User",
+                                      "User Menu",
+                                      "Admin Menu",
+                                      "Exit"};
 
-  String30 user_Cart_Name;
-  String15 password;
+    String30 user_Menu_Choices[3] =  {"Sell Menu",
+                                      "Buy Menu", 
+                                      "Exit"};
 
-  String30 main_Menu_Choices[4] = {"Register as a User",
-                                  "User Menu",
-                                  "Admin Menu",
-                                  "Exit"};
+    String30 sell_Menu_Choices[5] =  {"Add New Item", 
+                                      "Edit Stock",
+                                      "Show My Products",
+                                      "Show My Low Stock Products",
+                                      "Exit Sell Menu"};
+    
+    String30 buy_Menu_Choices[8] =   {"View All Products",
+                                      "Show Products by Certain Seller",
+                                      "Search Products by Category",
+                                      "Search Products by Name",
+                                      "Add to Cart",
+                                      "Edit Cart",
+                                      "Check Out Menu",
+                                      "Exit Buy Menu"};
 
-  String30 user_Menu_Choices[3] = {"Sell Menu", "Buy Menu", "Exit"};
+    String30 edit_Stock_Choices[6] = {"Replenish", 
+                                      "Change Price",
+                                      "Change Item Name",
+                                      "Change Category",
+                                      "Change Description",
+                                      "Finish Editing"};
 
-  String30 sell_Menu_Choices[5] = {"Add New Item", 
-                                   "Edit Stock",
-                                   "Show My Products",
-                                   "Show My Low Stock Products",
-                                   "Exit Sell Menu"};
-  
-  String30 buy_Menu_Choices[8] = {"View All Products",
-                                  "Show Products by Certain Seller",
-                                  "Search Products by Category",
-                                  "Search Products by Name",
-                                  "Add to Cart",
-                                  "Edit Cart",
-                                  "Check Out Menu",
-                                  "Exit Buy Menu"};
+    String30 edit_Cart_Choices[4] =  {"Remove All Items Of Seller",
+                                      "Remove Specific Item",
+                                      "Edit Quantity",
+                                      "Finish Edit Cart"};
 
-  String30 edit_Stock_Choices[6] = {"Replenish", 
-                                   "Change Price",
-                                   "Change Item Name",
-                                   "Change Category",
-                                   "Change Description",
-                                   "Finish Editing"};
+    String30 check_Out_Choices[4] =  {"All",
+                                      "By a Specific Seller",
+                                      "Specific Item",
+                                      "Exit Check Out"};
 
-  String30 edit_Cart_Choices[4] = {"Remove All Items Of Seller",
-                                   "Remove Specific Item",
-                                   "Edit Quantity",
-                                   "Finish Edit Cart"};
+    String30 admin_Menu_Choices[6] = {"Show All Users",
+                                      "Show All Sellers",
+                                      "Show Total Sales in Period",
+                                      "Show Sellers Sales",
+                                      "Show Shopaholics",
+                                      "Back to Main Menu"};
 
-  String30 check_Out_Choices[4] = {"All",
-                                   "By a Specific Seller",
-                                   "Specific Item",
-                                   "Exit Check Out"};
+    char  choice;
+    int   item_Index;
+    int   i;
 
-  String30 admin_Menu_Choices[6] = {"Show All Users",
-                                    "Show All Sellers",
-                                    "Show Total Sales in Period",
-                                    "Show Sellers Sales",
-                                    "Show Shopaholics",
-                                    "Back to Main Menu"};
+    // Initialize USER DATABASE
+    user_File_Pointer = fopen ("Users.txt", "r");
 
-  user_File_Pointer = fopen ("Users.txt", "r");
-  if (user_File_Pointer == NULL)
-    user_Database_Count = 0;
-  else
-    initialize_User_Database(user_File_Pointer, 
-                             user_Database, &user_Database_Count);
-  fclose (user_File_Pointer);
+    if (user_File_Pointer == NULL)
+        user_Database_Count = 0;
+    else
+        initialize_User_Database (user_File_Pointer, 
+                                  user_Database, 
+                                  &user_Database_Count);
 
-  item_File_Pointer = fopen ("Items.txt", "r");
-  if (item_File_Pointer == NULL)
-    item_Database_Count = 0;
-  else
-    initialize_Item_Database(item_File_Pointer, 
-                             item_Database, &item_Database_Count);
-  fclose (item_File_Pointer);
+    fclose (user_File_Pointer);
 
-  done = FALSE;
+    // Initialize ITEM DATABASE
+    item_File_Pointer = fopen ("Items.txt", "r");
 
-  do
+    if (item_File_Pointer == NULL)
+        item_Database_Count = 0;
+    else
+        initialize_Item_Database (item_File_Pointer, 
+                                  item_Database, &item_Database_Count);
+
+    fclose (item_File_Pointer);
+
+    done = FALSE;
+
+    do
     {
-      
-      sort_Users_By_ID(user_Database, user_Database_Count);
-      choice = display_Menu ("Main", main_Menu_Choices, 4);
-      switch (choice)
+        
+        sort_Users_By_ID(user_Database, user_Database_Count);
+        choice = display_Menu ("Main", main_Menu_Choices, 4);
+
+        switch (choice)
         {
-          
-          case USER_REGISTRATION: //user registration
+
+        //user registration
+        case USER_REGISTRATION: 
             register_User(user_Database, &user_Database_Count);
             break;
-          
-          case USER_MODE: //user menu
+        
+        //user menu
+        case USER_MODE: 
 
-            sprintf(user_Cart_Name, "%I64d.bag", user_ID);
-            
-            
-            if (login_User(user_Database, user_Database_Count, &user_ID) == 
-                VALID)
+        sprintf(user_Cart_Name, "%I64d.bag", user_ID);
+                   
+        if (login_User(user_Database, user_Database_Count, &user_ID) == VALID)
+        {
+            user_Done = FALSE;
+                
+            do
             {
-              user_Done = FALSE;
-              
-              do
-              {
-                
                 choice = display_Menu ("User", user_Menu_Choices, 3);
-                
-                switch (choice)
-                  {
                     
-                    case SELL_MENU:
-                      sell_Done = FALSE;
-                      do
+                switch (choice)
+                {
+
+                case SELL_MENU:
+                    sell_Done = FALSE;
+
+                    do
+                    {
+                        user_Product_Count = find_User_Product(item_Database, 
+                                                                item_Database_Count, 
+                                                                user_ID, 
+                                                                user_Product_Indices);
+                        
+                        sort_Item_Array_By_ID (item_Database, 
+                                            user_Product_Indices, 
+                                            user_Product_Count);
+                        
+                        choice = display_Menu ("Sell", sell_Menu_Choices, 5);
+                        
+                        switch(choice)
                         {
-                          user_Product_Count = find_User_Product(item_Database, 
-                                                                 item_Database_Count, 
-                                                                 user_ID, 
-                                                                 user_Product_Indices);
-                          
-                          sort_Item_Array_By_ID (item_Database, 
-                                                 user_Product_Indices, 
-                                                 user_Product_Count);
-                          
-                          choice = display_Menu ("Sell", sell_Menu_Choices, 5);
-                          
-                          switch(choice)
+                            
+                        case ADD_NEW_ITEM:
+                            if (count_User_Items(item_Database, 
+                                                item_Database_Count, 
+                                                user_ID) > 20)
                             {
-                              
-                              case ADD_NEW_ITEM:
+                                printf("\tERROR: Max capacity for items sold reached.\n");
+                                let_Read();
+                            }     
+                            else
+                                register_Product(item_Database, &item_Database_Count, user_ID);
                                 
-                                if (count_User_Items(item_Database, 
-                                                     item_Database_Count, 
-                                                     user_ID) > 20)
-                                {
-                                  printf("\tERROR: Max capacity for items sold reached.\n");
-                                  let_Read();
-                                }
-                                  
-                                else
-                                  register_Product(item_Database, &item_Database_Count, user_ID);
-                                
-                                break;
-                              
-                              case EDIT_STOCK:
-                                
-                                edit_Stock_Done = FALSE;
-                                has_Inputted = FALSE;
-                                
-                                do
-                                  {
+                            break;
+                            
+                        case EDIT_STOCK:       
+                            edit_Stock_Done = FALSE;
+                            has_Inputted = FALSE;
                                     
-                                    display_Table_Ala_Show_My_Products (item_Database, 
+                            do
+                            {   
+                            display_Table_Ala_Show_My_Products (item_Database, 
+                                                                user_Product_Indices, 
+                                                                user_Product_Count);
+                                        
+                            valid_Input = TRUE;
+                                        
+                                do
+                                {          
+                                    if (!valid_Input)
+                                        printf("\tInvalid Input.\n");
+                                
+                                    prompt_Long_Long("Insert product ID: ", &item_ID);
+                                
+                                    valid_Input = find_Product_In_List(item_Database, 
+                                                                        item_ID, 
                                                                         user_Product_Indices, 
                                                                         user_Product_Count);
-                                    
-                                    valid_Input = TRUE;
-                                    
-                                    do
-                                      {
-                                        
-                                        if (!valid_Input)
-                                          printf("\tInvalid Input.\n");
-                                        
-                                        prompt_Long_Long("Insert product ID: ", &item_ID);
-                                        
-                                        valid_Input = find_Product_In_List(item_Database, 
-                                                                           item_ID, 
-                                                                           user_Product_Indices, 
-                                                                           user_Product_Count);
-                                        
-                                        if (valid_Input)
-                                        {
-                                          has_Inputted = TRUE;
-                                          item_Index = give_Item_Index_Via_ID (item_Database, 
-                                                                               item_ID, 
-                                                                               user_Product_Indices, 
-                                                                               user_Product_Count);
-                                        }
-                                        
-                                      } while (!valid_Input && !has_Inputted);
-                                    
-                                    choice = display_Menu("Edit Stock", edit_Stock_Choices, 6);
-                                    
-                                    switch (choice)
-                                      {
-                                        
-                                        case REPLENISH:
-                                          prompt_Long_Long("\nHow many would you like to add? ", 
-                                                           &addend);
-                                          if (item_Database[item_Index].quantity_Available + 
-                                              addend >= 0)
-                                            item_Database[item_Index].quantity_Available += addend;
-                                          else  
-                                          {
-                                            printf("\t");
-                                            printf("Error: Amount leads to value less than zero.");
-                                            new_Line();
-                                            let_Read();
-                                          }
-
-                                          break;
-                                        
-                                        case CHANGE_PRICE:
-                                          prompt_Double("\nWhat is the new price? ", 
-                                                        &item_Database[item_Index].unit_Price);
-                                          break;
-                                        
-                                        case CHANGE_ITEM_NAME:
-                                          prompt_StringN("\nWhat is the new name? ", 
-                                                         item_Database[item_Index].name, 
-                                                         20);
-                                          break;
-                                        
-                                        case CHANGE_CATEGORY:
-                                          prompt_StringN("\nWhat is the new category? ", 
-                                                         item_Database[item_Index].category, 
-                                                         15);
-                                          break;
-                                        
-                                        case CHANGE_DESCRIPTION:
-                                          prompt_StringN("\nWhat is the new description? ", 
-                                                         item_Database[item_Index].description, 
-                                                         30);
-                                          break;
-                                        
-                                        case FINISH_EDITING:
-                                          edit_Stock_Done = TRUE;
-                                          break;
-                                        
-                                      }
-                                    
-                                  } while (!edit_Stock_Done);
                                 
-                                break;
-                              
-                              case SHOW_MY_PRODUCTS:
-                                display_Table_Ala_Show_My_Products (item_Database, 
-                                                                    user_Product_Indices, 
-                                                                    user_Product_Count);
-                                new_Line();
-                                let_Read();
-                                break;
-                              
-                              case SHOW_MY_LOW_STOCK:
-                                i = 0;
-                                while ((i < user_Product_Count && choice != 'X') || choice != 'x')
-                                  {
-                                    if (item_Database[user_Product_Indices[i]].quantity_Available < 
-                                        5)
+                                    if (valid_Input)
                                     {
-                                      display_Item(item_Database[user_Product_Indices[i]]);
-                                      new_Line();
-                                      prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", &choice);
-                                      if (choice == 'N' || choice == 'n')
-                                      {
-                                        if (i + 1 == user_Product_Count)
-                                        {
-                                          printf("\tError: Index out of bounds\n");
-                                          let_Read();
-                                        }
-                                        else i++;
-                                      }
-  
-                                      else if (choice == 'B' || choice == 'b')
-                                      {
-                                        if (i - 1 < 0)
-                                        {
-                                          printf("\tError: Index out of bounds\n");
-                                          let_Read();
-                                        }
-                                        else i--;
-                                      }
+                                        has_Inputted = TRUE;
+                                        item_Index = give_Item_Index_Via_ID (item_Database, 
+                                                                            item_ID, 
+                                                                            user_Product_Indices, 
+                                                                            user_Product_Count);
+                                    }
+                                                
+                                } while (!valid_Input && !has_Inputted);
+                                            
+                                choice = display_Menu("Edit Stock", edit_Stock_Choices, 6);
+                                            
+                                switch (choice)
+                                {
+                                                    
+                                case REPLENISH:
+                                    prompt_Long_Long("\nHow many would you like to add? ", 
+                                                    &addend);
+
+                                    if (item_Database[item_Index].quantity_Available + 
+                                        addend >= 0)
+                                        item_Database[item_Index].quantity_Available += addend;
+                                    else  
+                                    {
+                                        printf("\t");
+                                        printf("Error: Amount leads to value less than zero.");
+                                        new_Line();
+                                        let_Read();
                                     }
 
-                                    else i++;
+                                    break;
+                                                    
+                                case CHANGE_PRICE:
+                                    prompt_Double("\nWhat is the new price? ", 
+                                                &item_Database[item_Index].unit_Price);
+
+                                    break;
+                                                    
+                                case CHANGE_ITEM_NAME:
+                                    prompt_StringN("\nWhat is the new name? ", 
+                                                    item_Database[item_Index].name, 20);
+
+                                    break;
+                                                    
+                                case CHANGE_CATEGORY:
+                                    prompt_StringN("\nWhat is the new category? ", 
+                                                    item_Database[item_Index].category, 
+                                                    15);
+
+                                    break;
+                                                    
+                                case CHANGE_DESCRIPTION:
+                                    prompt_StringN("\nWhat is the new description? ", 
+                                                    item_Database[item_Index].description, 
+                                                    30);
+
+                                    break;
+                                                    
+                                case FINISH_EDITING:
+                                    edit_Stock_Done = TRUE;
+
+                                    break;              
+                                }
+                                            
+                        } while (!edit_Stock_Done);
+                                        
+                        break;
                                     
-                                  }
-                                printf("Nothing follows...\n");
-                                let_Read();
-                                break;
-                              
-                              case EXIT_SELL:
-                                sell_Done = TRUE;
-                                break;
-                              
-                            }
-                          
-                        } while (!sell_Done);
-                      
-                    break;
-                    
-                    case BUY_MENU:
-                      
-                      buy_Done = FALSE;
-                      
-                      do
-                        {
-                          
-                          choice = display_Menu("Buy", buy_Menu_Choices, 7);
-                          
-                          switch (choice)
+                        case SHOW_MY_PRODUCTS:
+                            display_Table_Ala_Show_My_Products (item_Database, 
+                                                                user_Product_Indices, 
+                                                                user_Product_Count);
+                            new_Line();
+                            let_Read();
+
+                            break;
+                                
+                        case SHOW_MY_LOW_STOCK:
+                            i = 0;
+
+                            while ((i < user_Product_Count && choice != 'X') || choice != 'x')
                             {
-                              case VIEW_ALL_PRODUCTS:
+                                if (item_Database[user_Product_Indices[i]]
+                                    .quantity_Available < 5)
+                                {
+                                    display_Item(item_Database[user_Product_Indices[i]]);
+                                    new_Line();
+
+                                    prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", 
+                                                &choice);
+
+                                    if (choice == 'N' || choice == 'n')
+                                    {
+                                        if (i + 1 == user_Product_Count)
+                                        {
+                                            printf("\tError: Index out of bounds\n");
+                                            let_Read();
+                                        }
+                                        else i++;
+                                    }
+                                    else if (choice == 'B' || choice == 'b')
+                                    {
+                                        if (i - 1 < 0)
+                                        {
+                                            printf("\tError: Index out of bounds\n");
+                                            let_Read();
+                                        }
+                                        else i--;
+                                    }
+                                }
+                                else i++;   
+                            }
+
+                            printf("Nothing follows...\n");
+                            let_Read();
+
+                            break;
+                                
+                        case EXIT_SELL:
+                            sell_Done = TRUE;
+
+                            break;       
+                        }      
+                            
+                    } while (!sell_Done);
+                        
+                    break;
+                        
+                    case BUY_MENU:
+                        buy_Done = FALSE;
+                        
+                        do
+                        {
+                            
+                            choice = display_Menu("Buy", buy_Menu_Choices, 7);
+                            
+                            switch (choice)
+                            {
+
+                            case VIEW_ALL_PRODUCTS:
                                 sort_Users_By_ID(user_Database, user_Database_Count);
+
                                 i = 0;
                                 while (i < user_Database_Count && choice != 'X' && choice != 'x')
-                                  {
+                                {
                                     if (count_User_Items(item_Database, item_Database_Count,  
                                                          user_Database[i].user_ID) > 0)
                                     {
-                                      printf ("\tUser ID: %I64d\n", user_Database[i].user_ID);
-                                      new_Line();
-                                      display_Table_Ala_Show_My_Products();
-                                      prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", &choice);
-                                      if (choice == 'N' || choice == 'n')
-                                      {
-                                        if (i + 1 == user_Product_Count)
-                                        {
-                                          printf("\tError: Index out of bounds\n");
-                                          let_Read();
-                                        }
-                                        else i++;
-                                      }
-  
-                                      else if (choice == 'B' || choice == 'b')
-                                      {
-                                        if (i - 1 < 0)
-                                        {
-                                          printf("\tError: Index out of bounds\n");
-                                          let_Read();
-                                        }
-                                        else i--;
-                                      }
-                                    }
+                                        printf ("\tUser ID: %I64d\n", user_Database[i].user_ID);
+                                        new_Line();
 
-                                    else i++;
-                                    
-                                  }
+                                        // display_Table_Ala_Show_My_Products();
+
+                                        prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ",
+                                                    &choice);
+
+                                        if (choice == 'N' || choice == 'n')
+                                        {
+                                            if (i + 1 == user_Product_Count)
+                                            {
+                                                printf("\tError: Index out of bounds\n");
+                                                let_Read();
+                                            }
+                                            else i++;
+                                        }
+                                        else if (choice == 'B' || choice == 'b')
+                                        {
+                                            if (i - 1 < 0)
+                                            {
+                                                printf("\tError: Index out of bounds\n");
+                                                let_Read();
+                                            }
+                                            else i--;
+                                        }
+                                    }
+                                    else i++;     
+                                }
+
                                 printf("Nothing follows...\n");
                                 let_Read();
-                                break;
-                              
-                              case USE_SELLER_LENS:
-                                // insert code here
-                                break;
-                              
-                              case USE_CATEGORY_LENS:
-                                // insert code here
-                                break;
-                              
-                              case USE_NAME_LENS:
-                                // insert code here
-                                break;
-                              
-                              case ADD_TO_CART:
-                                // insert code here
-                                break;
 
-                              case EDIT_CART:
+                                break;
                                 
+                            case USE_SELLER_LENS:
+                                // insert code here
+
+                                break;
+                                
+                            case USE_CATEGORY_LENS:
+                                // insert code here
+
+                                break;
+                                
+                            case USE_NAME_LENS:
+                                // insert code here
+
+                                break;
+                                
+                            case ADD_TO_CART:
+                                // insert code here
+
+                                    break;
+
+                            case EDIT_CART:
                                 edit_Cart_Done = FALSE;
-                                
-                                do 
-                                  {
                                     
+                                do 
+                                { 
                                     choice = display_Menu("Cart Edit", edit_Cart_Choices, 4);
                                     
                                     switch (choice)
-                                      {
+                                    {
                                         
-                                        case REMOVE_ITEMS_OF_SELLER:
-                                          //insert code here
-                                          break;
+                                    case REMOVE_ITEMS_OF_SELLER:
+                                        //insert code here
+
+                                        break;
                                         
-                                        case REMOVE_SPECIFIC_ITEM:
-                                          //insert code here
-                                          break;
+                                    case REMOVE_SPECIFIC_ITEM:
+                                        //insert code here
+
+                                        break;
                                         
-                                        case EDIT_QUANTITY:
-                                          //insert code here
-                                          break;
+                                    case EDIT_QUANTITY:
+                                        //insert code here
+
+                                        break;
                                         
-                                        case FINISH_EDIT_CART:
-                                          edit_Cart_Done = TRUE;
-                                          break;
-                                        
-                                      }
+                                    case FINISH_EDIT_CART:
+                                        edit_Cart_Done = TRUE;
+
+                                        break; 
+                                    }
                                     
-                                  } while (!edit_Cart_Done);
-                                
+                                } while (!edit_Cart_Done);
+                                    
                                 break;
-                              
-                              case CHECK_OUT:
                                 
+                            case CHECK_OUT:
                                 check_Out_Done = FALSE;
-                                
-                                do
-                                  {
                                     
+                                do
+                                {    
                                     choice = display_Menu("Check Out", check_Out_Choices, 4);
                                     
                                     switch (choice)
-                                      {
-                                        case BUY_ALL:
-                                          //insert code here
-                                          break;
+                                    {
+                                    case BUY_ALL:
+                                        //insert code here
 
-                                        case BUY_BY_CERTAIN_SELLER:
-                                          //insert code here
-                                          break;
+                                        break;
 
-                                        case BUY_SPECIFIC_ITEM:
-                                          //insert code here
-                                          break;
+                                    case BUY_BY_CERTAIN_SELLER:
+                                        //insert code here
 
-                                        case EXIT_CHECK_OUT:
-                                          check_Out_Done = TRUE;
-                                          break;
-                                      }
+                                        break;
+
+                                    case BUY_SPECIFIC_ITEM:
+                                        //insert code here
+
+                                        break;
+
+                                    case EXIT_CHECK_OUT:
+                                        check_Out_Done = TRUE;
+
+                                        break;
+                                    }
                                     
-                                  } while (!check_Out_Done);
+                                } while (!check_Out_Done);
+                                    
+                                break;
                                 
-                                break;
-                              
-                              case EXIT_BUY:
+                            case EXIT_BUY:
                                 buy_Done = TRUE;
+
                                 break;
-                              
                             }
-                          
+                            
                         } while (!buy_Done);
-                      
-                    break;
-                    
-                    case EXIT_SELL:
-                      user_Done = TRUE;
-                      break;
-                    
-                  }
-                
-              } while (!user_Done);
-              
-            }
-            break;
-          
-          case ADMIN_MODE: //admin menu
-            prompt_StringN("Insert password: ", password, 15);
-            if (strcmp(ADMIN_PASSWORD, password) != 0)
-            {
-                printf("\tError: Invalid Password!\n");
-                let_Read();
-            }
-            else
-            {
-                admin_Done = FALSE;
-                do
-                {
-                    system("cls");
-                    choice = display_Menu ("Admin", admin_Menu_Choices, 6);
-                    switch (choice)
-                    {
-                        case SHOW_ALL_USERS:
-                        //insert code here
+                        
                         break;
-                        case SHOW_ALL_SELLERS:
-                        //insert code here
-                        break;
-                        case SHOW_TOTAL_SALES_IN_GIVEN_DURATION:
-                        //insert code here
-                        break;
-                        case SHOW_SELLERS_SALES:
-                        //insert code here
-                        break;
-                        case SHOW_SHOPAHOLICS:
-                        //insert code here
-                        break;
-                        case EXIT_ADMIN:
-                        admin_Done = TRUE;
+                        
+                    case EXIT_USER:
+                        user_Done = TRUE;
+
                         break;
                     }
-                } while (!admin_Done);
+                    
+                } while (!user_Done);
+                
             }
+
             break;
-          
-          case EXIT_PROGRAM:
-            upload_Item_Database(item_Database, item_Database_Count);
-            upload_User_Database(user_Database, user_Database_Count);
-            done = TRUE;
-            break;
-        }
-    } while (!done);
-  
-  return 0;
+            
+            //admin menu
+            case ADMIN_MODE: 
+                prompt_StringN("Insert password: ", password, 15);
+
+                if (strcmp(ADMIN_PASSWORD, password) != 0)
+                {
+                    printf("\tError: Invalid Password!\n");
+                    let_Read();
+                }
+                else
+                {
+                    admin_Done = FALSE;
+                    do
+                    {
+                        system("cls");
+                        choice = display_Menu ("Admin", admin_Menu_Choices, 6);
+                        switch (choice)
+                        {
+                        case SHOW_ALL_USERS:
+                            //insert code here
+
+                            break;
+
+                        case SHOW_ALL_SELLERS:
+                            //insert code here
+
+                            break;
+
+                        case SHOW_TOTAL_SALES_IN_GIVEN_DURATION:
+                            //insert code here
+
+                            break;
+
+                        case SHOW_SELLERS_SALES:
+                            //insert code here
+
+                            break;
+
+                        case SHOW_SHOPAHOLICS:
+                            //insert code here
+
+                            break;
+                        case EXIT_ADMIN:
+                            admin_Done = TRUE;
+
+                            break;
+                        }
+                    } while (!admin_Done);
+                }
+
+                break;
+            
+            case EXIT_PROGRAM:
+                upload_Item_Database(item_Database, item_Database_Count);
+                upload_User_Database(user_Database, user_Database_Count);
+
+                done = TRUE;
+
+                break;
+            }
+
+        } while (!done);
+    
+    return 0;
 }
