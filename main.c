@@ -126,8 +126,7 @@ int main()
           case USER_MODE: //user menu
 
             sprintf(user_Cart_Name, "%I64d.bag", user_ID);
-            
-            
+
             if (login_User(user_Database, user_Database_Count, &user_ID) == 
                 VALID)
             {
@@ -374,7 +373,7 @@ int main()
                                     else i++;
                                     
                                   }
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
                                 let_Read();
                                 break;
                               
