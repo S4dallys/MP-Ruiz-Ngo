@@ -283,25 +283,7 @@ int main()
                                       display_Item(item_Database[user_Product_Indices[i]]);
                                       new_Line();
                                       prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", &choice);
-                                      if (choice == 'N' || choice == 'n')
-                                      {
-                                        if (i + 1 == user_Product_Count)
-                                        {
-                                          printf("\tError: Index out of bounds\n");
-                                          let_Read();
-                                        }
-                                        else i++;
-                                      }
-  
-                                      else if (choice == 'B' || choice == 'b')
-                                      {
-                                        if (i - 1 < 0)
-                                        {
-                                          printf("\tError: Index out of bounds\n");
-                                          let_Read();
-                                        }
-                                        else i--;
-                                      }
+                                      if (choice == 'N' || choice == 'n') i++;
                                     }
 
                                     else i++;
