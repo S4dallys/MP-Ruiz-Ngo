@@ -816,7 +816,6 @@ int main()
                                     "Show Shopaholics",
                                     "Back to Main Menu"};
 
-  /*
   user_File_Pointer = fopen ("Users.txt", "r");
   if (user_File_Pointer == NULL)
     user_Database_Count = 0;
@@ -832,7 +831,6 @@ int main()
     initialize_Item_Database(item_File_Pointer, 
                              item_Database, &item_Database_Count);
   fclose (item_File_Pointer);
-  */
 
   done = FALSE;
 
