@@ -332,7 +332,7 @@ main()
                         do
                         {
                             
-                            choice = display_Menu("Buy", buy_Menu_Choices, 7);
+                            choice = display_Menu("Buy", buy_Menu_Choices, 8);
                             
                             switch (choice)
                             {
