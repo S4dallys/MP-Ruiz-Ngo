@@ -12,6 +12,7 @@
 #include "files.c"
 #include "user.c"
 #include "item.c"
+#include "string_funcs.c"
 
 // switch case macros
 #define USER_REGISTRATION        'A'
