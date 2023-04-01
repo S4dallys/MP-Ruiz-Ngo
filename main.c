@@ -139,193 +139,193 @@ main()
         //user menu
         case USER_MODE: 
 
-        sprintf(user_Cart_Name, "%I64d.bag", user_ID);
-                   
-        if (login_User(user_Database, user_Database_Count, &user_ID) == VALID)
-        {
-            user_Done = FALSE;
-                
-            do
+            if (login_User(user_Database, user_Database_Count, &user_ID) == VALID)
             {
-                choice = display_Menu ("User", user_Menu_Choices, 3);
-                    
-                switch (choice)
+                sprintf(user_Cart_Name, "%I64d.bag", user_ID);
+
+                user_Done = FALSE;
+                
+                do
                 {
-
-                case SELL_MENU:
-                    sell_Done = FALSE;
-
-                    do
+                    choice = display_Menu ("User", user_Menu_Choices, 3);
+                        
+                    switch (choice)
                     {
-                        user_Product_Count = find_User_Product(item_Database, 
-                                                                item_Database_Count, 
-                                                                user_ID, 
-                                                                user_Product_Indices);
-                        
-                        sort_Item_Array_By_ID (item_Database, 
-                                            user_Product_Indices, 
-                                            user_Product_Count);
-                        
-                        choice = display_Menu ("Sell", sell_Menu_Choices, 5);
-                        
-                        switch(choice)
+
+                    case SELL_MENU:
+                        sell_Done = FALSE;
+
+                        do
                         {
+                            user_Product_Count = find_User_Product(item_Database, 
+                                                                    item_Database_Count, 
+                                                                    user_ID, 
+                                                                    user_Product_Indices);
                             
-                        case ADD_NEW_ITEM:
-                            if (count_User_Items(item_Database, 
-                                                item_Database_Count, 
-                                                user_ID) > 20)
+                            sort_Item_Array_By_ID (item_Database, 
+                                                user_Product_Indices, 
+                                                user_Product_Count);
+                            
+                            choice = display_Menu ("Sell", sell_Menu_Choices, 5);
+                            
+                            switch(choice)
                             {
-                                printf("\tERROR: Max capacity for items sold reached.\n");
-                                let_Read();
-                            }     
-                            else
-                                register_Product(item_Database, &item_Database_Count, user_ID);
                                 
-                            break;
-                            
-                        case EDIT_STOCK:       
-                            edit_Stock_Done = FALSE;
-                            has_Inputted = FALSE;
+                            case ADD_NEW_ITEM:
+                                if (count_User_Items(item_Database, 
+                                                    item_Database_Count, 
+                                                    user_ID) > 20)
+                                {
+                                    printf("\tERROR: Max capacity for items sold reached.\n");
+                                    let_Read();
+                                }     
+                                else
+                                    register_Product(item_Database, &item_Database_Count, user_ID);
                                     
-                            do
-                            {   
-                            display_Table_Ala_Show_My_Products (item_Database, 
-                                                                user_Product_Indices, 
-                                                                user_Product_Count);
-                                        
-                            valid_Input = TRUE;
+                                break;
+                                
+                            case EDIT_STOCK:       
+                                edit_Stock_Done = FALSE;
+                                has_Inputted = FALSE;
                                         
                                 do
-                                {          
-                                    if (!valid_Input)
-                                        printf("\tInvalid Input.\n");
-                                
-                                    prompt_Long_Long("Insert product ID: ", &item_ID);
-                                
-                                    valid_Input = find_Product_In_List(item_Database, 
-                                                                        item_ID, 
-                                                                        user_Product_Indices, 
-                                                                        user_Product_Count);
-                                
-                                    if (valid_Input)
-                                    {
-                                        has_Inputted = TRUE;
-                                        item_Index = give_Item_Index_Via_ID (item_Database, 
+                                {   
+                                display_Table_Ala_Show_My_Products (item_Database, 
+                                                                    user_Product_Indices, 
+                                                                    user_Product_Count);
+                                            
+                                valid_Input = TRUE;
+                                            
+                                    do
+                                    {          
+                                        if (!valid_Input)
+                                            printf("\tInvalid Input.\n");
+                                    
+                                        prompt_Long_Long("Insert product ID: ", &item_ID);
+                                    
+                                        valid_Input = find_Product_In_List(item_Database, 
                                                                             item_ID, 
                                                                             user_Product_Indices, 
                                                                             user_Product_Count);
+                                    
+                                        if (valid_Input)
+                                        {
+                                            has_Inputted = TRUE;
+                                            item_Index = give_Item_Index_Via_ID (item_Database, 
+                                                                                item_ID, 
+                                                                                user_Product_Indices, 
+                                                                                user_Product_Count);
+                                        }
+                                                    
+                                    } while (!valid_Input && !has_Inputted);
+                                                
+                                    choice = display_Menu("Edit Stock", edit_Stock_Choices, 6);
+                                                
+                                    switch (choice)
+                                    {
+                                                        
+                                    case REPLENISH:
+                                        prompt_Long_Long("\nHow many would you like to add? ", 
+                                                        &addend);
+
+                                        if (item_Database[item_Index].quantity_Available + 
+                                            addend >= 0)
+                                            item_Database[item_Index].quantity_Available += addend;
+                                        else  
+                                        {
+                                            printf("\t");
+                                            printf("Error: Amount leads to value less than zero.");
+                                            new_Line();
+                                            let_Read();
+                                        }
+
+                                        break;
+                                                        
+                                    case CHANGE_PRICE:
+                                        prompt_Double("\nWhat is the new price? ", 
+                                                    &item_Database[item_Index].unit_Price);
+
+                                        break;
+                                                        
+                                    case CHANGE_ITEM_NAME:
+                                        prompt_StringN("\nWhat is the new name? ", 
+                                                        item_Database[item_Index].name, 20);
+
+                                        break;
+                                                        
+                                    case CHANGE_CATEGORY:
+                                        prompt_StringN("\nWhat is the new category? ", 
+                                                        item_Database[item_Index].category, 
+                                                        15);
+
+                                        break;
+                                                        
+                                    case CHANGE_DESCRIPTION:
+                                        prompt_StringN("\nWhat is the new description? ", 
+                                                        item_Database[item_Index].description, 
+                                                        30);
+
+                                        break;
+                                                        
+                                    case FINISH_EDITING:
+                                        edit_Stock_Done = TRUE;
+
+                                        break;              
                                     }
                                                 
-                                } while (!valid_Input && !has_Inputted);
+                            } while (!edit_Stock_Done);
                                             
-                                choice = display_Menu("Edit Stock", edit_Stock_Choices, 6);
-                                            
-                                switch (choice)
-                                {
-                                                    
-                                case REPLENISH:
-                                    prompt_Long_Long("\nHow many would you like to add? ", 
-                                                    &addend);
-
-                                    if (item_Database[item_Index].quantity_Available + 
-                                        addend >= 0)
-                                        item_Database[item_Index].quantity_Available += addend;
-                                    else  
-                                    {
-                                        printf("\t");
-                                        printf("Error: Amount leads to value less than zero.");
-                                        new_Line();
-                                        let_Read();
-                                    }
-
-                                    break;
-                                                    
-                                case CHANGE_PRICE:
-                                    prompt_Double("\nWhat is the new price? ", 
-                                                &item_Database[item_Index].unit_Price);
-
-                                    break;
-                                                    
-                                case CHANGE_ITEM_NAME:
-                                    prompt_StringN("\nWhat is the new name? ", 
-                                                    item_Database[item_Index].name, 20);
-
-                                    break;
-                                                    
-                                case CHANGE_CATEGORY:
-                                    prompt_StringN("\nWhat is the new category? ", 
-                                                    item_Database[item_Index].category, 
-                                                    15);
-
-                                    break;
-                                                    
-                                case CHANGE_DESCRIPTION:
-                                    prompt_StringN("\nWhat is the new description? ", 
-                                                    item_Database[item_Index].description, 
-                                                    30);
-
-                                    break;
-                                                    
-                                case FINISH_EDITING:
-                                    edit_Stock_Done = TRUE;
-
-                                    break;              
-                                }
-                                            
-                        } while (!edit_Stock_Done);
-                                        
-                        break;
-                                    
-                        case SHOW_MY_PRODUCTS:
-                            display_Table_Ala_Show_My_Products (item_Database, 
-                                                                user_Product_Indices, 
-                                                                user_Product_Count);
-                            new_Line();
-                            let_Read();
-
                             break;
-                                
-                        case SHOW_MY_LOW_STOCK:
-                            i = 0;
+                                        
+                            case SHOW_MY_PRODUCTS:
+                                display_Table_Ala_Show_My_Products (item_Database, 
+                                                                    user_Product_Indices, 
+                                                                    user_Product_Count);
+                                new_Line();
+                                let_Read();
 
-                            while ((i < user_Product_Count && choice != 'X') || choice != 'x')
-                            {
-                                if (item_Database[user_Product_Indices[i]]
-                                    .quantity_Available < 5)
+                                break;
+                                    
+                            case SHOW_MY_LOW_STOCK:
+                                i = 0;
+
+                                while ((i < user_Product_Count && choice != 'X') || choice != 'x')
                                 {
-                                    display_Item(item_Database[user_Product_Indices[i]]);
-                                    new_Line();
-
-                                    prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", 
-                                                &choice);
-
-                                    if (choice == 'N' || choice == 'n')
+                                    if (item_Database[user_Product_Indices[i]]
+                                        .quantity_Available < 5)
                                     {
                                         display_Item(item_Database[user_Product_Indices[i]]);
                                         new_Line();
-                                        prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", &choice);
-                                        if (choice == 'N' || choice == 'n') i++;
+
+                                        prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", 
+                                                    &choice);
+
+                                        if (choice == 'N' || choice == 'n')
+                                        {
+                                            display_Item(item_Database[user_Product_Indices[i]]);
+                                            new_Line();
+                                            prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", &choice);
+                                            if (choice == 'N' || choice == 'n') i++;
+                                        }
                                     }
+                                    else i++;   
                                 }
-                                else i++;   
-                            }
 
-                            printf("Nothing follows...\n");
-                            let_Read();
+                                printf("Nothing follows...\n");
+                                let_Read();
 
-                            break;
+                                break;
+                                    
+                            case EXIT_SELL:
+                                sell_Done = TRUE;
+
+                                break;       
+                            }      
                                 
-                        case EXIT_SELL:
-                            sell_Done = TRUE;
-
-                            break;       
-                        }      
+                        } while (!sell_Done);
                             
-                    } while (!sell_Done);
-                        
-                    break;
-                        
+                        break;
+                            
                     case BUY_MENU:
                         buy_Done = FALSE;
                         
@@ -344,12 +344,12 @@ main()
                                 while (i < user_Database_Count && choice != 'X' && choice != 'x')
                                 {
                                     user_Product_Count = count_User_Items(item_Database, item_Database_Count,  
-                                                                          user_Database[i].user_ID);
+                                                                        user_Database[i].user_ID);
 
                                     if (user_Product_Count > 0)
                                     {
                                         find_User_Product(item_Database, item_Database_Count, 
-                                                          user_Database[i].user_ID, user_Product_Indices);
+                                                        user_Database[i].user_ID, user_Product_Indices);
 
                                         printf ("\tUser ID: %I64d\n", user_Database[i].user_ID);
                                         new_Line();
@@ -369,7 +369,7 @@ main()
                                 let_Read();
 
                                 break;
-                              
+                            
                             case USE_SELLER_LENS:
                                 prompt_Long_Long("Insert Seller ID: ", &user_ID);
                                 new_Line();
@@ -377,14 +377,14 @@ main()
                                 user_Product_Count = count_User_Items (item_Database, item_Database_Count, user_ID);
 
                                 find_User_Product(item_Database, item_Database_Count, 
-                                                  user_ID, user_Product_Indices);
+                                                user_ID, user_Product_Indices);
 
                                 display_Table_Ala_Show_My_Products (item_Database, user_Product_Indices, user_Product_Count);
                                 new_Line();
                                 let_Read();
 
                                 break;
-                              
+                            
                             case USE_CATEGORY_LENS:
                                 i = 0;
 
@@ -412,7 +412,7 @@ main()
                                 let_Read();
 
                                 break;
-                              
+                            
                             case USE_NAME_LENS:
                                 i = 0;
 
@@ -531,7 +531,7 @@ main()
 
                         break;
                     }
-                    
+                        
                 } while (!user_Done);
                 
             }
