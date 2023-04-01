@@ -2,6 +2,8 @@
 
 /*******************************************/
 
+/* comment pepela */
+
 #include "main.h"
 
 int main() 
