@@ -851,7 +851,8 @@ int main()
             sprintf(user_Cart_Name, "%I64d.bag", user_ID);
             
             
-            if (login_User(user_Database, user_Database_Count, &user_ID) == VALID)
+            if (login_User(user_Database, user_Database_Count, &user_ID) == 
+                VALID)
             {
               user_Done = FALSE;
               
@@ -942,11 +943,14 @@ int main()
                                         case REPLENISH:
                                           prompt_Long_Long("\nHow many would you like to add? ", 
                                                            &addend);
-                                          if (item_Database[item_Index].quantity_Available + addend >= 0)
+                                          if (item_Database[item_Index].quantity_Available + 
+                                              addend >= 0)
                                             item_Database[item_Index].quantity_Available += addend;
                                           else  
                                           {
-                                            printf("\tError: Amount leads to value less than zero.\n");
+                                            printf("\t");
+                                            printf("Error: Amount leads to value less than zero.");
+                                            new_Line();
                                             let_Read();
                                           }
 
@@ -997,7 +1001,8 @@ int main()
                                 i = 0;
                                 while ((i < user_Product_Count && choice != 'X') || choice != 'x')
                                   {
-                                    if (item_Database[user_Product_Indices[i]].quantity_Available < 5)
+                                    if (item_Database[user_Product_Indices[i]].quantity_Available < 
+                                        5)
                                     {
                                       display_Item(item_Database[user_Product_Indices[i]]);
                                       new_Line();
