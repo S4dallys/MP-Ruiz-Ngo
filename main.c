@@ -47,6 +47,9 @@ int main()
   String30 user_Cart_Name;
   String15 password;
 
+  String15 low_Category_Copy1;
+  String15 low_Category_Copy2;
+
   String30 main_Menu_Choices[4] = {"Register as a User",
                                   "User Menu",
                                   "Admin Menu",
@@ -353,11 +356,53 @@ int main()
                                 break;
                               
                               case USE_CATEGORY_LENS:
-                                // insert code here
+                                i = 0;
+                                prompt_StringN("Insert category: ", low_Category_Copy1, 15);
+                                to_Lowercase(low_Category_Copy1, low_Category_Copy1);
+
+                                choice = '\0';
+
+                                while (i < item_Database_Count && choice != 'X' && choice != 'x')
+                                  {
+                                    to_Lowercase(item_Database[i].category, low_Category_Copy2);
+                                    if (strcmp(low_Category_Copy1, low_Category_Copy2) == 0)
+                                    {
+                                      display_Item(item_Database[i);
+                                      new_Line();
+                                      prompt_Char("Enter 'N' to go to next item, and 'X' to exit... ", &choice);
+                                      if (choice == 'N' || choice == 'n') i++;
+                                    }
+
+                                    else i++;
+                                    
+                                  }
+                                printf("Nothing follows...\n");
+                                let_Read();
                                 break;
                               
                               case USE_NAME_LENS:
-                                // insert code here
+                                i = 0;
+                                prompt_StringN("Insert keyword: ", low_Category_Copy1, 15);
+                                to_Lowercase(low_Category_Copy1, low_Category_Copy1);
+
+                                choice = '\0';
+
+                                while (i < item_Database_Count && choice != 'X' && choice != 'x')
+                                  {
+                                    to_Lowercase(item_Database[i].category, low_Category_Copy2);
+                                    if (substring_Search(low_Category_Copy2, low_Category_Copy1))
+                                    {
+                                      display_Item(item_Database[i);
+                                      new_Line();
+                                      prompt_Char("Enter 'N' to go to next item, and 'X' to exit... ", &choice);
+                                      if (choice == 'N' || choice == 'n') i++;
+                                    }
+
+                                    else i++;
+                                    
+                                  }
+                                printf("Nothing follows...\n");
+                                let_Read();
                                 break;
                               
                               case ADD_TO_CART:
