@@ -40,6 +40,7 @@ int main()
 
   long long user_ID;
   long long item_ID;
+  long long ID;
   long long addend;
 
   String30 user_Cart_Name;
@@ -336,12 +337,17 @@ int main()
                                 i = 0;
                                 while (i < user_Database_Count && choice != 'X' && choice != 'x')
                                   {
-                                    if (count_User_Items(item_Database, item_Database_Count,  
-                                                         user_Database[i].user_ID) > 0)
+                                    user_Product_Count = count_User_Items(item_Database, item_Database_Count,  
+                                                         user_Database[i].user_ID);
+                                    if (user_Product_Count > 0)
                                     {
+                                      find_User_Product(item_Database, item_Database_Count, 
+                                                        user_Database[i].user_ID, user_Product_Indices);
                                       printf ("\tUser ID: %I64d\n", user_Database[i].user_ID);
                                       new_Line();
-                                      display_Table_Ala_Show_My_Products();
+                                      display_Table_Ala_Show_My_Products(item_Database, user_Product_Indices, 
+                                                                         user_Product_Count);
+                                      new_Line();
                                       prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", &choice);
                                       if (choice == 'N' || choice == 'n')
                                       {
@@ -372,7 +378,14 @@ int main()
                                 break;
                               
                               case USE_SELLER_LENS:
-                                // insert code here
+                                prompt_Long_Long("Insert Seller ID: ", &ID);
+                                new_Line();
+                                user_Product_Count = count_User_Items(item_Database, item_Database_Count, ID);
+                                find_User_Product(item_Database, item_Database_Count, 
+                                                        ID, user_Product_Indices);
+                                display_Table_Ala_Show_My_Products (item_Database, user_Product_Indices, user_Product_Count);
+                                new_Line();
+                                let_Read();
                                 break;
                               
                               case USE_CATEGORY_LENS:
