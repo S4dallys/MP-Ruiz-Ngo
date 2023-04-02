@@ -42,6 +42,7 @@ substring_Search (char search_area[],
             {
                 if (search_area[i+j] != find[j])
                     discrepancy = TRUE;
+                else j++;
             }
             if (discrepancy == FALSE)
                 found = TRUE;

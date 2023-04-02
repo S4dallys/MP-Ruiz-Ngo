@@ -226,10 +226,9 @@ main()
                                                         
                                     case REPLENISH:
                                         prompt_Long_Long("\nHow many would you like to add? ", 
-                                                        &addend);
+                                                          &addend);
 
-                                        if (item_Database[item_Index].quantity_Available + 
-                                            addend >= 0)
+                                        if (item_Database[item_Index].quantity_Available + addend >= 0)
                                             item_Database[item_Index].quantity_Available += addend;
                                         else  
                                         {
@@ -304,7 +303,10 @@ main()
                                         {
                                             display_Item(item_Database[user_Product_Indices[i]]);
                                             new_Line();
-                                            prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", &choice);
+
+                                            prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ",
+                                                        &choice);
+
                                             if (choice == 'N' || choice == 'n') i++;
                                         }
                                     }
