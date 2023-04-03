@@ -5,11 +5,17 @@
 
 #endif
 
-// *---prototypes---*
+void 
+clean_Input_Stream ()
+{
+    char garbage;
 
-void clean_Input_Stream ();
+    do
+    {
+        scanf("%c", &garbage);
 
-// *----------------*
+    } while (garbage != '\n');
+}
 
 void
 prompt_Int (char   prompt[],
@@ -84,14 +90,3 @@ prompt_StringN (char  prompt[],
     address[index] = 0;
 }
 
-void 
-clean_Input_Stream ()
-{
-    char garbage;
-
-    do
-    {
-        scanf("%c", &garbage);
-
-    } while (garbage != '\n');
-}

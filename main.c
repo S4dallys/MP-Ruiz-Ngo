@@ -38,6 +38,8 @@ main()
     boolean  valid_Input;
     boolean  has_Inputted;
 
+    boolean permissions_Array[MAX_USERS];
+
     FILE *  user_File_Pointer;
     FILE *  item_File_Pointer;
     FILE *  cart_File_Pointer;
@@ -188,7 +190,14 @@ main()
                                 break;
                             
                             // ---------------------------------------------------------------------
-                            case EDIT_STOCK:       
+                            case EDIT_STOCK:  
+                              if (user_Product_Count <= 0)
+                              {
+                                printf("\tERROR: No product being sold.\n");
+                                let_Read();
+                              }     
+                              else
+                              {
                                 edit_Stock_Done = FALSE;
                                 has_Inputted = FALSE;
                                         
@@ -283,7 +292,7 @@ main()
                                     }
                                                 
                             } while (!edit_Stock_Done);
-                                            
+                            }              
                             break;
                             
                             // ---------------------------------------------------------------------
