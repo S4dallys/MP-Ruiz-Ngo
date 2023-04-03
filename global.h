@@ -53,7 +53,7 @@ typedef struct dateTag
 typedef struct transactionTag
 {
     dateType       date;
-    itemType       transaction_Log[6];
+    itemType       transaction_Log[5];
     long long      buyer_ID;
     long long      seller_ID;
     float          amount;
