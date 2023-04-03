@@ -131,17 +131,18 @@ main()
         switch (choice)
         {
 
-        //user registration
+        //user registration ---------------------------------------------------------------------------------------------------------------
         case USER_REGISTRATION: 
             register_User(user_Database, &user_Database_Count);
             break;
         
-        //user menu
+        //user menu -----------------------------------------------------------------------------------------------------------------------
         case USER_MODE: 
 
             if (login_User(user_Database, user_Database_Count, &user_ID) == VALID)
             {
                 sprintf(user_Cart_Name, "%I64d.bag", user_ID);
+                load_User_Cart(user_Cart_Name, user_Cart, &item_Cart_Count);
 
                 user_Done = FALSE;
                 
@@ -152,7 +153,7 @@ main()
                     switch (choice)
                     {
 
-                    case SELL_MENU:
+                    case SELL_MENU: // ------------------------------------------------------------------------------------------------------
                         sell_Done = FALSE;
 
                         do
