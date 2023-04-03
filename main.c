@@ -392,12 +392,16 @@ main()
                                 prompt_Long_Long("Insert Seller ID: ", &user_ID);
                                 new_Line();
 
-                                user_Product_Count = count_User_Items (item_Database, item_Database_Count, user_ID);
+                                user_Product_Count = count_User_Items (item_Database, 
+                                                                       item_Database_Count, 
+                                                                       user_ID);
 
                                 find_User_Product(item_Database, item_Database_Count, 
                                                 user_ID, user_Product_Indices);
 
-                                display_Table_Ala_Show_My_Products (item_Database, user_Product_Indices, user_Product_Count);
+                                display_Table_Ala_Show_My_Products (item_Database, 
+                                                                    user_Product_Indices, 
+                                                                    user_Product_Count);
                                 new_Line();
                                 let_Read();
 
