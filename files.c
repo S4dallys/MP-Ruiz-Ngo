@@ -126,3 +126,25 @@ upload_Item_Database (itemType  item_Database[],
                 item_Database[index].unit_Price);
     }
 }
+
+void
+load_User_Cart (char     user_Cart_Name[],
+                itemType user_Cart[],
+                int*     user_Cart_Count)
+{
+    FILE* user_Cart_File;
+
+    *user_Cart_Count = 0;
+
+    user_Cart_File = fopen(user_Cart_Name, "rb");
+
+    if (user_Cart_File != NULL)
+    {
+        fread(&user_Cart[*user_Cart_Count], sizeof(itemType), 1, user_Cart_File);
+        while (!feof(user_Cart_File))
+        {
+            (*user_Cart_Count)++;
+            fread(&user_Cart[*user_Cart_Count], sizeof(itemType), 1, user_Cart_File);
+        }
+    }
+}
