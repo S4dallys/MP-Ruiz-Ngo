@@ -483,6 +483,7 @@ main()
                                     printf("\tPlease Edit Cart or Checkout first before adding another item.\n");
                                     let_Read();
                                 }     
+
                                 else
                                 {
                                     add_Item_To_Cart (item_Database, user_Cart, item_Database_Count, &item_Cart_Count);
@@ -616,12 +617,20 @@ main()
                         // -------------------------------------------------------------------------
                         case SHOW_ALL_USERS:
                             display_User_Table(user_Database, user_Database_Count);
+                            new_Line();
+                            let_Read();
                             break;
 
                         // -------------------------------------------------------------------------
                         case SHOW_ALL_SELLERS:
-                            //insert code here
-
+                            for (i = 0; i < user_Database_Count; i++)
+                              permissions_Array[i] = count_User_Items (item_Database, 
+                                                                       item_Database_Count, 
+                                                                       user_Database[i].user_ID) > 0;
+                            display_User_Table_With_Conditions (user_Database, user_Database_Count,
+                                                                permissions_Array);
+                            new_Line();
+                            let_Read();
                             break;
 
                         // -------------------------------------------------------------------------

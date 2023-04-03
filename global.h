@@ -42,13 +42,6 @@ typedef struct itemTag
 
 } itemType;
 
-typedef struct itemCountTag
-{
-    itemType  item;
-    int       amount;
-
-} itemCountType;
-
 typedef struct dateTag
 {
     int  month;
@@ -60,7 +53,7 @@ typedef struct dateTag
 typedef struct transactionTag
 {
     dateType       date;
-    itemCountType  transaction_Log[6];
+    itemType       transaction_Log[6];
     long long      buyer_ID;
     long long      seller_ID;
     float          amount;
