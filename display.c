@@ -315,7 +315,7 @@ display_User_Table_With_Conditions (userType user_Database[],
                                     boolean  permissions_Array[])
 {
     // local variable declaration
-    int user_Width_Array = {19, 10, 20, 30, 19};
+    int user_Width_Array[] = {19, 10, 20, 30, 19};
     int index;
     boolean first;
 
