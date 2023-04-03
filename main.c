@@ -513,7 +513,7 @@ main()
                                     
                                     // -------------------------------------------------------------
                                     case REMOVE_SPECIFIC_ITEM:
-                                        prompt_Long_Long("Enter ID: ", );
+                                        prompt_Long_Long("Enter ID: ", &item_ID);
 
                                         break;
                             
