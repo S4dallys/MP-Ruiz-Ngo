@@ -5,11 +5,25 @@
 
 #endif
 
-// *---prototypes---*
-
-boolean check_Unique_Item_ID (itemType item_Database[], int item_Database_Size, long long item_ID);
-
-// *----------------*
+boolean
+check_Unique_Item_ID (itemType   item_Database[],
+                      int        item_Database_Size,
+				      long long  item_ID)
+{
+	boolean  flag;
+	int      index;
+	
+	flag = TRUE;
+	index = 0;
+	
+	while (index < item_Database_Size && flag == FALSE)
+		if (item_Database[index].product_ID == item_ID)
+			flag = FALSE;
+		else
+			index++;
+	
+	return flag;
+}
 
 void
 register_Product (itemType   item_Database[],
@@ -57,26 +71,6 @@ register_Product (itemType   item_Database[],
     (*item_Database_Count)++;
 
     let_Read();
-}
-
-boolean
-check_Unique_Item_ID (itemType   item_Database[],
-                      int        item_Database_Size,
-				      long long  item_ID)
-{
-	boolean  flag;
-	int      index;
-	
-	flag = TRUE;
-	index = 0;
-	
-	while (index < item_Database_Size && flag == FALSE)
-		if (item_Database[index].product_ID == item_ID)
-			flag = FALSE;
-		else
-			index++;
-	
-	return flag;
 }
 
 int
