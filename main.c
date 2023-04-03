@@ -499,22 +499,6 @@ main()
                                 {          
                                     display_Product_Table (user_Cart, item_Cart_Count);
 
-                                    do 
-                                    { 
-                                        if (!valid_Input)
-                                            printf("\tInvalid Input.\n");
-                                    
-                                        prompt_Long_Long("Insert product ID: ", &item_ID);
-                                    
-                                        item_Index = give_Item_Index_Via_ID(user_Cart, item_ID, item_Cart_Count);
-                                    
-                                        if (item_Index != -1)
-                                        {
-                                            valid_Input = TRUE;
-                                        } else valid_Input = FALSE;
-                                                    
-                                    } while (!valid_Input);
-
                                     choice = display_Menu("Cart Edit", edit_Cart_Choices, 4);
                                     
                                     switch (choice)
@@ -528,7 +512,7 @@ main()
                                     
                                     // -------------------------------------------------------------
                                     case REMOVE_SPECIFIC_ITEM:
-                                        //insert code here
+                                        prompt_Long_Long("Enter ID: ", );
 
                                         break;
                             
