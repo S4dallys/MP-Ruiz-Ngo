@@ -606,8 +606,7 @@ main()
 
                         // -------------------------------------------------------------------------
                         case SHOW_ALL_USERS:
-                            //insert code here
-
+                            display_User_Table(user_Database, user_Database_Count);
                             break;
 
                         // -------------------------------------------------------------------------
