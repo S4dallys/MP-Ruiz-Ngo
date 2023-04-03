@@ -210,7 +210,7 @@ display_User_Table (userType user_Database[],
                     int      user_Database_Size)
 {
     // local variable declaration
-    int user_Width_Array = {19, 10, 20, 30, 19};
+    int user_Width_Array[] = {19, 10, 20, 30, 19};
     int index;
     boolean first;
 

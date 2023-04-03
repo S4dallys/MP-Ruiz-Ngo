@@ -199,3 +199,11 @@ sort_Item_Array_By_ID (itemType  item_Database[],
         }
     }
 }
+
+void swap_Item (itemType *  a,
+                itemType *  b)
+{
+    itemType temp = *a;
+    *a = *b;
+    *b = temp;
+}
