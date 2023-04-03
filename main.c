@@ -486,7 +486,7 @@ main()
 
                                 else
                                 {
-                                    add_Item_To_Cart (item_Database, user_Cart, item_Database_Count, &item_Cart_Count);
+                                    add_Item_To_Cart (item_Database, user_Cart, item_Database_Count, &item_Cart_Count, user_ID);
                                 }
 
                                 break;
