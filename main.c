@@ -190,7 +190,14 @@ main()
                                 break;
                             
                             // ---------------------------------------------------------------------
-                            case EDIT_STOCK:       
+                            case EDIT_STOCK:  
+                              if (user_Product_Count <= 0)
+                              {
+                                printf("\tERROR: No product being sold.\n");
+                                let_Read();
+                              }     
+                              else
+                              {
                                 edit_Stock_Done = FALSE;
                                 has_Inputted = FALSE;
                                         
@@ -285,7 +292,7 @@ main()
                                     }
                                                 
                             } while (!edit_Stock_Done);
-                                            
+                            }              
                             break;
                             
                             // ---------------------------------------------------------------------
