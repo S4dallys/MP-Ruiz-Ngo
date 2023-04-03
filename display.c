@@ -129,6 +129,57 @@ display_Menu (String30  menu_Name,
 }
 
 /**
+ * display_Product_Array displays the product
+ * ID, item name, category, unit price, and quantity available
+ * of every item which is in a certain array.
+ * @param item_Array - an array of items (struct itemTag)
+ * @param item_Array_Length - the number of items in
+ *                            item_Array
+*/
+void
+display_Product_Table (itemType  item_Array[],
+                       int       item_Array_Length)
+{
+    // local variable declaration
+    int item_Width_Array[5] = {19, 20, 15, 15, 19};
+    int index;
+    boolean first;
+
+    first = TRUE;
+
+    // loop through the initialization and the entire array
+    for (index = -1; index < item_Array_Length; index++)
+    {
+        // display a horizontal border line
+        display_Horizontal_Border_Line(5, item_Width_Array);
+
+        // print the header at initialization
+        if (first)
+        {
+            first = FALSE;
+
+            printf("\t| %-19s | %-20s | %-15s | %-15s | %-19s |\n", 
+                    "PRODUCT ID", "ITEM NAME", "CATEGORY", "UNIT PRICE", 
+                    "QUANTITY AVAILABLE");
+        }
+
+        // print the data in each column
+        else
+        {
+            printf("\t| %19I64d | %-20s | %-15s | %15.2f | %19I64d |\n",
+                        item_Array[index].product_ID,
+                        item_Array[index].name,
+                        item_Array[index].category,
+                        item_Array[index].unit_Price,
+                        item_Array[index].quantity_Available);
+        }
+    }
+
+    // cap it off with a final horizontal border line
+    display_Horizontal_Border_Line(5, item_Width_Array);
+}
+
+/**
  * display_Table_Ala_Show_My_Products displays the product
  * ID, item name, category, unit price, and quantity available
  * of every item whose index is in a certain array.
@@ -235,6 +286,61 @@ display_User_Table (userType user_Database[],
 
         // print the data in each column
         else
+        {
+            printf("| %19lld | %-10s | %-20s | %-30s | %19lld |\n",
+                   user_Database[index].user_ID,
+                   user_Database[index].password,
+                   user_Database[index].name,
+                   user_Database[index].address,
+                   user_Database[index].contact);
+        }
+    }
+
+    // cap it off with a final horizontal border line
+    display_Horizontal_Border_Line(5, user_Width_Array);
+}
+
+/**
+ * display_User_Table_With_Conditions displays the user structures
+ * in an array in a tabular format. Each structure will only be
+ * displayed if they are allowed to do so by their corresponding
+ * permissions in another array.
+ * @param user_Database - array of user tructures
+ * @param user_Database_Size - number of users in user_Database
+ * @param permissions_Array - an array of boolean values
+*/
+void
+display_User_Table_With_Conditions (userType user_Database[], 
+                                    int      user_Database_Size,
+                                    boolean  permissions_Array[])
+{
+    // local variable declaration
+    int user_Width_Array = {19, 10, 20, 30, 19};
+    int index;
+    boolean first;
+
+    first = TRUE;
+
+    // loop through the initialization and the entire array
+    for (index = -1; index < user_Database_Size; index++)
+    {
+        // display a horizontal border line
+        display_Horizontal_Border_Line(5, user_Width_Array);
+
+        // print the header at initialization
+        if (first)
+        {
+            first = FALSE;
+
+            printf("\t| %-19s | %-10s | %-20s | %-30s | %-19s |\n", 
+                   "USER ID", "PASSWORD", "NAME", "ADDRESS", 
+                   "CONTACT NUMBER");
+
+        }
+
+        // print the data in each column, if that is allowed to be
+        // printed
+        else if (permissions_Array[index] == TRUE)
         {
             printf("| %19lld | %-10s | %-20s | %-30s | %19lld |\n",
                    user_Database[index].user_ID,

@@ -38,6 +38,8 @@ main()
     boolean  valid_Input;
     boolean  has_Inputted;
 
+    boolean permissions_Array[MAX_USERS];
+
     FILE *  user_File_Pointer;
     FILE *  item_File_Pointer;
     FILE *  cart_File_Pointer;
