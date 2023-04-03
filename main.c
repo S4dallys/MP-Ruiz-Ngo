@@ -23,9 +23,9 @@ main()
     int  user_Product_Indices[20];
     int  user_Product_Count;
 
-    itemType  user_Cart[10];
-    String30  user_Cart_Name;
-    String15  password;
+    itemType   user_Cart[10];
+    String30   user_Cart_Name;
+    String15   password;
 
     boolean  done;
     boolean  user_Done;
@@ -131,18 +131,18 @@ main()
         switch (choice)
         {
 
-        //user registration ---------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
         case USER_REGISTRATION: 
             register_User(user_Database, &user_Database_Count);
             break;
         
-        //user menu -----------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------
         case USER_MODE: 
 
             if (login_User(user_Database, user_Database_Count, &user_ID) == VALID)
             {
                 sprintf(user_Cart_Name, "%I64d.bag", user_ID);
-                load_User_Cart(user_Cart_Name, user_Cart, &item_Cart_Count);
+                // load_User_Cart(user_Cart_Name, user_Cart, &item_Cart_Count);
 
                 user_Done = FALSE;
                 
@@ -153,7 +153,8 @@ main()
                     switch (choice)
                     {
 
-                    case SELL_MENU: // ------------------------------------------------------------------------------------------------------
+                    // -----------------------------------------------------------------------------
+                    case SELL_MENU:
                         sell_Done = FALSE;
 
                         do
@@ -171,7 +172,8 @@ main()
                             
                             switch(choice)
                             {
-                                
+                            
+                            // ---------------------------------------------------------------------
                             case ADD_NEW_ITEM:
                                 if (count_User_Items(item_Database, 
                                                     item_Database_Count, 
@@ -184,7 +186,8 @@ main()
                                     register_Product(item_Database, &item_Database_Count, user_ID);
                                     
                                 break;
-                                
+                            
+                            // ---------------------------------------------------------------------
                             case EDIT_STOCK:       
                                 edit_Stock_Done = FALSE;
                                 has_Inputted = FALSE;
@@ -212,7 +215,7 @@ main()
                                         if (valid_Input)
                                         {
                                             has_Inputted = TRUE;
-                                            item_Index = give_Item_Index_Via_ID (item_Database, 
+                                            item_Index = give_User_Item_Index_Via_ID (item_Database, 
                                                                                 item_ID, 
                                                                                 user_Product_Indices, 
                                                                                 user_Product_Count);
@@ -224,7 +227,8 @@ main()
                                                 
                                     switch (choice)
                                     {
-                                                        
+
+                                    // -------------------------------------------------------------
                                     case REPLENISH:
                                         prompt_Long_Long("\nHow many would you like to add? ", 
                                                           &addend);
@@ -240,33 +244,38 @@ main()
                                         }
 
                                         break;
-                                                        
+                                    
+                                    // -------------------------------------------------------------
                                     case CHANGE_PRICE:
                                         prompt_Double("\nWhat is the new price? ", 
                                                     &item_Database[item_Index].unit_Price);
 
                                         break;
-                                                        
+
+                                    // -------------------------------------------------------------     
                                     case CHANGE_ITEM_NAME:
                                         prompt_StringN("\nWhat is the new name? ", 
                                                         item_Database[item_Index].name, 20);
 
                                         break;
-                                                        
+
+                                    // -------------------------------------------------------------           
                                     case CHANGE_CATEGORY:
                                         prompt_StringN("\nWhat is the new category? ", 
                                                         item_Database[item_Index].category, 
                                                         15);
 
                                         break;
-                                                        
+
+                                    // -------------------------------------------------------------              
                                     case CHANGE_DESCRIPTION:
                                         prompt_StringN("\nWhat is the new description? ", 
                                                         item_Database[item_Index].description, 
                                                         30);
 
                                         break;
-                                                        
+
+                                    // -------------------------------------------------------------         
                                     case FINISH_EDITING:
                                         edit_Stock_Done = TRUE;
 
@@ -276,7 +285,8 @@ main()
                             } while (!edit_Stock_Done);
                                             
                             break;
-                                        
+                            
+                            // ---------------------------------------------------------------------
                             case SHOW_MY_PRODUCTS:
                                 display_Table_Ala_Show_My_Products (item_Database, 
                                                                     user_Product_Indices, 
@@ -285,7 +295,8 @@ main()
                                 let_Read();
 
                                 break;
-                                    
+                            
+                            // ---------------------------------------------------------------------
                             case SHOW_MY_LOW_STOCK:
                                 i = 0;
 
@@ -318,7 +329,8 @@ main()
                                 let_Read();
 
                                 break;
-                                    
+                            
+                            // ---------------------------------------------------------------------
                             case EXIT_SELL:
                                 sell_Done = TRUE;
 
@@ -328,7 +340,8 @@ main()
                         } while (!sell_Done);
                             
                         break;
-                            
+                    
+                    // -----------------------------------------------------------------------------
                     case BUY_MENU:
                         buy_Done = FALSE;
                         
@@ -339,7 +352,8 @@ main()
                             
                             switch (choice)
                             {
-
+                            
+                            // ---------------------------------------------------------------------
                             case VIEW_ALL_PRODUCTS:
                                 sort_Users_By_ID(user_Database, user_Database_Count);
 
@@ -373,6 +387,7 @@ main()
 
                                 break;
                             
+                            // ---------------------------------------------------------------------
                             case USE_SELLER_LENS:
                                 prompt_Long_Long("Insert Seller ID: ", &user_ID);
                                 new_Line();
@@ -388,6 +403,7 @@ main()
 
                                 break;
                             
+                            // ---------------------------------------------------------------------
                             case USE_CATEGORY_LENS:
                                 i = 0;
 
@@ -416,6 +432,7 @@ main()
 
                                 break;
                             
+                            // ---------------------------------------------------------------------
                             case USE_NAME_LENS:
                                 i = 0;
 
@@ -444,12 +461,23 @@ main()
                                 let_Read();
 
                                 break;
-                                
+                            
+                            // ---------------------------------------------------------------------
                             case ADD_TO_CART:
-                                // insert code here
+                                if (item_Cart_Count >= 10)
+                                {
+                                    printf("\tOnly 10 items allowed in the cart at a time.\n");
+                                    printf("\tPlease Edit Cart or Checkout first before adding another item.\n");
+                                    let_Read();
+                                }     
+                                else
+                                {
+                                    add_Item_To_Cart (item_Database, user_Cart, item_Database_Count, &item_Cart_Count);
+                                }
 
-                                    break;
+                                break;
 
+                            // ---------------------------------------------------------------------
                             case EDIT_CART:
                                 edit_Cart_Done = FALSE;
                                     
@@ -459,22 +487,26 @@ main()
                                     
                                     switch (choice)
                                     {
-                                        
+                                    
+                                    // -------------------------------------------------------------
                                     case REMOVE_ITEMS_OF_SELLER:
                                         //insert code here
 
                                         break;
-                                        
+                                    
+                                    // -------------------------------------------------------------
                                     case REMOVE_SPECIFIC_ITEM:
                                         //insert code here
 
                                         break;
-                                        
+                            
+                                    // -------------------------------------------------------------
                                     case EDIT_QUANTITY:
                                         //insert code here
 
                                         break;
-                                        
+                                    
+                                    // -------------------------------------------------------------
                                     case FINISH_EDIT_CART:
                                         edit_Cart_Done = TRUE;
 
@@ -484,7 +516,8 @@ main()
                                 } while (!edit_Cart_Done);
                                     
                                 break;
-                                
+                            
+                            // ---------------------------------------------------------------------
                             case CHECK_OUT:
                                 check_Out_Done = FALSE;
                                     
@@ -494,21 +527,26 @@ main()
                                     
                                     switch (choice)
                                     {
+
+                                    // -------------------------------------------------------------
                                     case BUY_ALL:
                                         //insert code here
 
                                         break;
 
+                                    // -------------------------------------------------------------
                                     case BUY_BY_CERTAIN_SELLER:
                                         //insert code here
 
                                         break;
 
+                                    // -------------------------------------------------------------
                                     case BUY_SPECIFIC_ITEM:
                                         //insert code here
 
                                         break;
 
+                                    // -------------------------------------------------------------
                                     case EXIT_CHECK_OUT:
                                         check_Out_Done = TRUE;
 
@@ -518,7 +556,8 @@ main()
                                 } while (!check_Out_Done);
                                     
                                 break;
-                                
+                            
+                            // ---------------------------------------------------------------------
                             case EXIT_BUY:
                                 buy_Done = TRUE;
 
@@ -528,7 +567,8 @@ main()
                         } while (!buy_Done);
                         
                         break;
-                        
+                    
+                    // -----------------------------------------------------------------------------
                     case EXIT_USER:
                         user_Done = TRUE;
 
@@ -541,7 +581,7 @@ main()
 
             break;
             
-            //admin menu
+            // -------------------------------------------------------------------------------------
             case ADMIN_MODE: 
                 prompt_StringN("Insert password: ", password, 15);
 
@@ -559,29 +599,37 @@ main()
                         choice = display_Menu ("Admin", admin_Menu_Choices, 6);
                         switch (choice)
                         {
+
+                        // -------------------------------------------------------------------------
                         case SHOW_ALL_USERS:
                             display_User_Table(user_Database, user_Database_Count);
                             break;
 
+                        // -------------------------------------------------------------------------
                         case SHOW_ALL_SELLERS:
                             //insert code here
 
                             break;
 
+                        // -------------------------------------------------------------------------
                         case SHOW_TOTAL_SALES_IN_GIVEN_DURATION:
                             //insert code here
 
                             break;
 
+                        // -------------------------------------------------------------------------
                         case SHOW_SELLERS_SALES:
                             //insert code here
 
                             break;
 
+                        // -------------------------------------------------------------------------
                         case SHOW_SHOPAHOLICS:
                             //insert code here
 
                             break;
+                        
+                        // -------------------------------------------------------------------------
                         case EXIT_ADMIN:
                             admin_Done = TRUE;
 
@@ -592,6 +640,7 @@ main()
 
                 break;
             
+            // -------------------------------------------------------------------------------------
             case EXIT_PROGRAM:
                 upload_Item_Database(item_Database, item_Database_Count);
                 upload_User_Database(user_Database, user_Database_Count);

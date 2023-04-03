@@ -11,6 +11,12 @@
 
 // *----------------*
 
+/**
+ * initialize_User_Database initializes the user_Database array using the values from Users.txt
+ * @param user_File_Pointer - file pointer set to Users.txt using fopen() function
+ * @param user_Database - struct array containing users
+ * @param user_Database_Count - number of users in user_Database
+*/
 void
 initialize_User_Database (FILE *    user_File_Pointer,
                           userType  user_Database[],
@@ -45,6 +51,12 @@ initialize_User_Database (FILE *    user_File_Pointer,
     } while (inputs == 8);
 }
 
+/**
+ * initialize_Item_Database initializes the item_Database array using the values from Items.txt
+ * @param item_File_Pointer file pointer set to Items.txt using fopen() function
+ * @param item_Database struct array containing items
+ * @param item_Database_Count number of users in item_Database
+*/
 void
 initialize_Item_Database (FILE *    item_File_Pointer,
                           itemType  item_Database[],
@@ -89,6 +101,11 @@ initialize_Item_Database (FILE *    item_File_Pointer,
     } while (inputs == 10);
 }
 
+/**
+ * upload_User_Database uploads the content of user_Database into the Users.txt file
+ * @param user_Database struct array of users
+ * @param user_Database_Count number of users in user_Database
+*/
 void
 upload_User_Database (userType  user_Database[],
                       int       user_Database_Count)
@@ -107,6 +124,11 @@ upload_User_Database (userType  user_Database[],
     }
 }
 
+/**
+ * upload_Item_Database uploads the content of item_Database into the Items.txt file
+ * @param item_Database struct array of item
+ * @param item_Database_Count number of items in item_Database
+*/
 void
 upload_Item_Database (itemType  item_Database[],
                       int       item_Database_Count)
