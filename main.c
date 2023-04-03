@@ -446,7 +446,7 @@ main()
                                 break;
                                 
                             case ADD_TO_CART:
-                                if (item_Cart_Count > 10)
+                                if (item_Cart_Count >= 10)
                                 {
                                     printf("\tOnly 10 items allowed in the cart at a time.\n");
                                     printf("\tPlease Edit Cart or Checkout first before adding another item.\n");
