@@ -23,7 +23,7 @@ main()
     int  user_Product_Indices[20];
     int  user_Product_Count;
 
-    itemType * user_Cart[10];
+    itemType   user_Cart[10];
     String30   user_Cart_Name;
     String15   password;
 
@@ -142,7 +142,7 @@ main()
             if (login_User(user_Database, user_Database_Count, &user_ID) == VALID)
             {
                 sprintf(user_Cart_Name, "%I64d.bag", user_ID);
-                load_User_Cart(user_Cart_Name, user_Cart, &item_Cart_Count);
+                // load_User_Cart(user_Cart_Name, user_Cart, &item_Cart_Count);
 
                 user_Done = FALSE;
                 
@@ -212,7 +212,7 @@ main()
                                         if (valid_Input)
                                         {
                                             has_Inputted = TRUE;
-                                            item_Index = give_Item_Index_Via_ID (item_Database, 
+                                            item_Index = give_User_Item_Index_Via_ID (item_Database, 
                                                                                 item_ID, 
                                                                                 user_Product_Indices, 
                                                                                 user_Product_Count);
@@ -448,15 +448,16 @@ main()
                             case ADD_TO_CART:
                                 if (item_Cart_Count > 10)
                                 {
-                                    printf("\tERROR: Only 10 items allowed in the cart at a time.\n");
+                                    printf("\tOnly 10 items allowed in the cart at a time.\n");
+                                    printf("\tPlease Edit Cart or Checkout first before adding another item.\n");
                                     let_Read();
                                 }     
                                 else
                                 {
-                                    add_Item_To_Cart ();
+                                    add_Item_To_Cart (item_Database, user_Cart, item_Database_Count, &item_Cart_Count);
                                 }
 
-                                    break;
+                                break;
 
                             case EDIT_CART:
                                 edit_Cart_Done = FALSE;

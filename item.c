@@ -122,8 +122,26 @@ find_Product_In_List (itemType    item_Database[],
 int
 give_Item_Index_Via_ID (itemType   item_Database[],
                         long long  itemID,
-                        int        item_Indices_Array[],
-                        int        item_Indices_Array_Length)
+                        int        item_Database_Count)
+{
+    int index = -1;
+    int i = 0;
+
+    while (i < item_Database_Count && index == -1)
+    {
+        if (item_Database[i].product_ID == itemID)
+        index = i;
+        else i++;
+    }
+    
+    return index;
+}
+
+int
+give_User_Item_Index_Via_ID (itemType   item_Database[],
+                             long long  itemID,
+                             int        item_Indices_Array[],
+                             int        item_Indices_Array_Length)
 {
     int index = -1;
     int i = 0;

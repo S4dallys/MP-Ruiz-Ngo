@@ -13,6 +13,7 @@
 #include "user.c"
 #include "item.c"
 #include "string_funcs.c"
+#include "cart.c"
 
 // switch case macros
 #define USER_REGISTRATION        'A'
