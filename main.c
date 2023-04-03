@@ -23,9 +23,9 @@ main()
     int  user_Product_Indices[20];
     int  user_Product_Count;
 
-    itemType  user_Cart[10];
-    String30  user_Cart_Name;
-    String15  password;
+    itemType * user_Cart[10];
+    String30   user_Cart_Name;
+    String15   password;
 
     boolean  done;
     boolean  user_Done;
@@ -445,7 +445,15 @@ main()
                                 break;
                                 
                             case ADD_TO_CART:
-                                // insert code here
+                                if (item_Cart_Count > 10)
+                                {
+                                    printf("\tERROR: Only 10 items allowed in the cart at a time.\n");
+                                    let_Read();
+                                }     
+                                else
+                                {
+                                    add_Item_To_Cart ();
+                                }
 
                                     break;
 

@@ -1,2 +1,2 @@
 @echo off
-gcc -o main.exe main.c
+gcc -o -std=c99 main.exe main.c
