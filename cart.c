@@ -5,11 +5,25 @@
 
 #endif
 
+<<<<<<< HEAD
 void add_Item_To_Cart (itemType    item_Database[],
                        itemType    user_Cart[],
                        int         item_Database_Count,
                        int *       item_Cart_Count,
                        long long   user_ID)
+=======
+// *---prototypes---*
+
+// none
+
+// *----------------*
+
+void 
+add_Item_To_Cart (itemType    item_Database[],
+                  itemType    user_Cart[],
+                  int         item_Database_Count,
+                  int *       item_Cart_Count)
+>>>>>>> 2bcfe8c8aa736635b91897d07ca0433939fc93d9
 {
     long long item_ID;
     long long quantity;
