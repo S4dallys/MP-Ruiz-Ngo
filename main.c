@@ -19,10 +19,16 @@ main()
     long long item_ID;
     long long addend;
 
+<<<<<<< HEAD
     int  user_Database_Count;
     int  item_Database_Count;
     int  item_Cart_Count;
     int  update_Product_Count;
+=======
+    int  user_Database_Count = 0;
+    int  item_Database_Count = 0;
+    int  item_Cart_Count = 0;
+>>>>>>> a51fdef388e975635b9d1de467323b86b60837f3
 
     int  user_Product_Indices[20];
     int  user_Product_Count;
