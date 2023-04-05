@@ -115,7 +115,7 @@ upload_User_Database (userType  user_Database[],
                       int       user_Database_Count)
 {
     // local variable declaration
-    FILE *user_File_Pointer = fopen("Users.txt", "r");
+    FILE *user_File_Pointer = fopen("Users.txt", "w");
     int index;
 
     // print every user in the array to the Users.txt file
