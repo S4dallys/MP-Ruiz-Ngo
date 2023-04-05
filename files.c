@@ -185,9 +185,10 @@ load_User_Cart (char     user_Cart_Name[],
     // activate if the file exists
     if (user_Cart_File != NULL)
     {
-        // read all of the available data in it
+        // read the first bytes of data
         fread(&user_Cart[*user_Cart_Count], sizeof(itemType), 1, user_Cart_File);
         
+        // continues to read until end of file
         while (!feof(user_Cart_File))
         {
             (*user_Cart_Count)++;
