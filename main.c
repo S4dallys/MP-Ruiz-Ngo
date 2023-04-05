@@ -265,8 +265,14 @@ main()
                                     
                                     // -------------------------------------------------------------
                                     case CHANGE_PRICE:
+                                        int new_price;
                                         prompt_Double("\nWhat is the new price? ", 
-                                                    &item_Database[item_Index].unit_Price);
+                                                    &new_price);
+
+                                        if (new_price < 0)
+                                            printf("ERROR: Item price cannot be zero.");
+                                        else
+                                            item_Database[item_Index].unit_Price = new_price;
 
                                         break;
 
