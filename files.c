@@ -44,14 +44,14 @@ initialize_User_Database (FILE *    user_File_Pointer,
 
         // if the read is complete, record the read data into the array
         // and increment the slated array length
-        if (inputs == 9)
+        if (inputs == 8)
         {
             user_Database[*user_Database_Count] = user_Instance;
             (*user_Database_Count)++;
         }
 
     // keep on reading while the read data in a set is complete
-    } while (inputs == 9);
+    } while (inputs == 8);
 }
 
 /**
