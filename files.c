@@ -30,6 +30,10 @@ initialize_User_Database (FILE *    user_File_Pointer,
 
         inputs += fscanf (user_File_Pointer, "%c", &white_Space);
 
+        inputs += fscanf (user_File_Pointer, "%[^\n]s", user_Instance.password);
+
+        inputs += fscanf (user_File_Pointer, "%c", &white_Space);
+
         inputs += fscanf (user_File_Pointer, "%[^\n]s", user_Instance.name);
 
         inputs += fscanf (user_File_Pointer, "%c", &white_Space);

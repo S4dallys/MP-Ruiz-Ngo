@@ -22,9 +22,11 @@ main()
     int  user_Database_Count;
     int  item_Database_Count;
     int  item_Cart_Count;
+    int  update_Product_Count;
 
     int  user_Product_Indices[20];
     int  user_Product_Count;
+    int  update_Product_Indices[10];
 
     itemType   user_Cart[10];
     String30   user_Cart_Name;
@@ -639,6 +641,10 @@ main()
                             // ---------------------------------------------------------------------
                             case EXIT_BUY:
                                 buy_Done = TRUE;
+                                if (item_Cart_Count > 0)
+                                {
+                                    //put stuff into cart
+                                }
 
                                 break;
                             }
