@@ -56,7 +56,7 @@ register_Product (itemType   item_Database[],
 
     prompt_StringN("Description: ", item.description, 30);
 
-    prompt_Long_Long("Quantity Available: ", &item.quantity_Available);
+    prompt_Long_Long("Quantity Available: ", &item.quantity);
 
     prompt_Double("Price: ", &item.unit_Price);
 

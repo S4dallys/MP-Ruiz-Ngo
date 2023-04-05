@@ -36,7 +36,7 @@ typedef struct itemTag
     String20   name;
     String15   category;
     String30   description;
-    long long  quantity_Available;
+    long long  quantity;
     double     unit_Price;
     long long  seller_ID;
 

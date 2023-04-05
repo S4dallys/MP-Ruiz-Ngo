@@ -89,7 +89,7 @@ initialize_Item_Database (FILE *    item_File_Pointer,
                           item_Instance.description);
 
         inputs += fscanf (item_File_Pointer, "%I64d",         
-                          &item_Instance.quantity_Available);
+                          &item_Instance.quantity);
 
         inputs += fscanf (item_File_Pointer, "%lf", &item_Instance.unit_Price);
         
@@ -152,7 +152,7 @@ upload_Item_Database (itemType  item_Database[],
                 item_Database[index].name,
                 item_Database[index].category,
                 item_Database[index].description,
-                item_Database[index].quantity_Available,
+                item_Database[index].quantity,
                 item_Database[index].unit_Price);
     }
 }

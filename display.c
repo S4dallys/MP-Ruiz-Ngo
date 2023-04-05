@@ -171,7 +171,7 @@ display_Product_Table (itemType  item_Array[],
                         item_Array[index].name,
                         item_Array[index].category,
                         item_Array[index].unit_Price,
-                        item_Array[index].quantity_Available);
+                        item_Array[index].quantity);
         }
     }
 
@@ -225,7 +225,7 @@ display_Table_Ala_Show_My_Products (itemType  item_Array[],
                         item_Array[item_Index_Array[index]].name,
                         item_Array[item_Index_Array[index]].category,
                         item_Array[item_Index_Array[index]].unit_Price,
-                        item_Array[item_Index_Array[index]].quantity_Available);
+                        item_Array[item_Index_Array[index]].quantity);
         }
     }
 
@@ -245,7 +245,7 @@ display_Item (itemType  item)
   printf("\tProduct ID:         %I64d\n", item.product_ID);
   printf("\tName:               %s\n", item.name);
   printf("\tCategory:           %s\n", item.category);
-  printf("\tQuantity Avaliable: %I64d\n", item.quantity_Available);
+  printf("\tQuantity Avaliable: %I64d\n", item.quantity);
   printf("\tPrice:              %lf\n", item.unit_Price); 
 }
 

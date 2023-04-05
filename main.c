@@ -12,7 +12,10 @@ main()
     userType  user_Database [MAX_USERS];
     itemType  item_Database [MAX_ITEMS];
 
+    transactionType transaction;
+
     long long user_ID;
+    long long seller_ID;
     long long item_ID;
     long long addend;
 
@@ -43,6 +46,7 @@ main()
     FILE *  user_File_Pointer;
     FILE *  item_File_Pointer;
     FILE *  cart_File_Pointer;
+    FILE *  transaction_File_Pointer;
 
     String30 main_Menu_Choices[4] =  {"Register as a User",
                                       "User Menu",
@@ -242,8 +246,8 @@ main()
                                         prompt_Long_Long("\nHow many would you like to add? ", 
                                                           &addend);
 
-                                        if (item_Database[item_Index].quantity_Available + addend >= 0)
-                                            item_Database[item_Index].quantity_Available += addend;
+                                        if (item_Database[item_Index].quantity + addend >= 0)
+                                            item_Database[item_Index].quantity += addend;
                                         else  
                                         {
                                             printf("\t");
@@ -312,7 +316,7 @@ main()
                                 while ((i < user_Product_Count && choice != 'X') || choice != 'x')
                                 {
                                     if (item_Database[user_Product_Indices[i]]
-                                        .quantity_Available < 5)
+                                        .quantity < 5)
                                     {
                                         display_Item(item_Database[user_Product_Indices[i]]);
                                         new_Line();
@@ -486,7 +490,11 @@ main()
 
                                 else
                                 {
-                                    add_Item_To_Cart (item_Database, user_Cart, item_Database_Count, &item_Cart_Count, user_ID);
+                                    add_Item_To_Cart (item_Database, 
+                                                      user_Cart, 
+                                                      item_Database_Count, 
+                                                      &item_Cart_Count, 
+                                                      user_ID);
                                 }
 
                                 break;
@@ -507,19 +515,68 @@ main()
                                     
                                     // -------------------------------------------------------------
                                     case REMOVE_ITEMS_OF_SELLER:
-                                        //insert
+                                        prompt_Long_Long ("Enter Seller ID:", &seller_ID);
+
+                                        if (count_User_Items(user_Cart, item_Cart_Count, seller_ID) == 0)
+                                        {
+                                            printf("\tERROR: Seller not found.\n");
+                                            let_Read();
+                                        }
+
+                                        else
+                                        {
+                                            for (i = 0; i < item_Cart_Count; i++)
+                                            {
+                                                if (user_Cart[i].seller_ID == seller_ID)
+                                                {
+                                                    swap_Item(&user_Cart[i], &user_Cart[item_Cart_Count-1]);
+                                                    item_Cart_Count--;
+                                                }
+                                            }
+                                        }
 
                                         break;
                                     
                                     // -------------------------------------------------------------
                                     case REMOVE_SPECIFIC_ITEM:
-                                        prompt_Long_Long("Enter ID: ", &item_ID);
+                                        prompt_Long_Long("Enter Item ID: ", &item_ID);
+
+                                        if (give_Item_Index_Via_ID(user_Cart, item_ID, item_Database_Count) == -1)
+                                        {
+                                            printf("\tERROR: Item not found/\n");
+                                            let_Read();
+                                        }
+
+                                        else
+                                        {
+                                            for (i = 0; i < item_Cart_Count; i++)
+                                            {
+                                                if (user_Cart[i].product_ID == item_ID)
+                                                {
+                                                    swap_Item(&user_Cart[i], &user_Cart[item_Cart_Count-1]);
+                                                    item_Cart_Count--;
+                                                }
+                                            }
+                                        }
 
                                         break;
                             
                                     // -------------------------------------------------------------
                                     case EDIT_QUANTITY:
-                                        //insert code here
+                                        prompt_Long_Long("Enter Item ID: ", &item_ID);
+
+                                        item_Index = give_Item_Index_Via_ID(user_Cart, item_ID, item_Database_Count);
+                                        if ( item_Index == -1)
+                                        {
+                                            printf("\tERROR: Item not found/\n");
+                                            let_Read();
+                                        }
+
+                                        else
+                                        {
+                                            prompt_Long_Long("Enter new item quantity: ",
+                                                             &user_Cart[item_Index].quantity);
+                                        }
 
                                         break;
                                     
@@ -537,7 +594,9 @@ main()
                             // ---------------------------------------------------------------------
                             case CHECK_OUT:
                                 check_Out_Done = FALSE;
-                                    
+
+                                // smt smh
+
                                 do
                                 {    
                                     choice = display_Menu("Check Out", check_Out_Choices, 4);
