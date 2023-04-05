@@ -431,6 +431,8 @@ main()
                             case USE_CATEGORY_LENS:
                                 i = 0;
 
+                                memset(low_Category_Copy1, 0, 16);
+
                                 prompt_StringN("Insert category: ", low_Category_Copy1, 15);
                                 to_Lowercase(low_Category_Copy1, low_Category_Copy1);
 
@@ -438,6 +440,8 @@ main()
 
                                 while (i < item_Database_Count && choice != 'X' && choice != 'x')
                                 {
+                                    memset(low_Category_Copy2, 0, 16);
+
                                     to_Lowercase(item_Database[i].category, low_Category_Copy2);
 
                                     if (strcmp(low_Category_Copy1, low_Category_Copy2) == 0)
@@ -460,6 +464,8 @@ main()
                             case USE_NAME_LENS:
                                 i = 0;
 
+                                memset(low_Name_Copy1, 0, 16);
+
                                 prompt_StringN("Insert keyword: ", low_Name_Copy1, 15);
                                 to_Lowercase(low_Name_Copy1, low_Name_Copy1);
 
@@ -467,6 +473,8 @@ main()
 
                                 while (i < item_Database_Count && choice != 'X' && choice != 'x')
                                 {
+                                    memset(low_Name_Copy2, 0, 16);
+
                                     to_Lowercase(item_Database[i].name, low_Name_Copy2);
 
                                     if (substring_Search(low_Name_Copy2, low_Name_Copy1))
