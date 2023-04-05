@@ -5,7 +5,8 @@
 #include <stdlib.h>
 
 #define MAX_USERS  100
-#define MAX_ITEMS  MAX_USERS * 20
+#define MAX_ITEMS_PER_USER 20
+#define MAX_ITEMS  MAX_USERS * MAX_ITEMS_PER_USER
 
 #define TRUE   1
 #define FALSE  0

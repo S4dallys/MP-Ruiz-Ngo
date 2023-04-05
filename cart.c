@@ -34,7 +34,7 @@ void add_Item_To_Cart (itemType    item_Database[],
             {
                 user_Cart[*item_Cart_Count] = item_Database[item_Index];
                 user_Cart[*item_Cart_Count].quantity = quantity;
-                item_Database[item_Index].quantity -= quantity;
+                //item_Database[item_Index].quantity -= quantity;
                 *item_Cart_Count = *item_Cart_Count + 1;
 
                 printf("\tItem added to cart.\n");

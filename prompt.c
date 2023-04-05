@@ -172,3 +172,45 @@ prompt_StringN (char  prompt[],
     // array with a null byte
     address[index] = 0;
 }
+
+
+void
+prompt_Date (dateType* date)
+{
+    boolean gave_Error;
+    boolean gave_Valid;
+
+    gave_Error = FALSE;
+    gave_Valid = FALSE;
+
+    do 
+    {
+        if (gave_Error)
+            printf("\tERROR: Invalid month.\n");
+
+        printf("\tInsert month: ");
+        scanf("%d", date->month);
+        
+        if (date -> month < 1 || date -> month > 12)
+            gave_Error = TRUE;
+        else
+            gave_Valid = TRUE;
+    } while (!gave_Valid);
+
+    gave_Error = FALSE;
+    gave_Valid = FALSE;
+    
+    do 
+    {
+        if (gave_Error)
+            printf("\tERROR: Invalid month.\n");
+
+        printf("\tInsert month: ");
+        scanf("%d", date->month);
+        
+        if (date -> month < 1 || date -> month > 12)
+            gave_Error = TRUE;
+        else
+            gave_Valid = TRUE;
+    } while (!gave_Valid);
+}
