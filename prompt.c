@@ -172,3 +172,58 @@ prompt_StringN (char  prompt[],
     // array with a null byte
     address[index] = 0;
 }
+
+
+void
+prompt_Date (dateType* date)
+{
+    boolean gave_Error;
+    boolean gave_Valid;
+    boolean is_Leap_Year;
+
+    int max_Days;
+
+    printf("\tYears in ISO 8601 prescribe 1 BC as 0, 2 BC as -1, and so on.\n");
+    printf("\tYears after 1 BC are written normally.\n");
+    printf("\tInsert year (considering ISO 8601): ");
+    scanf("%d", date->year);
+
+    is_Leap_Year = is_Leap(date -> year);
+
+    gave_Error = FALSE;
+    gave_Valid = FALSE;
+
+    do 
+    {
+        if (gave_Error)
+            printf("\tERROR: Invalid month.\n");
+
+        printf("\tInsert month (1-12): ");
+        scanf("%d", date->month);
+        
+        if (date -> month < 1 || date -> month > 12)
+            gave_Error = TRUE;
+        else
+            gave_Valid = TRUE;
+    } while (!gave_Valid);
+
+    max_Days = give_Max_Days_In_Month(is_Leap_Year, date -> month);
+
+    gave_Error = FALSE;
+    gave_Valid = FALSE;
+
+    do
+    {
+        if (gave_Error)
+            printf("\tERROR: Invalid date.\n");
+
+        printf("\tInsert date (1-%d): ", max_Days);
+        scanf("%d", date->day);
+        
+        if (date -> day < 1 || date -> day > max_Days)
+            gave_Error = TRUE;
+        else
+            gave_Valid = TRUE;
+    } while (!gave_Valid);
+    
+}

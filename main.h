@@ -14,6 +14,7 @@
 #include "item.c"
 #include "string_funcs.c"
 #include "cart.c"
+#include "date.c"
 
 // switch case macros
 #define USER_REGISTRATION        'A'

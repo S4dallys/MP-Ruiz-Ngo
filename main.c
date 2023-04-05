@@ -19,9 +19,10 @@ main()
     long long item_ID;
     long long addend;
 
-    int  user_Database_Count = 0;
-    int  item_Database_Count = 0;
-    int  item_Cart_Count = 0;
+    int  user_Database_Count;
+    int  item_Database_Count;
+    int  item_Cart_Count;
+    int  update_Product_Count;
 
     int  user_Product_Indices[20];
     int  user_Product_Count;
@@ -651,10 +652,6 @@ main()
                             // ---------------------------------------------------------------------
                             case EXIT_BUY:
                                 buy_Done = TRUE;
-                                if (item_Cart_Count > 0)
-                                {
-                                    //put stuff into cart
-                                }
 
                                 break;
                             }
@@ -666,7 +663,15 @@ main()
                     // -----------------------------------------------------------------------------
                     case EXIT_USER:
                         user_Done = TRUE;
+                        if (item_Cart_Count > 0)
+                        {
+                            //put stuff into cart
+                        }
 
+                        else
+                        {
+                            remove(user_Cart_Name);
+                        }
                         break;
                     }
                         
