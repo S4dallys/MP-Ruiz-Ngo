@@ -101,6 +101,9 @@ main()
     String15 low_Category_Copy1;
     String15 low_Category_Copy2;
 
+    String15 low_Name_Copy1;
+    String15 low_Name_Copy2;
+
     char  choice;
     int   item_Index;
     int   i;
@@ -458,16 +461,16 @@ main()
                             case USE_NAME_LENS:
                                 i = 0;
 
-                                prompt_StringN("Insert keyword: ", low_Category_Copy1, 15);
-                                to_Lowercase(low_Category_Copy1, low_Category_Copy1);
+                                prompt_StringN("Insert keyword: ", low_Name_Copy1, 15);
+                                to_Lowercase(low_Name_Copy1, low_Name_Copy1);
 
                                 choice = '\0';
 
                                 while (i < item_Database_Count && choice != 'X' && choice != 'x')
                                 {
-                                    to_Lowercase(item_Database[i].category, low_Category_Copy2);
+                                    to_Lowercase(item_Database[i].name, low_Name_Copy2);
 
-                                    if (substring_Search(low_Category_Copy2, low_Category_Copy1))
+                                    if (substring_Search(low_Name_Copy2, low_Name_Copy1))
                                     {
                                         display_Item(item_Database[i]);
                                         new_Line();
