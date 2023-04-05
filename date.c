@@ -58,3 +58,27 @@ give_Max_Days_In_Month (boolean is_Leap,
 
     return max_Days;
 }
+
+int
+compare_Date (dateType date_1,
+              dateType date_2)
+{
+    int flag;
+    if (date_1.year < date_2.year)
+        flag = -1;
+    else if (date_1.year > date_2.year)
+        flag = 1;
+    else
+        if (date_1.month < date_2.month)
+            flag = -1;
+        else if (date_1.month > date_2.month)
+            flag = 1;
+        else
+            if (date_1.day < date_2.day)
+                flag = -1;
+            else if (date_1.day > date_2.day)
+                flag = 1;
+            else
+                flag = 0;
+    return flag;
+}
