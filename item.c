@@ -170,7 +170,15 @@ find_User_Product (itemType   item_Database[],
  * item structures from an array, checks if one of the 
  * indices in the array represents an item with a certain
  * item ID.
- * @
+ * @param item_Database - an array of item structures
+ * @param itemID - the ID of an item to be searched
+ * @param item_Indices_Array - an array of indices wherein
+ *                             the products it represents
+ *                             is a searching ground for
+ *                             itemID
+ * @param item_Indices_Array_Length - the number of indices 
+ *                                    in item_indices_Array
+ * @return TRUE if the itemID was found; else, FALSE
 */
 boolean
 find_Product_In_List (itemType    item_Database[],
@@ -178,93 +186,182 @@ find_Product_In_List (itemType    item_Database[],
                       int         item_Indices_Array[],
                       int         item_Indices_Array_Length)
 {
-    boolean found = FALSE;
-    int i = 0;
+    // local variable declaration
+    boolean found;
+    int i;
 
+    found = FALSE;
+    i = 0;
+
+    // looping through the array until it reaches the end
+    // or an instance has been found
     while (i < item_Indices_Array_Length && found == FALSE)
     {
+        // flags an instance of item_ID in the array
         if (item_Database[item_Indices_Array[i]].product_ID == itemID)
           found = TRUE;
+
+        // increments an index
         else i++;
     }
 
     return found;
 }
 
+/**
+ * give_Item_Index_Via_ID gives the index of an item 
+ * structure within an array of such.
+ * @param item_Database - an array of item structures
+ * @param itemID - the item ID of the item whose index
+ *                 is desired to be known
+ * @param item_Database_Count - the number of item structures
+ *                              in item_Database
+ * @return the index of the item; -1 if not found
+*/
 int
 give_Item_Index_Via_ID (itemType   item_Database[],
                         long long  itemID,
                         int        item_Database_Count)
 {
-    int index = -1;
-    int i = 0;
+    // local variable declaration
+    int index;
+    int i;
 
+    index = -1;
+    i = 0;
+
+    // looping through the array until it reaches the end
+    // or an instance has been found
     while (i < item_Database_Count && index == -1)
     {
+        // flags an instance of item_ID in the array
         if (item_Database[i].product_ID == itemID)
-        index = i;
+            index = i;
+
+        // increments an index    
         else i++;
     }
     
     return index;
 }
 
+/**
+ * give_User_Item_Index_Via_ID, using an array of indices of
+ * item structures from an array, checks if one of the 
+ * indices in the array represents an item with a certain
+ * item ID; if it does, it returns its index and if it does
+ * not, it returns -1.
+ * @param item_Database - an array of item structures
+ * @param itemID - the ID of an item to be searched
+ * @param item_Indices_Array - an array of indices wherein
+ *                             the products it represents
+ *                             is a searching ground for
+ *                             itemID
+ * @param item_Indices_Array_Length - the number of indices 
+ *                                    in item_indices_Array
+ * @return the index of item_ID vis-a-vis item_Database; else,
+ *         it returns -1.
+*/
 int
 give_User_Item_Index_Via_ID (itemType   item_Database[],
                              long long  itemID,
                              int        item_Indices_Array[],
                              int        item_Indices_Array_Length)
 {
-    int index = -1;
-    int i = 0;
+    // local variable declaration
+    int index;
+    int i;
 
+    index = -1;
+    i = 0;
+
+    // looping through the array until it reaches the end
+    // or an instance has been found
     while (i < item_Indices_Array_Length && index == -1)
     {
+        // flags an instance of item_ID in the array
         if (item_Database[item_Indices_Array[i]].product_ID == itemID)
-        index = item_Indices_Array[i];
+            index = item_Indices_Array[i];
+
+        // increments an index  
         else i++;
     }
     
     return index;
 }
 
+/**
+ * count_User_Items counts how many items a user is selling
+ * from a given array of item structures.
+ * @param item_Database - an array of item structures
+ * @param item_Database_Count - the number of items inside
+ *                              item_Database
+ * @param userID - the user whose number of items being
+ *                 sold we wish to know
+ * @return the number of items the user represented by userID
+ *         is selling
+*/
 int
 count_User_Items (itemType   item_Database[],
                   int        item_Database_Count,
                   long long  userID)
 {
-    int counter = 0;
+    // local variable declaration
+    int counter;
     int i;
 
+    counter = 0;
+
+    // loops though the array
     for (i = 0; i < item_Database_Count; i++)
+    {
+        // increments the counter if the item is being sold
+        // by the seller in question
         if (item_Database[i].seller_ID == userID)
-        counter++;
+            counter++;
+    }
 
     return counter;
 }
+
 /**
- * sort_Item_Array
+ * sort_Item_Array sorts an array of item indices with respect
+ * to the item IDs of the item they represent, in ascending 
+ * order.
+ * @param item_Database - an array of item structures
+ * @param item_Index_Array - an array of array indices
+ * @param item_Array_Size - the number of indices in 
+ *                          item_Index_Array
 */
 void
 sort_Item_Array_By_ID (itemType  item_Database[],
                        int       item_Index_Array[],
                        int       item_Array_Size)
 {
+    // local variable declaration
     int lowest;
     int temp;
-    int i, j;
+    int i;
+    int j;
 
+    // loops through all of the indices in item_Idex_Array
     for (i = 0; i < item_Array_Size - 1; i++)
     {
+        // assume that the ith element represents the lowest ID
         lowest = i;
 
+        // loops through the rest of the array
         for (j = i + 1; j < item_Array_Size; j++)
         {
+            // rewrites the representation of the lowest ID if
+            // it finds a smaller one
             if (item_Database[item_Index_Array[lowest]].product_ID > 
                 item_Database[item_Index_Array[j]].product_ID)
                 lowest = j;
         }
 
+        // switches if the ith element does not represent the
+        // item with the lowest ID from range (i, item_Array_Size)
         if (lowest != i)
         {
             temp = item_Index_Array[i];
