@@ -287,7 +287,7 @@ display_User_Table (userType user_Database[],
         // print the data in each column
         else
         {
-            printf("| %19lld | %-10s | %-20s | %-30s | %19lld |\n",
+            printf("\t| %19lld | %-10s | %-20s | %-30s | %19lld |\n",
                    user_Database[index].user_ID,
                    user_Database[index].password,
                    user_Database[index].name,
@@ -342,7 +342,7 @@ display_User_Table_With_Conditions (userType user_Database[],
         // printed
         else if (permissions_Array[index] == TRUE)
         {
-            printf("| %19lld | %-10s | %-20s | %-30s | %19lld |\n",
+            printf("\t| %19lld | %-10s | %-20s | %-30s | %19lld |\n",
                    user_Database[index].user_ID,
                    user_Database[index].password,
                    user_Database[index].name,
