@@ -313,7 +313,7 @@ main()
                             case SHOW_MY_LOW_STOCK:
                                 i = 0;
 
-                                while ((i < user_Product_Count && choice != 'X') || choice != 'x')
+                                while (i < user_Product_Count && (choice != 'X' || choice != 'x'))
                                 {
                                     if (item_Database[user_Product_Indices[i]]
                                         .quantity < 5)
@@ -326,13 +326,16 @@ main()
 
                                         if (choice == 'N' || choice == 'n')
                                         {
-                                            display_Item(item_Database[user_Product_Indices[i]]);
-                                            new_Line();
-
-                                            prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ",
-                                                        &choice);
-
-                                            if (choice == 'N' || choice == 'n') i++;
+                                            i++;
+                                        }
+                                        else if (choice == 'B' || choice == 'b')
+                                        {
+                                            if (--i < 0)
+                                            {
+                                                printf("Nothing follows...\n");
+                                                let_Read();
+                                                i = 0;
+                                            }
                                         }
                                     }
                                     else i++;   
