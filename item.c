@@ -549,7 +549,6 @@ void swap_Item (itemType *  a,
     *b = temp;
 }
 
-<<<<<<< HEAD
 /**
  * swap_Item swaps the contents of one item structure with!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * another
@@ -559,10 +558,6 @@ void swap_Item (itemType *  a,
 void 
 swap_Order (orderType *  a,
             orderType *  b)
-=======
-void swap_Item_Ordertype (orderType *  a,
-                          orderType *  b)
->>>>>>> e583f39b0299536ae987e02d6ef8d70d72597776
 {
     // local variable declaration
     orderType temp;
