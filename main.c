@@ -118,7 +118,7 @@ main()
     int    j;
     double new_price;
     double sum;
-    int    temp;
+    // int    temp;
 
     // Initialize USER DATABASE
     user_File_Pointer = fopen ("Users.txt", "r");
@@ -718,7 +718,7 @@ main()
                                             {
                                                 if (user_Cart[seller_Product_Indices[i]].quantity_Desired > user_Cart[seller_Product_Indices[i]].item.quantity)
                                                 {
-                                                    printf("\tERROR: Item %c%s%c (ID#%lld) is out of stock. Skipping item...\n", 
+                                                    printf("\tERROR: Item %c%s%c (ID#%I64d) is out of stock. Skipping item...\n", 
                                                         '"', user_Cart[seller_Product_Indices[i]].item.name, '"', 
                                                         user_Cart[seller_Product_Indices[i]].item.product_ID);
                                                 }

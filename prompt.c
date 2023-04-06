@@ -181,7 +181,7 @@ prompt_Date (dateType* date)
     printf("\tYears in ISO 8601 prescribe 1 BC as 0, 2 BC as -1, and so on.\n");
     printf("\tYears after 1 BC are written normally.\n");
     printf("\tInsert year (considering ISO 8601): ");
-    scanf("%d", date->year);
+    scanf("%d", &date->year);
 
     is_Leap_Year = is_Leap(date -> year);
 
@@ -194,7 +194,7 @@ prompt_Date (dateType* date)
             printf("\tERROR: Invalid month.\n");
 
         printf("\tInsert month (1-12): ");
-        scanf("%d", date->month);
+        scanf("%d", &date->month);
         
         if (date -> month < 1 || date -> month > 12)
             gave_Error = TRUE;
@@ -213,7 +213,7 @@ prompt_Date (dateType* date)
             printf("\tERROR: Invalid date.\n");
 
         printf("\tInsert date (1-%d): ", max_Days);
-        scanf("%d", date->day);
+        scanf("%d", &date->day);
         
         if (date -> day < 1 || date -> day > max_Days)
             gave_Error = TRUE;
