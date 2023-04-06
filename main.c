@@ -757,7 +757,7 @@ main()
                                         {                                                
                                             transaction.date = date;
                                             transaction.buyer_ID = user_ID;
-                                            transaction.seller_ID = user_Cart[item_Index].item.seller_ID;
+                                            transaction.seller_ID = seller_ID;
                                             transaction.items_Ordered = 0;
 
                                             for (i = 0; i < seller_Product_Count; i++)
