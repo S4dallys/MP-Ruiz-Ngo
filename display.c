@@ -292,7 +292,7 @@ display_User_Table (userType user_Database[],
         // print the data in each column
         else
         {
-            printf("\t| %19lld | %-10s | %-20s | %-30s | %19lld |\n",
+            printf("\t| %19I64d | %-10s | %-20s | %-30s | %19I64d |\n",
                    user_Database[index].user_ID,
                    user_Database[index].password,
                    user_Database[index].name,
@@ -347,7 +347,7 @@ display_User_Table_With_Conditions (userType user_Database[],
         // printed
         else if (permissions_Array[index] == TRUE)
         {
-            printf("\t| %19lld | %-10s | %-20s | %-30s | %19lld |\n",
+            printf("\t| %19I64d | %-10s | %-20s | %-30s | %19I64d |\n",
                    user_Database[index].user_ID,
                    user_Database[index].password,
                    user_Database[index].name,
@@ -463,7 +463,7 @@ display_Transaction (transactionType *transaction,
     printf("\tTotal Price of Transaction: %f\n", total_Price);
     new_Line();
     printf("Payable to: %s, User ID# %19I64d\n", 
-           search_User(user_Database, user_Database_Size, transaction->seller_ID), 
+           user_Database[search_User(user_Database, user_Database_Size, transaction->seller_ID)].name, 
            transaction->seller_ID);
     transaction->amount = total_Price;
     new_Line();
