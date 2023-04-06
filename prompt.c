@@ -5,6 +5,13 @@
 
 #endif
 
+boolean
+is_Leap (int year);
+
+int
+give_Max_Days_In_Month (boolean is_Leap,
+                        int     month);
+
 /**
  * clean_Input_Stream removes all characters that exist
  * in the input stream up to and including the first new

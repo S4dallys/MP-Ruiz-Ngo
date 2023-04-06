@@ -5,6 +5,11 @@
 
 #endif
 
+int
+search_User (userType   user_Database[],
+             int        user_Database_Size,
+             long long  user_ID);
+
 /**
  * display_Choices displays an array of strings as choices, 
  * i.e., in the format "[<letter>] <choice><new line>"",
