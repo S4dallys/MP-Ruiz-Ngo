@@ -469,3 +469,54 @@ display_Transaction (transactionType *transaction,
     new_Line();
 }
 
+/**
+ * display_User_Table_With_Conditions displays the user structures
+ * in an array in a tabular format. Each structure will only be
+ * displayed if they are allowed to do so by their corresponding
+ * permissions in another array.
+ * @param user_Database - array of user tructures
+ * @param user_Database_Size - number of users in user_Database
+ * @param permissions_Array - an array of boolean values
+*/
+void
+display_Table_Based_On_Money (userType user_Database[], 
+                              int      user_Database_Size,
+                              float    sales_Array[])
+{
+    // local variable declaration
+    int user_Width_Array[] = {19, 10, 15};
+    int index;
+    boolean first;
+
+    first = TRUE;
+
+    // loop through the initialization and the entire array
+    for (index = -1; index < user_Database_Size; index++)
+    {
+        // display a horizontal border line
+        display_Horizontal_Border_Line(3, user_Width_Array);
+
+        // print the header at initialization
+        if (first)
+        {
+            first = FALSE;
+
+            printf("\t| %-19s | %-20s | %-15s |\n", 
+                   "ID", "NAME", "SALES");
+
+        }
+
+        // print the data in each column, if that is allowed to be
+        // printed
+        else if (sales_Array[index] > 0)
+        {
+            printf("\t| %19I64d | %-20s | %-30s | %19I64d |\n",
+                   user_Database[index].user_ID,
+                   user_Database[index].name,
+                   sales_Array[index]);
+        }
+    }
+
+    // cap it off with a final horizontal border line
+    display_Horizontal_Border_Line(3, user_Width_Array);
+}           

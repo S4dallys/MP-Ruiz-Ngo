@@ -52,6 +52,7 @@ main()
     boolean permissions_Array[MAX_USERS];
 
     float   sales_Array[MAX_USERS];
+    float   spend_Array[MAX_USERS];
 
     FILE *  user_File_Pointer;
     FILE *  item_File_Pointer;
@@ -739,6 +740,8 @@ main()
                                                     transaction_File_Pointer = fopen ("Transactions.dat", "ab");
                                                     fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
                                                     fclose (transaction_File_Pointer);
+
+                                                    transaction.items_Ordered = 0;
                                                 }
                                             }
 
@@ -914,6 +917,7 @@ main()
                                             sum += transaction.amount;
                                         fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
                                     }
+                                    fclose (transaction_File_Pointer);
                                     new_Line();
                                     printf("\tTotal Sales from %04d-%02d-%02d to %04d-%02d-%02d: %f",
                                            duration_Date_1.year, duration_Date_1.month, duration_Date_1.day,
@@ -923,18 +927,53 @@ main()
                                     let_Read();
                                 }
                             }
-                            
                             break;
 
                         // -------------------------------------------------------------------------
                         case SHOW_SELLERS_SALES:
-                            //insert code here
-
+                            for (i = 0; i < MAX_USERS; i++)
+                                sales_Array[i] = 0;
+                            transaction_File_Pointer = fopen ("Transactions.dat", "rb");
+                            if (transaction_File_Pointer == NULL)
+                                printf("\tERROR: Transaction file does not exist.\n");
+                            else
+                                {
+                                    fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                    while (!feof(transaction_File_Pointer))
+                                    {
+                                        sales_Array[search_User(user_Database, user_Database_Count, transaction.seller_ID)] += transaction.amount;
+                                        fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                    }
+                                    fclose (transaction_File_Pointer);
+                                    new_Line();
+                                    display_Table_Based_On_Money (user_Database, user_Database_Count, sales_Array);
+                                    new_Line();
+                                    let_Read();
+                                }
+                            
                             break;
 
                         // -------------------------------------------------------------------------
                         case SHOW_SHOPAHOLICS:
-                            //insert code here
+                            for (i = 0; i < MAX_USERS; i++)
+                                spend_Array[i] = 0;
+                            transaction_File_Pointer = fopen ("Transactions.dat", "rb");
+                            if (transaction_File_Pointer == NULL)
+                                printf("\tERROR: Transaction file does not exist.\n");
+                            else
+                                {
+                                    fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                    while (!feof(transaction_File_Pointer))
+                                    {
+                                        sales_Array[search_User(user_Database, user_Database_Count, transaction.buyer_ID)] += transaction.amount;
+                                        fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                    }
+                                    fclose (transaction_File_Pointer);
+                                    new_Line();
+                                    display_Table_Based_On_Money (user_Database, user_Database_Count, spend_Array);
+                                    new_Line();
+                                    let_Read();
+                                }
 
                             break;
                         
