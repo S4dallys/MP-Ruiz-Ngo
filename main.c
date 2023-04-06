@@ -564,11 +564,7 @@ main()
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
                                                     {
-<<<<<<< HEAD
                                                         swap_Order(&user_Cart[j], &user_Cart[j+1]);
-=======
-                                                        swap_Item_Ordertype(&user_Cart[j], &user_Cart[j+1]);
->>>>>>> e583f39b0299536ae987e02d6ef8d70d72597776
                                                     }
                                                     i--;
                                                     item_Cart_Count--;
@@ -582,11 +578,7 @@ main()
                                     case REMOVE_SPECIFIC_ITEM:
                                         prompt_Long_Long("Enter Item ID: ", &item_ID);
 
-<<<<<<< HEAD
                                         if (give_Item_Index_Via_ID_In_Cart(user_Cart, item_ID, item_Cart_Count) == -1)
-=======
-                                        if (give_Item_Index_Via_ID_Ordertype(user_Cart, item_ID, item_Database_Count) == -1)
->>>>>>> e583f39b0299536ae987e02d6ef8d70d72597776
                                         {
                                             printf("\tERROR: Item not found/\n");
                                             let_Read();
@@ -600,11 +592,7 @@ main()
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
                                                     {
-<<<<<<< HEAD
                                                         swap_Order(&user_Cart[j], &user_Cart[j+1]);
-=======
-                                                        swap_Item_Ordertype(&user_Cart[j], &user_Cart[j+1]);
->>>>>>> e583f39b0299536ae987e02d6ef8d70d72597776
                                                     }
                                                     i--;
                                                     item_Cart_Count--;
