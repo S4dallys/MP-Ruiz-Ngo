@@ -246,6 +246,43 @@ give_Item_Index_Via_ID (itemType   item_Database[],
 }
 
 /**
+ * give_Item_Index_Via_ID_In_Cart gives the index of an item 
+ * structure within an array of order structures
+ * @param item_Database - an array of order structures
+ * @param itemID - the item ID of the item whose index
+ *                 is desired to be known
+ * @param item_Database_Count - the number of order structures
+ *                              in order_Database
+ * @return the index of the item; -1 if not found
+*/
+int
+give_Item_Index_Via_ID_In_Cart (orderType  order_Database[],
+                                long long  itemID,
+                                int        order_Database_Count)
+{
+    // local variable declaration
+    int index;
+    int i;
+
+    index = -1;
+    i = 0;
+
+    // looping through the array until it reaches the end
+    // or an instance has been found
+    while (i < order_Database_Count && index == -1)
+    {
+        // flags an instance of item_ID in the array
+        if (order_Database[i].item.product_ID == itemID)
+            index = i;
+
+        // increments an index    
+        else i++;
+    }
+    
+    return index;
+}
+
+/**
  * give_User_Item_Index_Via_ID, using an array of indices of
  * item structures from an array, checks if one of the 
  * indices in the array represents an item with a certain

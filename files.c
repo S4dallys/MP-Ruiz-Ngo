@@ -171,7 +171,7 @@ upload_Item_Database (itemType  item_Database[],
 */
 void
 load_User_Cart (char     user_Cart_Name[],
-                itemType user_Cart[],
+                orderType user_Cart[],
                 int*     user_Cart_Count)
 {
     // local variable declaration
@@ -186,7 +186,7 @@ load_User_Cart (char     user_Cart_Name[],
     if (user_Cart_File != NULL)
     {
         // read the first bytes of data
-        fread(&user_Cart[*user_Cart_Count], sizeof(itemType), 1, user_Cart_File);
+        fread(&user_Cart[*user_Cart_Count], sizeof(orderType), 1, user_Cart_File);
         
         // continues to read until end of file
         while (!feof(user_Cart_File))

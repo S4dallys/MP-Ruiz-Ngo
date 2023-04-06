@@ -5,52 +5,100 @@
 
 #endif
 
-void add_Item_To_Cart (itemType    item_Database[],
-                       itemType    user_Cart[],
-                       int         item_Database_Count,
-                       int *       item_Cart_Count,
-                       long long   user_ID)
+void 
+add_Item_To_Cart (itemType    item_Database[],
+                  orderType   user_Cart[],
+                  int         item_Database_Count,
+                  int *       item_Cart_Count,
+                  long long   user_ID)
 {
     long long item_ID;
     long long quantity;
     int item_Index;
 
     prompt_Long_Long ("ID: ", &item_ID);
-    prompt_Long_Long ("Quantity: ", &quantity);
 
-    item_Index = give_Item_Index_Via_ID (item_Database, item_ID, item_Database_Count);
-
-    if (item_Index != -1)
+    if (give_Item_Index_Via_ID_In_Cart(user_Cart, item_ID, *item_Cart_Count) != -1)
     {
-        if (item_Database[item_Index].seller_ID == user_ID)
-        {
-            printf("\tERROR: Sellers cannot sell to themselves.\n");
-            let_Read();
-        }
+        printf("\tERROR: Product already in cart.\n");
+        printf("\tPlease go to Edit Cart -> Edit Quantity instead for additional orders.\n");
+        let_Read();
+    }
 
-        else
+    else
+    {
+        prompt_Long_Long ("Quantity: ", &quantity);
+
+        item_Index = give_Item_Index_Via_ID (item_Database, item_ID, item_Database_Count);
+
+        if (item_Index != -1)
         {
-            if (item_Database[item_Index].quantity >= quantity) 
+            if (item_Database[item_Index].seller_ID == user_ID)
             {
-                user_Cart[*item_Cart_Count] = item_Database[item_Index];
-                user_Cart[*item_Cart_Count].quantity = quantity;
-                //item_Database[item_Index].quantity -= quantity;
-                *item_Cart_Count = *item_Cart_Count + 1;
-
-                printf("\tItem added to cart.\n");
+                printf("\tERROR: Sellers cannot sell to themselves.\n");
                 let_Read();
             }
 
             else
             {
-                printf("\tERROR: Quantity requested exceeds stock.\n");
-                let_Read();
+                if (item_Database[item_Index].quantity >= quantity) 
+                {
+                    user_Cart[*item_Cart_Count].item = item_Database[item_Index];
+                    user_Cart[*item_Cart_Count].quantity_Desired = quantity;
+                    *item_Cart_Count = *item_Cart_Count + 1;
+
+                    printf("\tItem added to cart.\n");
+                    let_Read();
+                }
+
+                else
+                {
+                    printf("\tERROR: Quantity requested exceeds stock.\n");
+                    let_Read();
+                }
             }
         }
+        else 
+        {
+            printf("\tERROR: Item not found.\n");
+            let_Read();
+        }
     }
-    else 
+}
+
+boolean
+compare_Product (itemType item_1, itemType item_2)
+{
+    return strcmp (item_1.category, item_2.category) == 0 &&
+           strcmp (item_1.description, item_2.description) == 0 &&
+           strcmp (item_1.name, item_2.name) == 0 &&
+           item_1.quantity == item_2.quantity &&
+           item_1.unit_Price == item_2.unit_Price; 
+}
+
+int
+enumerate_Differing_Product (itemType  item_Database[],
+                             int       item_Database_Count,
+                             orderType user_Cart[],
+                             int       user_Cart_Count,
+                             int       update_Product_Indices[])
+{
+    int i;
+    int counter;
+
+    counter = 0;
+
+    for (i = 0; i < user_Cart_Count; i++)
     {
-        printf("\tERROR: Item not found.\n");
-        let_Read();
+        if (!compare_Product (item_Database[give_Item_Index_Via_ID(item_Database, 
+                                                                  user_Cart[i].item.product_ID, 
+                                                                  item_Database_Count)],
+                             user_Cart[i].item))
+        {
+            update_Product_Indices[counter] = i;
+            counter++;
+        }
     }
+
+    return counter;
 }

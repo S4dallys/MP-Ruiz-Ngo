@@ -51,10 +51,16 @@ typedef struct dateTag
 
 } dateType;
 
+typedef struct orderTag
+{
+    itemType  item;
+    long long quantity_Desired;
+} orderType;
+
 typedef struct transactionTag
 {
     dateType       date;
-    itemType       transaction_Log[5];
+    orderType      transaction_Log[5];
     long long      buyer_ID;
     long long      seller_ID;
     float          amount;

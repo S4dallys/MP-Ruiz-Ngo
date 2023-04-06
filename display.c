@@ -131,14 +131,14 @@ display_Menu (String30  menu_Name,
 /**
  * display_Product_Array displays the product
  * ID, item name, category, unit price, and quantity available
- * of every item which is in a certain array.
- * @param item_Array - an array of items (struct itemTag)
- * @param item_Array_Length - the number of items in
- *                            item_Array
+ * of every item which is in an order array.
+ * @param order_Array - an array of orderss (struct orderTag)
+ * @param order_Array_Length - the number of items in
+ *                             order_Array
 */
 void
-display_Product_Table (itemType  item_Array[],
-                       int       item_Array_Length)
+display_Product_Table (orderType order_Array[],
+                       int       order_Array_Length)
 {
     // local variable declaration
     int item_Width_Array[5] = {19, 20, 15, 15, 19};
@@ -148,7 +148,7 @@ display_Product_Table (itemType  item_Array[],
     first = TRUE;
 
     // loop through the initialization and the entire array
-    for (index = -1; index < item_Array_Length; index++)
+    for (index = -1; index < order_Array_Length; index++)
     {
         // display a horizontal border line
         display_Horizontal_Border_Line(5, item_Width_Array);
@@ -167,11 +167,11 @@ display_Product_Table (itemType  item_Array[],
         else
         {
             printf("\t| %19I64d | %-20s | %-15s | %15.2f | %19I64d |\n",
-                        item_Array[index].product_ID,
-                        item_Array[index].name,
-                        item_Array[index].category,
-                        item_Array[index].unit_Price,
-                        item_Array[index].quantity);
+                        order_Array[index].item.product_ID,
+                        order_Array[index].item.name,
+                        order_Array[index].item.category,
+                        order_Array[index].item.unit_Price,
+                        order_Array[index].item.quantity);
         }
     }
 

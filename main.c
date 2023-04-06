@@ -13,6 +13,7 @@ main()
     itemType  item_Database [MAX_ITEMS];
 
     transactionType transaction;
+    dateType date;
 
     long long user_ID;
     long long seller_ID;
@@ -28,7 +29,7 @@ main()
     int  user_Product_Count;
     int  update_Product_Indices[10];
 
-    itemType   user_Cart[10];
+    orderType  user_Cart[10];
     String30   user_Cart_Name;
     String15   password;
 
@@ -107,6 +108,8 @@ main()
     char  choice;
     int   item_Index;
     int   i;
+    int   j;
+    int   new_price;
 
     // Initialize USER DATABASE
     user_File_Pointer = fopen ("Users.txt", "r");
@@ -265,7 +268,6 @@ main()
                                     
                                     // -------------------------------------------------------------
                                     case CHANGE_PRICE:
-                                        int new_price;
                                         prompt_Double("\nWhat is the new price? ", 
                                                     &new_price);
 
@@ -549,9 +551,13 @@ main()
                                         {
                                             for (i = 0; i < item_Cart_Count; i++)
                                             {
-                                                if (user_Cart[i].seller_ID == seller_ID)
+                                                if (user_Cart[i].item.seller_ID == seller_ID)
                                                 {
-                                                    swap_Item(&user_Cart[i], &user_Cart[item_Cart_Count-1]);
+                                                    for (j = i; j < item_Cart_Count; j++)
+                                                    {
+                                                        swap_Item(&user_Cart[j], &user_Cart[j+1]);
+                                                    }
+                                                    i--;
                                                     item_Cart_Count--;
                                                 }
                                             }
@@ -573,9 +579,13 @@ main()
                                         {
                                             for (i = 0; i < item_Cart_Count; i++)
                                             {
-                                                if (user_Cart[i].product_ID == item_ID)
+                                                if (user_Cart[i].item.product_ID == item_ID)
                                                 {
-                                                    swap_Item(&user_Cart[i], &user_Cart[item_Cart_Count-1]);
+                                                    for (j = i; j < item_Cart_Count; j++)
+                                                    {
+                                                        swap_Item(&user_Cart[j], &user_Cart[j+1]);
+                                                    }
+                                                    i--;
                                                     item_Cart_Count--;
                                                 }
                                             }
@@ -587,8 +597,10 @@ main()
                                     case EDIT_QUANTITY:
                                         prompt_Long_Long("Enter Item ID: ", &item_ID);
 
-                                        item_Index = give_Item_Index_Via_ID(user_Cart, item_ID, item_Database_Count);
-                                        if ( item_Index == -1)
+                                        item_Index = give_Item_Index_Via_ID_In_Cart (user_Cart, 
+                                                                                     item_ID, 
+                                                                                     item_Database_Count);
+                                        if (item_Index == -1)
                                         {
                                             printf("\tERROR: Item not found/\n");
                                             let_Read();
@@ -597,7 +609,7 @@ main()
                                         else
                                         {
                                             prompt_Long_Long("Enter new item quantity: ",
-                                                             &user_Cart[item_Index].quantity);
+                                                             &user_Cart[item_Index].quantity_Desired);
                                         }
 
                                         break;
@@ -617,7 +629,47 @@ main()
                             case CHECK_OUT:
                                 check_Out_Done = FALSE;
 
-                                // smt smh
+                                prompt_Date (&date);
+
+                                update_Product_Count = 0;
+
+                                update_Product_Count = enumerate_Differing_Product (item_Database,
+                                                                                    item_Database_Count,
+                                                                                    user_Cart,
+                                                                                    item_Cart_Count,
+                                                                                    update_Product_Indices);
+                                
+                                if (update_Product_Count > 0)
+                                {
+                                    printf("\tWARNING: Updates found.\n");
+                                    new_Line();
+                                    printf("\tUpdated Items:\n");
+                                    printf("\t-------------------------------------------------\n");
+                                    for (int i = 0; i < update_Product_Count; i++)
+                                    {
+                                        new_Line();
+                                        printf("\t%d\n", i+1);
+                                        new_Line();
+                                        printf("\tOld:\n");
+                                        display_Item(user_Cart[update_Product_Indices[i]].item);
+                                        new_Line();
+                                        printf("\tNew:\n");
+                                        display_Item(item_Database[give_Item_Index_Via_ID(item_Database, 
+                                                                                          user_Cart[update_Product_Indices[i]].item.product_ID, 
+                                                                                          item_Database_Count)]);
+                                        new_Line();
+                                        printf("\t-------------------------------------------------\n");
+
+                                        user_Cart[update_Product_Indices[i]].item = item_Database[give_Item_Index_Via_ID(item_Database, 
+                                                                                                                         user_Cart[update_Product_Indices[i]].item.product_ID, 
+                                                                                                                         item_Database_Count)];
+                                    }
+
+                                    new_Line();
+                                    printf("\tINFO: Cart updated!\n");
+                                    printf("\tINFO: You can still go back to Edit Cart.\n");
+                                    let_Read();
+                                }
 
                                 do
                                 {    
@@ -669,14 +721,20 @@ main()
                     // -----------------------------------------------------------------------------
                     case EXIT_USER:
                         user_Done = TRUE;
+
                         if (item_Cart_Count > 0)
                         {
-                            //put stuff into cart
+                            cart_File_Pointer = fopen (user_Cart_Name, "wb");
+                            fwrite(user_Cart, sizeof(orderType), item_Cart_Count, cart_File_Pointer);
+                            fclose (cart_File_Pointer);
                         }
 
                         else
                         {
-                            remove(user_Cart_Name);
+                            cart_File_Pointer = fopen (user_Cart_Name, "rb");
+                            if (cart_File_Pointer != NULL)
+                                remove(user_Cart_Name);
+                            fclose (cart_File_Pointer);
                         }
                         break;
                     }
