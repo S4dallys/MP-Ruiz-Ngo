@@ -318,6 +318,33 @@ give_Item_Index_Via_ID_Ordertype (orderType   item_Database[],
     return index;
 }
 
+int
+give_Item_Index_Via_ID_Ordertype (orderType   item_Database[],
+                        long long  itemID,
+                        int        item_Database_Count)
+{
+    // local variable declaration
+    int index;
+    int i;
+
+    index = -1;
+    i = 0;
+
+    // looping through the array until it reaches the end
+    // or an instance has been found
+    while (i < item_Database_Count && index == -1)
+    {
+        // flags an instance of item_ID in the array
+        if (item_Database[i].item.product_ID == itemID)
+            index = i;
+
+        // increments an index    
+        else i++;
+    }
+    
+    return index;
+}
+
 /**
  * give_Item_Index_Via_ID_In_Cart gives the index of an item 
  * structure within an array of order structures
@@ -522,8 +549,20 @@ void swap_Item (itemType *  a,
     *b = temp;
 }
 
-void swap_Order (orderType *  a,
+<<<<<<< HEAD
+/**
+ * swap_Item swaps the contents of one item structure with!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * another
+ * @param a - the address of an item structure
+ * @param b - the address of another item structure
+*/
+void 
+swap_Order (orderType *  a,
+            orderType *  b)
+=======
+void swap_Item_Ordertype (orderType *  a,
                           orderType *  b)
+>>>>>>> e583f39b0299536ae987e02d6ef8d70d72597776
 {
     // local variable declaration
     orderType temp;
