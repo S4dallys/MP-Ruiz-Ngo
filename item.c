@@ -291,6 +291,33 @@ give_Item_Index_Via_ID (itemType   item_Database[],
     return index;
 }
 
+int
+give_Item_Index_Via_ID_Ordertype (orderType   item_Database[],
+                        long long  itemID,
+                        int        item_Database_Count)
+{
+    // local variable declaration
+    int index;
+    int i;
+
+    index = -1;
+    i = 0;
+
+    // looping through the array until it reaches the end
+    // or an instance has been found
+    while (i < item_Database_Count && index == -1)
+    {
+        // flags an instance of item_ID in the array
+        if (item_Database[i].item.product_ID == itemID)
+            index = i;
+
+        // increments an index    
+        else i++;
+    }
+    
+    return index;
+}
+
 /**
  * give_Item_Index_Via_ID_In_Cart gives the index of an item 
  * structure within an array of order structures
@@ -407,6 +434,29 @@ count_User_Items (itemType   item_Database[],
     return counter;
 }
 
+int
+count_User_Items_Ordertype (orderType item_Database[],
+                            int        item_Database_Count,
+                            long long  userID)
+{
+    // local variable declaration
+    int counter;
+    int i;
+
+    counter = 0;
+
+    // loops though the array
+    for (i = 0; i < item_Database_Count; i++)
+    {
+        // increments the counter if the item is being sold
+        // by the seller in question
+        if (item_Database[i].item.seller_ID == userID)
+            counter++;
+    }
+
+    return counter;
+}
+
 /**
  * sort_Item_Array sorts an array of item indices with respect
  * to the item IDs of the item they represent, in ascending 
@@ -465,6 +515,30 @@ void swap_Item (itemType *  a,
 {
     // local variable declaration
     itemType temp;
+
+    // switches the contents
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+<<<<<<< HEAD
+/**
+ * swap_Item swaps the contents of one item structure with!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * another
+ * @param a - the address of an item structure
+ * @param b - the address of another item structure
+*/
+void 
+swap_Order (orderType *  a,
+            orderType *  b)
+=======
+void swap_Item_Ordertype (orderType *  a,
+                          orderType *  b)
+>>>>>>> e583f39b0299536ae987e02d6ef8d70d72597776
+{
+    // local variable declaration
+    orderType temp;
 
     // switches the contents
     temp = *a;
