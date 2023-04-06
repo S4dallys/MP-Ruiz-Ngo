@@ -116,7 +116,7 @@ main()
     int    item_Index;
     int    i;
     int    j;
-    int    new_price;
+    double new_price;
     double sum;
     int temp;
 
@@ -550,7 +550,7 @@ main()
                                     case REMOVE_ITEMS_OF_SELLER:
                                         prompt_Long_Long ("Enter Seller ID:", &seller_ID);
 
-                                        if (count_User_Items(user_Cart, item_Cart_Count, seller_ID) == 0)
+                                        if (count_User_Items_Ordertype(user_Cart, item_Cart_Count, seller_ID) == 0)
                                         {
                                             printf("\tERROR: Seller not found.\n");
                                             let_Read();
@@ -564,7 +564,7 @@ main()
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
                                                     {
-                                                        swap_Item(&user_Cart[j], &user_Cart[j+1]);
+                                                        swap_Item_Ordertype(&user_Cart[j], &user_Cart[j+1]);
                                                     }
                                                     i--;
                                                     item_Cart_Count--;
@@ -578,7 +578,7 @@ main()
                                     case REMOVE_SPECIFIC_ITEM:
                                         prompt_Long_Long("Enter Item ID: ", &item_ID);
 
-                                        if (give_Item_Index_Via_ID(user_Cart, item_ID, item_Database_Count) == -1)
+                                        if (give_Item_Index_Via_ID_Ordertype(user_Cart, item_ID, item_Database_Count) == -1)
                                         {
                                             printf("\tERROR: Item not found/\n");
                                             let_Read();
@@ -592,7 +592,7 @@ main()
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
                                                     {
-                                                        swap_Item(&user_Cart[j], &user_Cart[j+1]);
+                                                        swap_Item_Ordertype(&user_Cart[j], &user_Cart[j+1]);
                                                     }
                                                     i--;
                                                     item_Cart_Count--;
