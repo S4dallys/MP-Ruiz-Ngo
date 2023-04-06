@@ -462,6 +462,5 @@ display_Transaction (transactionType *transaction,
            transaction->seller_ID);
     transaction->amount = total_Price;
     new_Line();
-    let_Read();
 }
 

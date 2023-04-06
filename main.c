@@ -14,6 +14,8 @@ main()
 
     transactionType transaction;
     dateType date;
+    dateType duration_Date_1;
+    dateType duration_Date_2;
 
     long long user_ID;
     long long seller_ID;
@@ -24,10 +26,13 @@ main()
     int  item_Database_Count;
     int  item_Cart_Count;
     int  update_Product_Count;
+    int  seller_Product_Count;
 
     int  user_Product_Indices[20];
     int  user_Product_Count;
     int  update_Product_Indices[10];
+    int  seller_Product_Indices[10];
+
 
     orderType  user_Cart[10];
     String30   user_Cart_Name;
@@ -45,6 +50,8 @@ main()
     boolean  has_Inputted;
 
     boolean permissions_Array[MAX_USERS];
+
+    float   sales_Array[MAX_USERS];
 
     FILE *  user_File_Pointer;
     FILE *  item_File_Pointer;
@@ -105,11 +112,13 @@ main()
     String15 low_Name_Copy1;
     String15 low_Name_Copy2;
 
-    char  choice;
-    int   item_Index;
-    int   i;
-    int   j;
-    int   new_price;
+    char   choice;
+    int    item_Index;
+    int    i;
+    int    j;
+    int    new_price;
+    double sum;
+    int temp;
 
     // Initialize USER DATABASE
     user_File_Pointer = fopen ("Users.txt", "r");
@@ -643,6 +652,7 @@ main()
                                 if (update_Product_Count > 0)
                                 {
                                     printf("\tWARNING: Updates found.\n");
+                                    printf("\tUpdating...\n");
                                     new_Line();
                                     printf("\tUpdated Items:\n");
                                     printf("\t-------------------------------------------------\n");
@@ -689,8 +699,59 @@ main()
                                     case BUY_BY_CERTAIN_SELLER:
                                         prompt_Long_Long ("Insert seller ID: ", &seller_ID);
 
+                                        seller_Product_Count = find_User_Product_In_Cart (user_Cart, item_Cart_Count, seller_ID, seller_Product_Indices);
 
+                                        if (seller_Product_Count == 0)
+                                        {
+                                            printf("\tERROR: Seller not found.\n");
+                                            let_Read();
+                                        }
 
+                                        else
+                                        {                                                
+                                            transaction.date = date;
+                                            transaction.buyer_ID = user_ID;
+                                            transaction.seller_ID = user_Cart[item_Index].item.seller_ID;
+                                            transaction.items_Ordered = 0;
+
+                                            for (i = 0; i < seller_Product_Count; i++)
+                                            {
+                                                if (user_Cart[seller_Product_Indices[i]].quantity_Desired > user_Cart[seller_Product_Indices[i]].item.quantity)
+                                                {
+                                                    printf("\tERROR: Item %c%s%c (ID#%lld) is out of stock. Skipping item...\n", 
+                                                        '"', user_Cart[seller_Product_Indices[i]].item.name, '"', 
+                                                        user_Cart[seller_Product_Indices[i]].item.product_ID);
+                                                }
+
+                                                else
+                                                {
+                                                    transaction.transaction_Log[transaction.items_Ordered] = user_Cart[seller_Product_Indices[i]];
+                                                    transaction.items_Ordered++;
+                                                }
+
+                                                if (transaction.items_Ordered == 5)
+                                                {
+                                                    display_Transaction (&transaction, user_Database, user_Database_Count);
+                                                    for (j = 0; j < 5; j++)
+                                                        item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
+                                                    transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+                                                    fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                                    fclose (transaction_File_Pointer);
+                                                }
+                                            }
+
+                                            if (transaction.items_Ordered != 0)
+                                            {
+                                                display_Transaction (&transaction, user_Database, user_Database_Count);
+                                                for (j = 0; j < 5; j++)
+                                                    item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
+                                                transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+                                                fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                                fclose (transaction_File_Pointer);
+                                            }
+                                            new_Line();
+                                            let_Read();
+                                        }
                                         break;
 
                                     // -------------------------------------------------------------
@@ -724,6 +785,7 @@ main()
 
                                             display_Transaction (&transaction, user_Database, user_Database_Count);
                                             item_Database[give_Item_Index_Via_ID(item_Database, user_Cart[item_Index].item.product_ID, item_Database_Count)].quantity -= user_Cart[item_Index].quantity_Desired;
+                                            let_Read();
 
                                             transaction_File_Pointer = fopen ("Transactions.dat", "ab");
                                             fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
@@ -821,8 +883,43 @@ main()
 
                         // -------------------------------------------------------------------------
                         case SHOW_TOTAL_SALES_IN_GIVEN_DURATION:
-                            //insert code here
-
+                            sum = 0;
+                            transaction_File_Pointer = fopen ("Transactions.dat", "rb");
+                            if (transaction_File_Pointer == NULL)
+                                printf("\tERROR: Transaction file does not exist.\n");
+                            else
+                            {
+                                printf("\tStarting Date:\n");
+                                prompt_Date(&duration_Date_1);
+                                new_Line();
+                                printf("\tEnd Date:\n");
+                                prompt_Date(&duration_Date_2);
+                                if (compare_Date(duration_Date_1, duration_Date_2) != -1 ||
+                                    compare_Date(duration_Date_1, duration_Date_2) != 0)
+                                {
+                                    printf("\tERROR: Invalid date bounds.\n");
+                                    let_Read();
+                                }
+                                else
+                                {
+                                    fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                    while (!feof(transaction_File_Pointer))
+                                    {
+                                        if (!(compare_Date(transaction.date, duration_Date_1) == -1 ||
+                                            compare_Date(transaction.date, duration_Date_2) == 1))
+                                            sum += transaction.amount;
+                                        fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                    }
+                                    new_Line();
+                                    printf("\tTotal Sales from %04d-%02d-%02d to %04d-%02d-%02d: %f",
+                                           duration_Date_1.year, duration_Date_1.month, duration_Date_1.day,
+                                           duration_Date_2.year, duration_Date_2.month, duration_Date_2.day,
+                                           sum);
+                                    new_Line();
+                                    let_Read();
+                                }
+                            }
+                            
                             break;
 
                         // -------------------------------------------------------------------------

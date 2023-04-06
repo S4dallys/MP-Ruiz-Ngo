@@ -18,7 +18,6 @@ register_User (userType  user_Database[],
 {
     userType  user;
     boolean   valid_Response;
-    //char    white_Space;
 
     valid_Response = TRUE;
 
@@ -33,8 +32,6 @@ register_User (userType  user_Database[],
                                         *user_Database_Count, 
                                         user.user_ID);
     } while (!valid_Response);
-
-    //white_Space = scanf("%c", &white_Space);
 
     prompt_StringN("Name: ", user.name, 20);
 

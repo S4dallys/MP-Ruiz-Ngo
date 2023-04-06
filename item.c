@@ -166,6 +166,52 @@ find_User_Product (itemType   item_Database[],
 }
 
 /**
+ * find_User_Product searches for a user's products in an 
+ * array of orders and stores the indices of these products
+ * in an integer array and returns the number of products
+ * found.
+ * @param item_Database - an array of item structures
+ * @param item_Database_Size - the number of items inside
+ *                             item_Database
+ * @param sellerID - the user whose products the function 
+ *                   is looking for
+ * @param item_Indices_Array - the array where the indices
+ *                             of where the user's products
+ *                             are stored in item_Database
+ *                             are to be stored
+ * @return the length of item_Indices_Array
+*/
+int
+find_User_Product_In_Cart (orderType  order_Database[],
+                           int        order_Database_Size,
+                           long long  sellerID,
+                           int        order_Indices_Array[])
+{
+    // local variable declaration
+    int index;
+    int i;
+
+    index = 0;
+
+    // loops through the array
+    for (i = 0; i < order_Database_Size; i++)
+    {
+        // records an order's index in order_Indices_Array
+        // if its seller ID is the same as the one given.
+        if (order_Database[i].item.seller_ID == sellerID)
+        {
+            order_Indices_Array[index] = i;
+
+            // increments the index
+            index++;
+        }
+    }
+
+    // returns how many products the seller has
+    return index;
+}
+
+/**
  * find_Product_In_List, using an array of indices of
  * item structures from an array, checks if one of the 
  * indices in the array represents an item with a certain
