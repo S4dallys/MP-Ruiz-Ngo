@@ -116,9 +116,9 @@ main()
     int    item_Index;
     int    i;
     int    j;
-    int    new_price;
+    double new_price;
     double sum;
-    int temp;
+    int    temp;
 
     // Initialize USER DATABASE
     user_File_Pointer = fopen ("Users.txt", "r");
@@ -564,7 +564,7 @@ main()
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
                                                     {
-                                                        swap_Item(&user_Cart[j], &user_Cart[j+1]);
+                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
                                                     }
                                                     i--;
                                                     item_Cart_Count--;
@@ -578,7 +578,7 @@ main()
                                     case REMOVE_SPECIFIC_ITEM:
                                         prompt_Long_Long("Enter Item ID: ", &item_ID);
 
-                                        if (give_Item_Index_Via_ID(user_Cart, item_ID, item_Database_Count) == -1)
+                                        if (give_Item_Index_Via_ID_In_Cart(user_Cart, item_ID, item_Cart_Count) == -1)
                                         {
                                             printf("\tERROR: Item not found/\n");
                                             let_Read();
@@ -592,7 +592,7 @@ main()
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
                                                     {
-                                                        swap_Item(&user_Cart[j], &user_Cart[j+1]);
+                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
                                                     }
                                                     i--;
                                                     item_Cart_Count--;
@@ -732,8 +732,10 @@ main()
                                                 if (transaction.items_Ordered == 5)
                                                 {
                                                     display_Transaction (&transaction, user_Database, user_Database_Count);
+
                                                     for (j = 0; j < 5; j++)
                                                         item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
+                                                    
                                                     transaction_File_Pointer = fopen ("Transactions.dat", "ab");
                                                     fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
                                                     fclose (transaction_File_Pointer);
@@ -743,8 +745,10 @@ main()
                                             if (transaction.items_Ordered != 0)
                                             {
                                                 display_Transaction (&transaction, user_Database, user_Database_Count);
+
                                                 for (j = 0; j < 5; j++)
                                                     item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
+                                                
                                                 transaction_File_Pointer = fopen ("Transactions.dat", "ab");
                                                 fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
                                                 fclose (transaction_File_Pointer);

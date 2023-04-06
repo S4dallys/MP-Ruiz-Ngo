@@ -471,3 +471,22 @@ void swap_Item (itemType *  a,
     *a = *b;
     *b = temp;
 }
+
+/**
+ * swap_Item swaps the contents of one item structure with!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * another
+ * @param a - the address of an item structure
+ * @param b - the address of another item structure
+*/
+void 
+swap_Order (orderType *  a,
+            orderType *  b)
+{
+    // local variable declaration
+    orderType temp;
+
+    // switches the contents
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
