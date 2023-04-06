@@ -758,6 +758,19 @@ main()
                                             }
                                             new_Line();
                                             let_Read();
+
+                                            for (i = 0; i < item_Cart_Count; i++)
+                                            {
+                                                if (user_Cart[i].item.seller_ID == transaction.seller_ID)
+                                                {
+                                                    for (j = i; j < item_Cart_Count; j++)
+                                                    {
+                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                    }
+                                                    i--;
+                                                    item_Cart_Count--;
+                                                }
+                                            }
                                         }
                                         break;
 
@@ -793,6 +806,19 @@ main()
                                             display_Transaction (&transaction, user_Database, user_Database_Count);
                                             item_Database[give_Item_Index_Via_ID(item_Database, user_Cart[item_Index].item.product_ID, item_Database_Count)].quantity -= user_Cart[item_Index].quantity_Desired;
                                             let_Read();
+
+                                            for (i = 0; i < item_Cart_Count; i++)
+                                            {
+                                                if (user_Cart[i].item.product_ID == transaction.transaction_Log[0].item.product_ID)
+                                                {
+                                                    for (j = i; j < item_Cart_Count; j++)
+                                                    {
+                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                    }
+                                                    i--;
+                                                    item_Cart_Count--;
+                                                }
+                                            }
 
                                             transaction_File_Pointer = fopen ("Transactions.dat", "ab");
                                             fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
