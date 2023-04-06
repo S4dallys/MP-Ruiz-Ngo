@@ -32,6 +32,7 @@ main()
     int  user_Product_Count;
     int  update_Product_Indices[10];
     int  seller_Product_Indices[10];
+    long long  unique_Sellers_Indices[10];
 
 
     orderType  user_Cart[10];
@@ -117,9 +118,12 @@ main()
     int    item_Index;
     int    i;
     int    j;
+    int    k;
+    int    unique_Sellers_Count;
+    int    transactions_Count;
     double new_price;
     double sum;
-    // int    temp;
+    int    temp;
 
     // Initialize USER DATABASE
     user_File_Pointer = fopen ("Users.txt", "r");
@@ -551,7 +555,7 @@ main()
                                     case REMOVE_ITEMS_OF_SELLER:
                                         prompt_Long_Long ("Enter Seller ID:", &seller_ID);
 
-                                        if (count_User_Items_Ordertype(user_Cart, item_Cart_Count, seller_ID) == 0)
+                                        if (give_Item_Index_Via_ID_In_Cart(user_Cart, seller_ID, item_Cart_Count) == 0)
                                         {
                                             printf("\tERROR: Seller not found.\n");
                                             let_Read();
@@ -692,7 +696,49 @@ main()
 
                                     // -------------------------------------------------------------
                                     case BUY_ALL:
-                                        //insert code here
+                                        sort_Item_Array_By_SellerID(user_Cart, item_Cart_Count);
+
+                                        unique_Sellers_Count = 0;
+                                        k = 0;
+                                        for (i = 0; i < item_Cart_Count; i++)
+                                        {
+                                            if (check_Unique_Seller_ID(unique_Sellers_Indices, unique_Sellers_Count, user_Cart[i].item.seller_ID))
+                                            {
+                                                unique_Sellers_Indices[j] = search_User(user_Database, 
+                                                                                        user_Database_Count, 
+                                                                                        user_Cart[i].item.seller_ID);
+                                                unique_Sellers_Count++;
+                                            }
+                                        }
+
+                                        transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+
+                                        for (i = 0; i < j; i++)
+                                        {
+                                            transaction.amount += 0;;
+                                            temp = unique_Sellers_Indices[i];
+                                            transactions_Count = 0;
+
+                                            while (user_Cart[k].item.seller_ID == temp && k < item_Cart_Count)
+                                            {
+                                                transaction.transaction_Log[transactions_Count] = user_Cart[k];
+                                                transaction.amount += user_Cart[k].item.unit_Price;
+
+                                                transactions_Count++;
+                                                k++;
+                                            }
+
+                                            transaction.date = date;
+                                            transaction.items_Ordered = transactions_Count;
+                                            transaction.buyer_ID = user_ID;
+                                            transaction.seller_ID = user_Database[temp].user_ID;
+
+                                            fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+
+                                            display_Transaction(&transaction, user_Database, user_Database_Count);
+                                        }
+
+                                        fclose (transaction_File_Pointer);
 
                                         break;
 
@@ -712,7 +758,7 @@ main()
                                         {                                                
                                             transaction.date = date;
                                             transaction.buyer_ID = user_ID;
-                                            transaction.seller_ID = user_Cart[item_Index].item.seller_ID;
+                                            transaction.seller_ID = seller_ID;
                                             transaction.items_Ordered = 0;
 
                                             for (i = 0; i < seller_Product_Count; i++)

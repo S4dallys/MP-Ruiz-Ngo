@@ -43,6 +43,33 @@ check_Unique_Item_ID (itemType   item_Database[],
 	return flag;
 }
 
+boolean
+check_Unique_Seller_ID (long long   item_Database[],
+                         int        item_Database_Size,
+				      long long  item_ID)
+{
+    // local variable declaration
+	boolean  flag;
+	int      index;
+	
+	flag = TRUE;
+	index = 0;
+	
+    // looping through the array until it reaches the end
+    // or an instance has been found
+	while (index < item_Database_Size && flag == FALSE)
+
+        // flags an instance of item_ID in the array
+		if (item_Database[index] == item_ID)
+			flag = FALSE;
+
+        // increments the index
+		else
+			index++;
+	
+	return flag;
+}
+
 /**
  * register_Product accepts input from the user to create
  * an item or product instance and appends it to an array
@@ -434,29 +461,6 @@ count_User_Items (itemType   item_Database[],
     return counter;
 }
 
-int
-count_User_Items_Ordertype (orderType item_Database[],
-                            int        item_Database_Count,
-                            long long  userID)
-{
-    // local variable declaration
-    int counter;
-    int i;
-
-    counter = 0;
-
-    // loops though the array
-    for (i = 0; i < item_Database_Count; i++)
-    {
-        // increments the counter if the item is being sold
-        // by the seller in question
-        if (item_Database[i].item.seller_ID == userID)
-            counter++;
-    }
-
-    return counter;
-}
-
 /**
  * sort_Item_Array sorts an array of item indices with respect
  * to the item IDs of the item they represent, in ascending 
@@ -500,6 +504,43 @@ sort_Item_Array_By_ID (itemType  item_Database[],
             temp = item_Index_Array[i];
             item_Index_Array[i] = item_Index_Array[lowest];
             item_Index_Array[lowest] = temp;
+        }
+    }
+}
+
+void
+sort_Item_Array_By_SellerID (orderType  item_Database[],
+                       int       item_Array_Size)
+{
+    // local variable declaration
+    int lowest;
+    orderType temp;
+    int i;
+    int j;
+
+    // loops through all of the indices in item_Idex_Array
+    for (i = 0; i < item_Array_Size - 1; i++)
+    {
+        // assume that the ith element represents the lowest ID
+        lowest = i;
+
+        // loops through the rest of the array
+        for (j = i + 1; j < item_Array_Size; j++)
+        {
+            // rewrites the representation of the lowest ID if
+            // it finds a smaller one
+            if (item_Database[lowest].item.seller_ID > 
+                item_Database[j].item.seller_ID)
+                lowest = j;
+        }
+
+        // switches if the ith element does not represent the
+        // item with the lowest ID from range (i, item_Array_Size)
+        if (lowest != i)
+        {
+            temp = item_Database[i];
+            item_Database[i] = item_Database[lowest];
+            item_Database[lowest] = temp;
         }
     }
 }

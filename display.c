@@ -396,7 +396,7 @@ display_And_Calculate_Order_Table (orderType transaction_Log[],
                                    int       items_Ordered)
 {
     // local variable declaration
-    int item_Width_Array[5] = {19, 20, 15, 15, 19};
+    int item_Width_Array[5] = {19, 19, 20, 15, 15};
     int index;
     boolean first;
 
@@ -418,7 +418,7 @@ display_And_Calculate_Order_Table (orderType transaction_Log[],
         {
             first = FALSE;
 
-            printf("\t| %-19s | %-19s | %-20s | %-15s | %-15s |", 
+            printf("\t| %-19s | %-19s | %-20s | %-15s | %-15s |\n", 
                    "QUANTITY", "PRODUCT ID", "ITEM NAME", "UNIT PRICE", "TOTAL PRICE");
         }
 
@@ -428,7 +428,7 @@ display_And_Calculate_Order_Table (orderType transaction_Log[],
             price_Of_Items = transaction_Log[index].quantity_Desired *
                              transaction_Log[index].item.unit_Price;
 
-            printf("\t| %19I64d | %19I64d | %-20s | %15.2f | %15.2f |",
+            printf("\t| %19I64d | %19I64d | %-20s | %15.2f | %15.2f |\n",
                    transaction_Log[index].quantity_Desired,
                    transaction_Log[index].item.product_ID,
                    transaction_Log[index].item.name,
@@ -460,9 +460,9 @@ display_Transaction (transactionType *transaction,
     new_Line();
     total_Price = display_And_Calculate_Order_Table (transaction->transaction_Log, transaction->items_Ordered);
     new_Line();
-    printf("\tTotal Price of Transaction: %f\n", total_Price);
+    printf("\tTotal Price of Transaction: %.2f\n", total_Price);
     new_Line();
-    printf("Payable to: %s, User ID# %19I64d\n", 
+    printf("\tPayable to: %s, User ID# %-19I64d\n", 
            user_Database[search_User(user_Database, user_Database_Size, transaction->seller_ID)].name, 
            transaction->seller_ID);
     transaction->amount = total_Price;
