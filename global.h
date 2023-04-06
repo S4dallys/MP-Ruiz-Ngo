@@ -60,6 +60,7 @@ typedef struct orderTag
 typedef struct transactionTag
 {
     dateType       date;
+    int            items_Ordered;
     orderType      transaction_Log[5];
     long long      buyer_ID;
     long long      seller_ID;

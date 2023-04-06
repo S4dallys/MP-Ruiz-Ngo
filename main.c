@@ -624,6 +624,7 @@ main()
                                 } while (!edit_Cart_Done);
                                     
                                 break;
+
                             
                             // ---------------------------------------------------------------------
                             case CHECK_OUT:
@@ -686,13 +687,48 @@ main()
 
                                     // -------------------------------------------------------------
                                     case BUY_BY_CERTAIN_SELLER:
-                                        //insert code here
+                                        prompt_Long_Long ("Insert seller ID: ", &seller_ID);
+
+
 
                                         break;
 
                                     // -------------------------------------------------------------
                                     case BUY_SPECIFIC_ITEM:
-                                        //insert code here
+                                        prompt_Long_Long ("Insert item ID: ", &item_ID);
+
+                                        item_Index = give_Item_Index_Via_ID_In_Cart (user_Cart, 
+                                                                                     item_ID,
+                                                                                     item_Cart_Count);
+                                        
+                                        if (item_Index == -1)
+                                        {
+                                            printf("\tERROR: Item not found.\n");
+                                            let_Read();
+                                        }
+
+                                        else if (user_Cart[item_Index].item.quantity < 
+                                                 user_Cart[item_Index].quantity_Desired)
+                                        {
+                                            printf("\tERROR: Item stocks less than desired.\n");
+                                            let_Read();
+                                        }
+
+                                        else
+                                        {
+                                            transaction.date = date;
+                                            transaction.buyer_ID = user_ID;
+                                            transaction.items_Ordered = 1;
+                                            transaction.transaction_Log[0] = user_Cart[item_Index];
+                                            transaction.seller_ID = user_Cart[item_Index].item.seller_ID;
+
+                                            display_Transaction (&transaction, user_Database, user_Database_Count);
+                                            item_Database[give_Item_Index_Via_ID(item_Database, user_Cart[item_Index].item.product_ID, item_Database_Count)].quantity -= user_Cart[item_Index].quantity_Desired;
+
+                                            transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+                                            fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                            fclose (transaction_File_Pointer);
+                                        }
 
                                         break;
 

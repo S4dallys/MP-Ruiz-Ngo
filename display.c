@@ -385,3 +385,83 @@ new_Line()
 {
   printf("\n");
 }
+
+double
+display_And_Calculate_Order_Table (orderType transaction_Log[],
+                                   int       items_Ordered)
+{
+    // local variable declaration
+    int item_Width_Array[5] = {19, 20, 15, 15, 19};
+    int index;
+    boolean first;
+
+    double total_Price;
+    double price_Of_Items;
+
+    total_Price = 0;
+
+    first = TRUE;
+
+    // loop through the initialization and the entire array
+    for (index = -1; index < items_Ordered; index++)
+    {
+        // display a horizontal border line
+        display_Horizontal_Border_Line(5, item_Width_Array);
+
+        // print the header at initialization
+        if (first)
+        {
+            first = FALSE;
+
+            printf("\t| %-19s | %-19s | %-20s | %-15s | %-15s |", 
+                   "QUANTITY", "PRODUCT ID", "ITEM NAME", "UNIT PRICE", "TOTAL PRICE");
+        }
+
+        // print the data in each column
+        else
+        {
+            price_Of_Items = transaction_Log[index].quantity_Desired *
+                             transaction_Log[index].item.unit_Price;
+
+            printf("\t| %19I64d | %19I64d | %-20s | %15.2f | %15.2f |",
+                   transaction_Log[index].quantity_Desired,
+                   transaction_Log[index].item.product_ID,
+                   transaction_Log[index].item.name,
+                   transaction_Log[index].item.unit_Price,
+                   price_Of_Items);
+            
+            total_Price += price_Of_Items;
+        }
+    }
+
+    // cap it off with a final horizontal border line
+    display_Horizontal_Border_Line(5, item_Width_Array);
+
+    return total_Price;
+}
+
+void
+display_Transaction (transactionType *transaction,
+                     userType        user_Database[],
+                     int             user_Database_Size)
+{
+    double total_Price;
+
+    printf("\t*****************************************SUMMARY OF TRANSACTION*****************************************");
+    new_Line();
+    printf("\tDate of Transaction: %04d-%02d-%02d", transaction->date.year, 
+                                                    transaction->date.month, 
+                                                    transaction->date.day);
+    new_Line();
+    total_Price = display_And_Calculate_Order_Table (transaction->transaction_Log, transaction->items_Ordered);
+    new_Line();
+    printf("\tTotal Price of Transaction: %f\n", total_Price);
+    new_Line();
+    printf("Payable to: %s, User ID# %19I64d\n", 
+           search_User(user_Database, user_Database_Size, transaction->seller_ID), 
+           transaction->seller_ID);
+    transaction->amount = total_Price;
+    new_Line();
+    let_Read();
+}
+

@@ -37,17 +37,14 @@ void
 prompt_Int (char   prompt[],
             int *  address)
 {
-    // local variable declaration
-    char garbage;
-
     // shows prompt parameter
     printf("\t%s", prompt);
 
     // gets an integer input from the input stream
     scanf("%d", address);
 
-    // removes new line character from stream
-    scanf("%c", &garbage);
+    // removes garbage input from stream
+    clean_Input_Stream();
 }
 
 /**
@@ -62,17 +59,14 @@ void
 prompt_Long_Long (char         prompt[],
                   long long *  address)
 {
-    // local variable declaration
-    char garbage;
-    
     // shows prompt parameter
     printf("\t%s", prompt);
 
     // gets a long long input from the input stream
     scanf("%I64d", address);
 
-    // removes new line character from stream
-    scanf("%c", &garbage);
+    // removes garbage input from stream
+    clean_Input_Stream();
 }
 
 /**
@@ -87,17 +81,14 @@ void
 prompt_Double (char      prompt[],
                double *  address)
 {
-    // local variable declaration
-    char garbage;
-
     // shows prompt parameter
     printf("\t%s", prompt);
 
     // gets a double input from the input stream
     scanf("%lf", address);
 
-    // removes new line character from input stream
-    scanf("%c", &garbage);
+    // removes garbage input from stream
+    clean_Input_Stream();
 }
 
 /**
@@ -112,17 +103,14 @@ void
 prompt_Char (char    prompt[],
              char *  address)
 {
-    // local variable declaration
-    char garbage;
-    
     // shows prompt parameter
     printf("\t%s", prompt);
 
     // gets a character input from the input stream
     scanf("%c", address);
 
-    // removes new line character from input stream
-    scanf("%c", &garbage);
+    // removes garbage input from stream
+    clean_Input_Stream();
 }
 
 /**
@@ -226,4 +214,6 @@ prompt_Date (dateType* date)
             gave_Valid = TRUE;
     } while (!gave_Valid);
     
+    // removes garbage input from stream
+    clean_Input_Stream();
 }
