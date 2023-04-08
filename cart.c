@@ -102,3 +102,48 @@ enumerate_Differing_Product (itemType  item_Database[],
 
     return counter;
 }
+
+boolean
+check_Unique_Seller (long long  ID_Array[],
+                     int        ID_Database_Size,
+				     long long  user_ID)
+{
+    boolean  flag;
+	int      index;
+	
+	flag = TRUE;
+	index = 0;
+	
+	while (index < ID_Database_Size && flag == FALSE)
+    {
+		if (ID_Array[index] == user_ID)
+			flag = FALSE;
+		else
+			index++;
+    }
+
+	return flag;
+}
+
+int
+enumerate_Unique_Sellers (orderType order_Array[],
+                          int       order_Database_Count,
+                          long long unique_Seller_Array[])
+{
+    int ctr;
+    int i;
+
+    ctr = 0;
+
+    for (i = 0; i < order_Database_Count; i++)
+    {
+        if (check_Unique_Seller(unique_Seller_Array, ctr, order_Array[i].item.seller_ID))
+        {
+            unique_Seller_Array[ctr] = order_Array[i].item.seller_ID;
+            ctr++;
+        }
+    }
+
+    return ctr;
+
+}
