@@ -168,7 +168,10 @@ prompt_StringN (char  prompt[],
     address[index] = 0;
 }
 
-
+/**
+ * Prompts user for a date and creates a dateType struct.
+ * @param date dateType pointer to set new dateType to
+*/
 void
 prompt_Date (dateType* date)
 {
@@ -178,11 +181,13 @@ prompt_Date (dateType* date)
 
     int max_Days;
 
+    // prompt for date year
     printf("\tYears in ISO 8601 prescribe 1 BC as 0, 2 BC as -1, and so on.\n");
     printf("\tYears after 1 BC are written normally.\n");
     printf("\tInsert year (considering ISO 8601): ");
     scanf("%d", &date->year);
 
+    // checks if year is leap year
     is_Leap_Year = is_Leap(date -> year);
 
     gave_Error = FALSE;
@@ -193,6 +198,7 @@ prompt_Date (dateType* date)
         if (gave_Error)
             printf("\tERROR: Invalid month.\n");
 
+        // prompt for date month
         printf("\tInsert month (1-12): ");
         scanf("%d", &date->month);
         
@@ -202,6 +208,7 @@ prompt_Date (dateType* date)
             gave_Valid = TRUE;
     } while (!gave_Valid);
 
+    // sets ma days in month based on year and month
     max_Days = give_Max_Days_In_Month(is_Leap_Year, date -> month);
 
     gave_Error = FALSE;
@@ -212,6 +219,7 @@ prompt_Date (dateType* date)
         if (gave_Error)
             printf("\tERROR: Invalid date.\n");
 
+        // prompt date day
         printf("\tInsert date (1-%d): ", max_Days);
         scanf("%d", &date->day);
         
