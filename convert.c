@@ -35,7 +35,7 @@ make_Transaction_txt ()
     fclose(transactionFileB);
     fclose(transactionFileT);
 }
-
+                  // fi = input file name (ur .bag file); fo = output file name (smth.txt or what have u)
 void make_Bag_Txt (char * fi, char* fo)
 {
     FILE * bagFileB;
