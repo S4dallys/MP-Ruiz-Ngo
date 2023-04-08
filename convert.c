@@ -34,6 +34,28 @@ make_Transaction_txt ()
 
     fclose(transactionFileB);
     fclose(transactionFileT);
+}
+
+void make_Bag_Txt (char * fi, char* fo)
+{
+    FILE * bagFileB;
+    FILE * bagFileT;
+    itemType item;
+    int i;
+    i = 0;
+    bagFileB = fopen (fi, "rb");
+    bagFileT = fopen (fo, "wt");
+    fread (&item, sizeof(itemType), 1, fi);
+    while (!feof(bagFileB))
+    {
+        fprintf(bagFileT, "Item %d:\n", i + 1);
+        fprintf(bagFileT, "\tProduct ID:         %I64d\n", item.product_ID);
+        fprintf(bagFileT, "\tName:               %s\n", item.name);
+        fprintf(bagFileT, "\tCategory:           %s\n", item.category);
+        fprintf(bagFileT, "\tQuantity Avaliable: %I64d\n", item.quantity);
+        fprintf(bagFileT, "\tPrice:              %lf\n\n", item.unit_Price); 
+        fread (&item, sizeof(itemType), 1, fi);
+    }
 
 }
 
