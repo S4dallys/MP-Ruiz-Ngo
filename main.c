@@ -27,12 +27,13 @@ main()
     int  item_Cart_Count;
     int  update_Product_Count;
     int  seller_Product_Count;
+    int  unique_Seller_Count;
 
     int  user_Product_Indices[20];
     int  user_Product_Count;
     int  update_Product_Indices[10];
     int  seller_Product_Indices[10];
-    long long  unique_Sellers_Indices[10];
+    long long  unique_Sellers_IDs[10];
 
 
     orderType  user_Cart[10];
@@ -696,49 +697,72 @@ main()
 
                                     // -------------------------------------------------------------
                                     case BUY_ALL:
-                                        sort_Item_Array_By_SellerID(user_Cart, item_Cart_Count);
+                                        unique_Sellers_Count = enumerate_Unique_Sellers (user_Cart, item_Cart_Count, unique_Sellers_IDs);
 
-                                        unique_Sellers_Count = 0;
-                                        k = 0;
-                                        for (i = 0; i < item_Cart_Count; i++)
+                                        for (k = 0; k < unique_Sellers_Count; k++)
                                         {
-                                            if (check_Unique_Seller_ID(unique_Sellers_Indices, unique_Sellers_Count, user_Cart[i].item.seller_ID))
+                                            seller_Product_Count = find_User_Product_In_Cart (user_Cart, item_Cart_Count, unique_Sellers_IDs[k], seller_Product_Indices);
+
+                                            if (seller_Product_Count == 0)
                                             {
-                                                unique_Sellers_Indices[j] = search_User(user_Database, 
-                                                                                        user_Database_Count, 
-                                                                                        user_Cart[i].item.seller_ID);
-                                                unique_Sellers_Count++;
-                                            }
-                                        }
-
-                                        transaction_File_Pointer = fopen ("Transactions.dat", "ab");
-
-                                        for (i = 0; i < j; i++)
-                                        {
-                                            transaction.amount += 0;;
-                                            temp = unique_Sellers_Indices[i];
-                                            transactions_Count = 0;
-
-                                            while (user_Cart[k].item.seller_ID == temp && k < item_Cart_Count)
-                                            {
-                                                transaction.transaction_Log[transactions_Count] = user_Cart[k];
-                                                transaction.amount += user_Cart[k].item.unit_Price;
-
-                                                transactions_Count++;
-                                                k++;
+                                                printf("\tERROR: Seller not found.\n");
+                                                let_Read();
                                             }
 
-                                            transaction.date = date;
-                                            transaction.items_Ordered = transactions_Count;
-                                            transaction.buyer_ID = user_ID;
-                                            transaction.seller_ID = user_Database[temp].user_ID;
+                                            else
+                                            {                                                
+                                                transaction.date = date;
+                                                transaction.buyer_ID = user_ID;
+                                                transaction.seller_ID = seller_ID;
+                                                transaction.items_Ordered = 0;
 
-                                            fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                                for (i = 0; i < seller_Product_Count; i++)
+                                                {
+                                                    if (user_Cart[seller_Product_Indices[i]].quantity_Desired > user_Cart[seller_Product_Indices[i]].item.quantity)
+                                                    {
+                                                        printf("\tERROR: Item %c%s%c (ID#%I64d) is out of stock. Skipping item...\n", 
+                                                            '"', user_Cart[seller_Product_Indices[i]].item.name, '"', 
+                                                            user_Cart[seller_Product_Indices[i]].item.product_ID);
+                                                    }
 
-                                            display_Transaction(&transaction, user_Database, user_Database_Count);
+                                                    else
+                                                    {
+                                                        transaction.transaction_Log[transaction.items_Ordered] = user_Cart[seller_Product_Indices[i]];
+                                                        transaction.items_Ordered++;
+                                                    }
+
+                                                    if (transaction.items_Ordered == 5)
+                                                    {
+                                                        display_Transaction (&transaction, user_Database, user_Database_Count);
+
+                                                        for (j = 0; j < 5; j++)
+                                                            item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
+                                                        
+                                                        transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+                                                        fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                                        fclose (transaction_File_Pointer);
+
+                                                        transaction.items_Ordered = 0;
+                                                    }
+                                                }
+
+                                                if (transaction.items_Ordered != 0)
+                                                {
+                                                    display_Transaction (&transaction, user_Database, user_Database_Count);
+
+                                                    for (j = 0; j < 5; j++)
+                                                        item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
+                                                    
+                                                    transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+                                                    fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                                    fclose (transaction_File_Pointer);
+                                                }
+                                                new_Line();
+                                                let_Read();
+
+                                                item_Cart_Count = 0;
+                                            }
                                         }
-
-                                        fclose (transaction_File_Pointer);
 
                                         break;
 
