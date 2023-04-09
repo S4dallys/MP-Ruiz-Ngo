@@ -1,3 +1,5 @@
 .vscode
 main.exe
+convert.exe
 *.bag
+test.txt

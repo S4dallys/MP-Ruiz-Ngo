@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "global.h"
 
+#define TEST "test.txt"
+
 void
 make_Transaction_txt ()
 {
@@ -45,7 +47,7 @@ void make_Bag_Txt (char * fi, char* fo)
     i = 0;
     bagFileB = fopen (fi, "rb");
     bagFileT = fopen (fo, "wt");
-    fread (&item, sizeof(itemType), 1, fi);
+    fread (&item, sizeof(itemType), 1, bagFileB);
     while (!feof(bagFileB))
     {
         fprintf(bagFileT, "Item %d:\n", i + 1);
@@ -54,12 +56,15 @@ void make_Bag_Txt (char * fi, char* fo)
         fprintf(bagFileT, "\tCategory:           %s\n", item.category);
         fprintf(bagFileT, "\tQuantity Avaliable: %I64d\n", item.quantity);
         fprintf(bagFileT, "\tPrice:              %lf\n\n", item.unit_Price); 
-        fread (&item, sizeof(itemType), 1, fi);
+        fread (&item, sizeof(itemType), 1, bagFileB);
+        printf("%d ", i++);
     }
+    fclose(bagFileB);
+    fclose(bagFileT);
 
 }
 
 int main ()
 {
-    make_Transaction_txt();
+    make_Bag_Txt("247.bag", TEST);
 }
