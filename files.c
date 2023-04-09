@@ -132,6 +132,8 @@ upload_User_Database (userType  user_Database[],
                 user_Database[index].address,
                 user_Database[index].contact);
     }
+
+    fclose(user_File_Pointer);
 }
 
 /**
@@ -159,6 +161,8 @@ upload_Item_Database (itemType  item_Database[],
                 item_Database[index].quantity,
                 item_Database[index].unit_Price);
     }
+
+    fclose(item_File_Pointer);
 }
 
 /**
@@ -192,7 +196,9 @@ load_User_Cart (char     user_Cart_Name[],
         while (!feof(user_Cart_File))
         {
             (*user_Cart_Count)++;
-            fread(&user_Cart[*user_Cart_Count], sizeof(itemType), 1, user_Cart_File);
+            fread(&user_Cart[*user_Cart_Count], sizeof(orderType), 1, user_Cart_File);
         }
     }
+
+    fclose(user_Cart_File);
 }

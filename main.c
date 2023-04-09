@@ -926,7 +926,10 @@ main()
                         if (item_Cart_Count > 0)
                         {
                             cart_File_Pointer = fopen (user_Cart_Name, "wb");
-                            fwrite(user_Cart, sizeof(orderType), item_Cart_Count, cart_File_Pointer);
+                            fseek(cart_File_Pointer, 0, SEEK_SET);
+                            for (i = 0; i < item_Cart_Count; i++) {
+                                fwrite(&user_Cart[i], sizeof(orderType), 1, cart_File_Pointer);
+                                printf("%d ", user_Cart[i].item.product_ID);}
                             fclose (cart_File_Pointer);
                         }
 

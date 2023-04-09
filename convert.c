@@ -57,8 +57,7 @@ void make_Bag_Txt (char * fi, char* fo)
         fprintf(bagFileT, "\tQuantity Avaliable: %I64d\n", item.item.quantity);
         fprintf(bagFileT, "\tPrice:              %lf\n\n", item.item.unit_Price); 
         fprintf(bagFileT, "\tWant: %I64d\n\n", item.quantity_Desired);
-        fread (&item, sizeof(itemType), 1, bagFileB);
-      
+        fread (&item, sizeof(orderType), 1, bagFileB);
         printf("%d ", i++);
     }
     fclose(bagFileB);
@@ -68,5 +67,5 @@ void make_Bag_Txt (char * fi, char* fo)
 
 int main ()
 {
-    make_Bag_Txt("180.bag", TEST);
+    make_Bag_Txt("46.bag", TEST);
 }
