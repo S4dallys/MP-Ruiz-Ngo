@@ -42,21 +42,23 @@ void make_Bag_Txt (char * fi, char* fo)
 {
     FILE * bagFileB;
     FILE * bagFileT;
-    itemType item;
+    orderType item;
     int i;
     i = 0;
     bagFileB = fopen (fi, "rb");
     bagFileT = fopen (fo, "wt");
-    fread (&item, sizeof(itemType), 1, bagFileB);
+    fread (&item, sizeof(orderType), 1, bagFileB);
     while (!feof(bagFileB))
     {
         fprintf(bagFileT, "Item %d:\n", i + 1);
-        fprintf(bagFileT, "\tProduct ID:         %I64d\n", item.product_ID);
-        fprintf(bagFileT, "\tName:               %s\n", item.name);
-        fprintf(bagFileT, "\tCategory:           %s\n", item.category);
-        fprintf(bagFileT, "\tQuantity Avaliable: %I64d\n", item.quantity);
-        fprintf(bagFileT, "\tPrice:              %lf\n\n", item.unit_Price); 
+        fprintf(bagFileT, "\tProduct ID:         %I64d\n", item.item.product_ID);
+        fprintf(bagFileT, "\tName:               %s\n", item.item.name);
+        fprintf(bagFileT, "\tCategory:           %s\n", item.item.category);
+        fprintf(bagFileT, "\tQuantity Avaliable: %I64d\n", item.item.quantity);
+        fprintf(bagFileT, "\tPrice:              %lf\n\n", item.item.unit_Price); 
+        fprintf(bagFileT, "\tWant: %I64d\n\n", item.quantity_Desired);
         fread (&item, sizeof(itemType), 1, bagFileB);
+      
         printf("%d ", i++);
     }
     fclose(bagFileB);
@@ -66,5 +68,5 @@ void make_Bag_Txt (char * fi, char* fo)
 
 int main ()
 {
-    make_Bag_Txt("247.bag", TEST);
+    make_Bag_Txt("180.bag", TEST);
 }
