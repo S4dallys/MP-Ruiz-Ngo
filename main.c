@@ -353,7 +353,7 @@ main()
                                         // sees if the price is less than zero
                                         if (new_price < 0)
                                             // gives an error message if so
-                                            printf("ERROR: Item price cannot be less than zero.");
+                                            printf("ERROR: Item price cannot be less than zero.\n");
                                         else
                                             // changes the price otherwise
                                             item_Database[item_Index].unit_Price = new_price;
