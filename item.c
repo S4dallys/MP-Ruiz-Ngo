@@ -112,7 +112,7 @@ register_Product (itemType   item_Database[],
         // displays a message if the user previously gave an 
         // erroneous input
         if (!valid_Response)
-            printf("\tItem ID already taken. Please find another.\n");
+            printf("\tInvalid Item ID. Please find another.\n");
         
         // asks for item ID
         prompt_Long_Long("ID: ", &item.product_ID);
@@ -120,7 +120,7 @@ register_Product (itemType   item_Database[],
         // checks if the item ID is unique
         valid_Response = check_Unique_Item_ID (item_Database, 
                                                *item_Database_Count, 
-                                               item.product_ID);
+                                               item.product_ID) && item.product_ID >= 0;
 
     // loop ends when the user gives a unique ID
     } while (!valid_Response);

@@ -36,15 +36,16 @@ register_User (userType  user_Database[],
     {
         // shows an error message for erroneous input
         if (!valid_Response)
-            printf("\tUser ID already taken. Please find another.\n");
+            printf("\tInvalid User ID. Please find another.\n");
         
         // asks for an ID
         prompt_Long_Long("ID: ", &user.user_ID);
 
-        // checks if the ID is unique or not to the array
+        // checks if the ID is unique or not to the array and if it is greater
+        // than 0
         valid_Response = check_Unique_User_ID (user_Database, 
                                                *user_Database_Count, 
-                                               user.user_ID);
+                                               user.user_ID) && user.user_ID >= 0;
 
     // ends once the user has given a unique ID
     } while (!valid_Response);

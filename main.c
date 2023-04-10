@@ -79,7 +79,7 @@ main()
                                       "Exit Sell Menu"};
     
     String30 buy_Menu_Choices[8] =   {"View All Products",
-                                      "Show Products by Seller",
+                                      "Show Products of Seller",
                                       "Search Products by Category",
                                       "Search Products by Name",
                                       "Add to Cart",
@@ -329,14 +329,14 @@ main()
                                                           &addend);
                                                           
                                         // catches erroneous values (inputs less than 0)
-                                        if (addend < 0)
+                                        if (addend > 0)
                                             // adds if value is valid
                                             item_Database[item_Index].quantity += addend;
 
                                         // shows an error mesage otherwise
                                         else  
                                         {
-                                            printf("\tERROR: Negative amount.\n");
+                                            printf("\tERROR: Zero or Negative amount.\n");
                                             let_Read();
                                         }
 
