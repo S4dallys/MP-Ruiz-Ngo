@@ -9,57 +9,60 @@
 int 
 main() 
 {
-    userType  user_Database [MAX_USERS];
-    itemType  item_Database [MAX_ITEMS];
+    userType  user_Database [MAX_USERS];  // user array
+    itemType  item_Database [MAX_ITEMS];  // item array
+  
+    transactionType transaction; // transaction instance
+    dateType date;               // date instance
+    dateType duration_Date_1;    // duration date, earlier than date 2
+    dateType duration_Date_2;    // duration date, after date 1
 
-    transactionType transaction;
-    dateType date;
-    dateType duration_Date_1;
-    dateType duration_Date_2;
+    long long user_ID;   // user ID instance
+    long long seller_ID; // seller ID instance
+    long long item_ID;   // item ID instance
+    long long addend;    // temporary long long variable
 
-    long long user_ID;
-    long long seller_ID;
-    long long item_ID;
-    long long addend;
-
-    int  user_Database_Count;
-    int  item_Database_Count;
-    int  item_Cart_Count;
-    int  update_Product_Count;
-    int  seller_Product_Count;
+    int  user_Database_Count;  // amount of users in user_Database
+    int  item_Database_Count;  // amount of users in item_Database
+    int  item_Cart_Count;      // amount of orders in the cart
+    int  update_Product_Count; // amount of items in the cart which have been updated
+    int  seller_Product_Count; 
+    int  user_Product_Count;   
+    int  unique_Sellers_Count; // amount of unique sellers
 
     int  user_Product_Indices[20];
-    int  user_Product_Count;
-    int  update_Product_Indices[10];
-    int  seller_Product_Indices[10];
-    long long  unique_Sellers_IDs[10];
+    int  update_Product_Indices[10];   // array of indexes of products updated
+    int  seller_Product_Indices[10];   
+    long long  unique_Sellers_IDs[10]; // array of unique seller IDs
 
 
-    orderType  user_Cart[10];
-    String30   user_Cart_Name;
-    String15   password;
+    orderType  user_Cart[10];  // user cart
+    String30   user_Cart_Name; // name of the user's cart name
+    String15   password;       // bin for password
 
-    boolean  done;
-    boolean  user_Done;
-    boolean  sell_Done;
-    boolean  buy_Done;
-    boolean  edit_Stock_Done;
-    boolean  edit_Cart_Done;
-    boolean  check_Out_Done;
-    boolean  admin_Done;
-    boolean  valid_Input;
-    boolean  has_Inputted;
+    // self-explanatory Boolean variables, used either as sentinel values or loop conditions
+    boolean  done;             // loop condition for main program
+    boolean  user_Done;        // loop condition for user menu
+    boolean  sell_Done;        // loop condition for sell menu
+    boolean  buy_Done;         // loop condition for buy menu
+    boolean  edit_Stock_Done;  // loop condition for edit stock menu
+    boolean  edit_Cart_Done;   // loop condition for edit cart menu
+    boolean  check_Out_Done;   // loop condition for check out menu
+    boolean  admin_Done;       // loop condition for admin menu
+    boolean  valid_Input;      // sentinel value for valid inputs
+    boolean  has_Inputted;     // sentinel value for inputs
 
-    boolean permissions_Array[MAX_USERS];
+    boolean permissions_Array[MAX_USERS]; // array of Boolean values
 
-    float   sales_Array[MAX_USERS];
-    float   spend_Array[MAX_USERS];
+    float   sales_Array[MAX_USERS]; // array of user sales
+    float   spend_Array[MAX_USERS]; // array of user spending
 
-    FILE *  user_File_Pointer;
-    FILE *  item_File_Pointer;
-    FILE *  cart_File_Pointer;
-    FILE *  transaction_File_Pointer;
+    FILE *  user_File_Pointer;         // file pointer for user file
+    FILE *  item_File_Pointer;         // file pointer for item file
+    FILE *  cart_File_Pointer;         // file pointer for cart file
+    FILE *  transaction_File_Pointer;  // file pointer for transaction file
 
+    // arrays of menu choices to the indicated menus
     String30 main_Menu_Choices[4] =  {"Register as a User",
                                       "User Menu",
                                       "Admin Menu",
@@ -108,20 +111,19 @@ main()
                                       "Show Shopaholics",
                                       "Back to Main Menu"};
 
-    String15 low_Category_Copy1;
-    String15 low_Category_Copy2;
+    String15 low_Category_Copy1; // will contain a lowercase version of a category
+    String15 low_Category_Copy2; // will contain a lowercase version of a category
 
-    String15 low_Name_Copy1;
-    String15 low_Name_Copy2;
+    String15 low_Name_Copy1; // will contain a lowercase version of a name
+    String15 low_Name_Copy2; // will contain a lowercase version of a name
 
-    char   choice;
-    int    item_Index;
-    int    i;
-    int    j;
-    int    k;
-    int    unique_Sellers_Count;
-    double new_price;
-    double sum;
+    char   choice; // represents a choice
+    int    item_Index; // represents an index of an item structure in an array
+    int    i; // looping variable for later loops
+    int    j; // looping variable for later loops
+    int    k; // looping variable for later loops
+    double new_price; // bin for a price
+    double sum;       // receptacle for a sum
 
     // Initialize USER DATABASE
     user_File_Pointer = fopen ("Users.txt", "r"); // open the file pointer on read mode
@@ -181,90 +183,128 @@ main()
         
         //------------------------------------------------------------------------------------------
         case USER_MODE: 
-
+            // allow to user menu if login is successful (if not, function will display an error)
             if (login_User(user_Database, user_Database_Count, &user_ID) == VALID)
             {
+                // create a name for the user's cart file
                 sprintf(user_Cart_Name, "%I64d.bag", user_ID);
+
+                // download the contents of the user's cart
                 load_User_Cart(user_Cart_Name, user_Cart, &item_Cart_Count);
 
+                // assume the user is not done
                 user_Done = FALSE;
                 
                 do
                 {
+                    // get a choice from the user
                     choice = display_Menu ("User", user_Menu_Choices, 3);
-                        
+
+                    // activate commands based on the user's choice
                     switch (choice)
                     {
 
                     // -----------------------------------------------------------------------------
+                    // activates the sell menu
                     case SELL_MENU:
+
+                        // assumes the user is not yet done
                         sell_Done = FALSE;
 
+                        // loops while user is not yet done
                         do
                         {
+                            // gets the users products
                             user_Product_Count = find_User_Product(item_Database, 
                                                                     item_Database_Count, 
                                                                     user_ID, 
                                                                     user_Product_Indices);
                             
+                            // arranges the products in the array based on their ID
                             sort_Item_Array_By_ID (item_Database, 
                                                 user_Product_Indices, 
                                                 user_Product_Count);
                             
+                            // displays the sell menu and asks for a choice
                             choice = display_Menu ("Sell", sell_Menu_Choices, 5);
-                            
-                            switch(choice)
+
+                            // activate commands based on the user's choice
+                            switch (choice)
                             {
                             
                             // ---------------------------------------------------------------------
+                            // adds a new item
                             case ADD_NEW_ITEM:
+
+                                // counts user's items and checks if item addition is possible
                                 if (count_User_Items(item_Database, 
                                                     item_Database_Count, 
-                                                    user_ID) > 20)
+                                                    user_ID) >= 20)
                                 {
                                     printf("\tERROR: Max capacity for items sold reached.\n");
                                     let_Read();
                                 }     
                                 else
+                                    // registers product if seller has less than 20 products at 
+                                    // count
                                     register_Product(item_Database, &item_Database_Count, user_ID);
                                     
                                 break;
                             
                             // ---------------------------------------------------------------------
-                            case EDIT_STOCK:  
+                            // edits stock
+                            case EDIT_STOCK:
+
+                              // checks if user does have stock  
                               if (user_Product_Count <= 0)
                               {
-                                printf("\tERROR: No product being sold.\n");
+                                // error message display
+                                printf("\tERROR: No product being sold.\n"); // error message display
                                 let_Read();
-                              }     
+                              }
+
+                              // activates if user has stock     
                               else
                               {
+                                // sentinel value initialization
                                 edit_Stock_Done = FALSE;
                                 has_Inputted = FALSE;
-                                        
+                                
+                                // loops while user is not yet done
                                 do
                                 {   
+                                // shows all of user's products
                                 display_Table_Ala_Show_My_Products (item_Database, 
                                                                     user_Product_Indices, 
                                                                     user_Product_Count);
-                                            
+                                
+                                // assumes a valid input
                                 valid_Input = TRUE;
-                                            
+                                    
+                                    // asks for a valid item ID from the user
                                     do
                                     {          
+                                        // displays error message if user previously gave erroneous
+                                        // input
                                         if (!valid_Input)
                                             printf("\tInvalid Input.\n");
-                                    
+
+                                        // asks for item ID
                                         prompt_Long_Long("Insert product ID: ", &item_ID);
                                     
+                                        // checks if ID in list of seller products
                                         valid_Input = find_Product_In_List(item_Database, 
                                                                             item_ID, 
                                                                             user_Product_Indices, 
                                                                             user_Product_Count);
                                     
+                                        // activates once valid ID is given
                                         if (valid_Input)
                                         {
+                                            // ends the loop this command is in
                                             has_Inputted = TRUE;
+
+                                            // gets the index of the item based on its ID
                                             item_Index = give_User_Item_Index_Via_ID (item_Database, 
                                                                                 item_ID, 
                                                                                 user_Product_Indices, 
@@ -272,124 +312,153 @@ main()
                                         }
                                                     
                                     } while (!valid_Input && !has_Inputted);
-                                                
+                                    
+                                    // displays edit stock menu and asks for a choice
                                     choice = display_Menu("Edit Stock", edit_Stock_Choices, 6);
-                                                
+
+                                    // activate commands based on the user's choice      
                                     switch (choice)
                                     {
 
                                     // -------------------------------------------------------------
+                                    // replenishes item based on inputted value
+                                    // Precondition: addend must be positive or 0
                                     case REPLENISH:
+                                        // asks how much is to be added
                                         prompt_Long_Long("\nHow many would you like to add? ", 
                                                           &addend);
-
-                                        if (item_Database[item_Index].quantity + addend >= 0)
+                                                          
+                                        // catches erroneous values (inputs less than 0)
+                                        if (addend < 0)
+                                            // adds if value is valid
                                             item_Database[item_Index].quantity += addend;
+
+                                        // shows an error mesage otherwise
                                         else  
                                         {
-                                            printf("\t");
-                                            printf("Error: Amount leads to value less than zero.");
-                                            new_Line();
+                                            printf("\tERROR: Negative amount.\n");
                                             let_Read();
                                         }
 
                                         break;
                                     
                                     // -------------------------------------------------------------
+                                    // changes price
                                     case CHANGE_PRICE:
+
+                                        // asks for new price
                                         prompt_Double("\nWhat is the new price? ", 
                                                     &new_price);
 
+                                        // sees if the price is less than zero
                                         if (new_price < 0)
-                                            printf("ERROR: Item price cannot be zero.");
+                                            // gives an error message if so
+                                            printf("ERROR: Item price cannot be less than zero.");
                                         else
+                                            // changes the price otherwise
                                             item_Database[item_Index].unit_Price = new_price;
 
                                         break;
 
-                                    // -------------------------------------------------------------     
+                                    // -------------------------------------------------------------  
+                                    // changes item's name   
                                     case CHANGE_ITEM_NAME:
+                                        // asks for the new name and stores it
                                         prompt_StringN("\nWhat is the new name? ", 
                                                         item_Database[item_Index].name, 20);
 
                                         break;
 
-                                    // -------------------------------------------------------------           
+                                    // -------------------------------------------------------------    
+                                    // changes item's category       
                                     case CHANGE_CATEGORY:
+                                        // asks for a new category and stores it
                                         prompt_StringN("\nWhat is the new category? ", 
                                                         item_Database[item_Index].category, 
                                                         15);
 
                                         break;
 
-                                    // -------------------------------------------------------------              
+                                    // -------------------------------------------------------------    
+                                    // changes item's description          
                                     case CHANGE_DESCRIPTION:
+                                        // asks for a new description and stores it
                                         prompt_StringN("\nWhat is the new description? ", 
                                                         item_Database[item_Index].description, 
                                                         30);
 
                                         break;
 
-                                    // -------------------------------------------------------------         
+                                    // ------------------------------------------------------------- 
+                                    // finish editing        
                                     case FINISH_EDITING:
+                                        // ends the loop this command is in
                                         edit_Stock_Done = TRUE;
 
                                         break;              
                                     }
                                                 
-                            } while (!edit_Stock_Done);
+                                } while (!edit_Stock_Done);
                             }              
                             break;
                             
                             // ---------------------------------------------------------------------
+                            // shows user's products
                             case SHOW_MY_PRODUCTS:
+                                // displays the table of products
                                 display_Table_Ala_Show_My_Products (item_Database, 
                                                                     user_Product_Indices, 
                                                                     user_Product_Count);
+                                
                                 new_Line();
+
+                                // lets the user see the table before proceeding
                                 let_Read();
 
                                 break;
                             
                             // ---------------------------------------------------------------------
+                            // shows user's low stock products
                             case SHOW_MY_LOW_STOCK:
-                                i = 0;
 
+                                i = 0; // initializes indexing variable
+
+                                // goes through user's items while the user has not yet 
+                                // inputted x
                                 while (i < user_Product_Count && (choice != 'X' || choice != 'x'))
                                 {
-                                    if (item_Database[user_Product_Indices[i]]
-                                        .quantity < 5)
+                                    // checks if the quantity of an item is less than 5
+                                    if (item_Database[user_Product_Indices[i]].quantity < 5)
                                     {
+                                        // displays the item
                                         display_Item(item_Database[user_Product_Indices[i]]);
                                         new_Line();
 
-                                        prompt_Char("Enter 'N' to go to next item, 'B' to go back, and 'X' to exit... ", 
+                                        // asks the user for a choice of exiting or going to the next
+                                        // item
+                                        prompt_Char("Enter 'N' to go to next item, and 'X' to exit... ", 
                                                     &choice);
 
+                                        // goes to the next item if user inputs 'N' or 'n'
                                         if (choice == 'N' || choice == 'n')
-                                        {
                                             i++;
-                                        }
-                                        else if (choice == 'B' || choice == 'b')
-                                        {
-                                            if (--i < 0)
-                                            {
-                                                printf("Nothing follows...\n");
-                                                let_Read();
-                                                i = 0;
-                                            }
-                                        }
                                     }
+                                    // skips the item if its quantity is 5 and above
                                     else i++;   
                                 }
 
+                                // says that nothing follows once user has reached end of list
                                 printf("Nothing follows...\n");
+
+                                // allows user to read outputs before proceeding
                                 let_Read();
 
                                 break;
                             
                             // ---------------------------------------------------------------------
+                            // exits sell menu
                             case EXIT_SELL:
+                                // ends the loop for the sell menu
                                 sell_Done = TRUE;
 
                                 break;       
@@ -408,6 +477,7 @@ main()
                             
                             choice = display_Menu("Buy", buy_Menu_Choices, 8);
                             
+                            // activate commands based on the user's choice
                             switch (choice)
                             {
                             
@@ -563,6 +633,7 @@ main()
 
                                     choice = display_Menu("Cart Edit", edit_Cart_Choices, 4);
                                     
+                                    // activate commands based on the user's choice
                                     switch (choice)
                                     {
                                     
@@ -706,6 +777,7 @@ main()
                                 {    
                                     choice = display_Menu("Check Out", check_Out_Choices, 4);
                                     
+                                    // activate commands based on the user's choice
                                     switch (choice)
                                     {
 
@@ -956,7 +1028,6 @@ main()
                             fseek(cart_File_Pointer, 0, SEEK_SET);
                             for (i = 0; i < item_Cart_Count; i++) //{
                                 fwrite(&user_Cart[i], sizeof(orderType), 1, cart_File_Pointer);
-                                //printf("%d ", user_Cart[i].item.product_ID);}
                             fclose (cart_File_Pointer);
                         }
 
@@ -1019,49 +1090,78 @@ main()
                         // shows all users which have items registered in the item array in tabular
                         // format
                         case SHOW_ALL_SELLERS:
-
+                            // generates an array for all users which states if they have items or not
                             for (i = 0; i < user_Database_Count; i++)
                               permissions_Array[i] = count_User_Items (item_Database, 
                                                                        item_Database_Count, 
                                                                        user_Database[i].user_ID) > 0;
+                            
+                            // displays sellers based on the array made previously
                             display_User_Table_With_Conditions (user_Database, user_Database_Count,
                                                                 permissions_Array);
                             new_Line();
+
+                            // lets user see the output
                             let_Read();
                             break;
 
                         // -------------------------------------------------------------------------
+                        // shows total sales in the duration
                         case SHOW_TOTAL_SALES_IN_GIVEN_DURATION:
-                            sum = 0;
+
+                            sum = 0; // initializes bin for adding
+
+                            // initializes file pointer
                             transaction_File_Pointer = fopen ("Transactions.dat", "rb");
+
+                            // gives an error if the file is not found
                             if (transaction_File_Pointer == NULL)
                                 printf("\tERROR: Transaction file does not exist.\n");
+
+                            // proceeds if it is found
                             else
                             {
+                                // asks for a startinf date
                                 printf("\tStarting Date:\n");
                                 prompt_Date(&duration_Date_1);
                                 new_Line();
+
+                                // asks for an ending date
                                 printf("\tEnd Date:\n");
                                 prompt_Date(&duration_Date_2);
+
+                                // says date bounds given are invalid if user entered a later
+                                // starting date than the former, gives an error
                                 if (compare_Date(duration_Date_1, duration_Date_2) != -1 ||
                                     compare_Date(duration_Date_1, duration_Date_2) != 0)
                                 {
                                     printf("\tERROR: Invalid date bounds.\n");
                                     let_Read();
                                 }
+
                                 else
                                 {
+                                    // reads transaction data from the file
                                     fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+
+                                    // continues to read while not EOF
                                     while (!feof(transaction_File_Pointer))
                                     {
+                                        // sees if the date is within the range
                                         if (!(compare_Date(transaction.date, duration_Date_1) == -1 ||
                                             compare_Date(transaction.date, duration_Date_2) == 1))
-                                            sum += transaction.amount;
+                                            sum += transaction.amount; // adds if so
+
+                                        // reads more data
                                         fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
                                     }
+
+                                    // close file pointer
                                     fclose (transaction_File_Pointer);
                                     new_Line();
-                                    printf("\tTotal Sales from %04d-%02d-%02d to %04d-%02d-%02d: %f",
+
+                                    // shows the total sales
+                                    printf("\tTotal Sales from %04d-%02d-%02d to %04d-%02d-%02d: %.2f\n",
                                            duration_Date_1.year, duration_Date_1.month, duration_Date_1.day,
                                            duration_Date_2.year, duration_Date_2.month, duration_Date_2.day,
                                            sum);
@@ -1073,23 +1173,43 @@ main()
 
                         // -------------------------------------------------------------------------
                         case SHOW_SELLERS_SALES:
+                            // initializes sales array to be bin for addition
                             for (i = 0; i < MAX_USERS; i++)
                                 sales_Array[i] = 0;
+
+                            // initializes transaction file pointer
                             transaction_File_Pointer = fopen ("Transactions.dat", "rb");
+
+                            // gives an error if the file is not found
                             if (transaction_File_Pointer == NULL)
                                 printf("\tERROR: Transaction file does not exist.\n");
+
+                            // proceeds if found
                             else
                                 {
+                                    // reads transaction
                                     fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
-                                    while (!feof(transaction_File_Pointer))
+                                    // continues to read while not end of line
+                                    while (!feof(transaction_File_Pointer)) 
                                     {
-                                        sales_Array[search_User(user_Database, user_Database_Count, transaction.seller_ID)] += transaction.amount;
+                                        // adds sellers sales to the proper sales receptacle
+                                        sales_Array[search_User(user_Database, 
+                                                                user_Database_Count, 
+                                                                transaction.seller_ID)] += transaction.amount;
+                                        
+                                        // continues to read data
                                         fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
                                     }
+
+                                    // closes transaction file pointer
                                     fclose (transaction_File_Pointer);
                                     new_Line();
+
+                                    // displays table of sellers and their sales
                                     display_Table_Based_On_Money (user_Database, user_Database_Count, sales_Array);
                                     new_Line();
+
+                                    // lets user read the table before proceeding
                                     let_Read();
                                 }
                             
@@ -1097,23 +1217,41 @@ main()
 
                         // -------------------------------------------------------------------------
                         case SHOW_SHOPAHOLICS:
+                            // initializes spending array to be bin for addition
                             for (i = 0; i < MAX_USERS; i++)
                                 spend_Array[i] = 0;
+                            
+                            // initializes transaction file pointer
                             transaction_File_Pointer = fopen ("Transactions.dat", "rb");
                             if (transaction_File_Pointer == NULL)
                                 printf("\tERROR: Transaction file does not exist.\n");
+                            
+                            // proceeds if found
                             else
                                 {
+                                    // reads transaction
                                     fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+                                    // continues to read while not end of line
                                     while (!feof(transaction_File_Pointer))
                                     {
-                                        sales_Array[search_User(user_Database, user_Database_Count, transaction.buyer_ID)] += transaction.amount;
+                                        // adds buyer sales to the proper spend receptacle
+                                        sales_Array[search_User (user_Database, 
+                                                                 user_Database_Count, 
+                                                                 transaction.buyer_ID)] += transaction.amount;
+
+                                        // continues to read data
                                         fread(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
                                     }
+
+                                    // closes transaction file pointer
                                     fclose (transaction_File_Pointer);
                                     new_Line();
-                                    display_Table_Based_On_Money (user_Database, user_Database_Count, spend_Array);
+
+                                    // displays table of buyers and their spending
+                                    display_Table_Based_On_Money (user_Database, user_Database_Count, sales_Array);
                                     new_Line();
+
+                                    // lets user read the table before proceeding
                                     let_Read();
                                 }
 
