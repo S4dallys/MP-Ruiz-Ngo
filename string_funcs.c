@@ -18,10 +18,10 @@ to_Lowercase (char string[],
               char lower[])
 {
     // local variable declaration
-    int string_Length;
-    int i;
+    int string_Length; // the length of the string to lowercase
+    int i;             // indexing variable to be used in later looping
 
-    string_Length = (int) strlen (string);
+    string_Length = (int) strlen (string); // initialization of string length
 
     // loops through string and stores the lowercase
     // version of each character (if applicable) in 
@@ -43,19 +43,20 @@ substring_Search (char search_Area[],
                   char find[])
 {
     // local variable declarations
-    boolean found;
-    boolean discrepancy;
+    boolean found;       // represents if the substring has been found
+    boolean discrepancy; // represents if a discrepancy has been found which makes it
+                         // not a substring
 
-    int i;
-    int j;
-    int find_Length;
-    int search_Area_Length;
+    int i;                  // index variable for later looping
+    int j;                  // index variable for later looping
+    int find_Length;        // length of the substring to find
+    int search_Area_Length; // length of the string to search in
 
-    char character_From_Search_Area;
-    char character_From_Find;
+    char character_From_Search_Area; // character in the string to search in
+    char character_From_Find;        // character in the substring to search for
 
-    find_Length = (int) strlen(find);
-    search_Area_Length = (int) strlen (search_Area);
+    find_Length = (int) strlen(find); // initialization of substring length
+    search_Area_Length = (int) strlen (search_Area); // initialization of search string length
 
     // assume the substring has not been found yet
     found = FALSE;
@@ -68,7 +69,7 @@ substring_Search (char search_Area[],
         // the string; stops when it is found
         for (i = 0; i < search_Area_Length - find_Length + 1 && !found; i++)
         {
-            j = 0;
+            j = 0; // initialization of indexing variable
 
             // assume there are no discrepancies
             discrepancy = FALSE;

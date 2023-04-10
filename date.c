@@ -5,24 +5,40 @@
 
 #endif
 
+/**
+ * is_Leap checks if a year is a leap year or not.
+ * @param year - the year we wish to know is a leap year or not
+ * @return TRUE if it is a leap year; FALSE otherwise
+*/
 boolean
 is_Leap (int year)
 {
-    boolean flag;
+    // local variable declaration
+    boolean flag; // shows if the year is a leap year or not
 
+    // activates if the year is divisible by 4
     if (year % 4 == 0)
     {
+        // activates if the year is divisible by 100
         if (year % 100 == 0)
         {
+            // activates if the year is divisible by 400
             if (year % 400 == 0)
                 flag = TRUE;
+
+            // activates if the year is not divisible by 400
             else
                 flag = FALSE;
         }
 
+        // activates if the year is not divisible by 100
         else
             flag = TRUE;
     }
+
+    // activates if the year is not divisible by 4
+    else
+        flag = FALSE;
 
     return flag;
 }
