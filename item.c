@@ -5,6 +5,12 @@
 
 #endif
 
+void swap_Item (itemType *  a,
+                itemType *  b);
+
+void swap_Order (orderType *  a,
+            orderType *  b);
+
 /**
  * check_Unique_Item_ID checks if a given long long parameter 
  * exists as an item or product ID in a given item array.
@@ -551,7 +557,7 @@ sort_Item_Array_By_SellerID (orderType  item_Database[],
         // switches if the ith element does not represent the
         // item with the lowest ID from range (i, item_Array_Size)
         if (lowest != i)
-            swap_Item (&item_Database[i], &item_Database[lowest]);
+            swap_Order (&item_Database[i], &item_Database[lowest]);
     }
 }
 
