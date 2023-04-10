@@ -54,8 +54,8 @@ check_Unique_Item_ID (itemType   item_Database[],
 
 boolean
 check_Unique_Seller_ID (long long   item_Database[],
-                         int        item_Database_Size,
-				      long long  item_ID)
+                        int        item_Database_Size,
+				        long long  item_ID)
 {
     // local variable declaration
     boolean  flag;  // represents if an ID is unique to the array
@@ -205,10 +205,10 @@ find_User_Product (itemType   item_Database[],
 }
 
 /**
- * find_User_Product searches for a user's products in an 
- * array of orders and stores the indices of these products
- * in an integer array and returns the number of products
- * found.
+ * find_User_Product_In_Cart searches for a user's products 
+ * in an array of orders and stores the indices of these 
+ * products in an integer array and returns the number of 
+ * products found.
  * @param item_Database - an array of item structures
  * @param item_Database_Size - the number of items inside
  *                             item_Database
