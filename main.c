@@ -1323,7 +1323,10 @@ main()
 
                             // checks if user cart exists
                             if (cart_File_Pointer != NULL)
-                                remove(user_Cart_Name); // removes it if so
+                            {
+                                fclose (cart_File_Pointer);
+                                cart_File_Pointer = fopen (user_Cart_Name, "wb");
+                            }
 
                             // closes file pointer
                             fclose (cart_File_Pointer);
