@@ -704,207 +704,39 @@ main()
                             // lets user edit cart
                             case EDIT_CART:
 
-                                // initialization of sentinel values
-                                edit_Cart_Done = FALSE;
-                                valid_Input = TRUE;
-
-                                do
-                                {   
-                                    // shows product table       
-                                    display_Product_Table (user_Cart, item_Cart_Count);
-
-                                    // shows edit cart menu and asks for a choice
-                                    choice = display_Menu("Cart Edit", edit_Cart_Choices, 4);
-                                    
-                                    // activate commands based on the user's choice
-                                    switch (choice)
-                                    {
-                                    
-                                    // -------------------------------------------------------------
-                                    // removes products of seller from cart
-                                    case REMOVE_ITEMS_OF_SELLER:
-                                        // asks for seller ID
-                                        prompt_Long_Long ("Enter Seller ID:", &seller_ID);
-
-                                        // shows error message if seller is not found
-                                        if (find_User_Product_In_Cart(user_Cart, 
-                                                                      item_Cart_Count, 
-                                                                      seller_ID,
-                                                                      seller_Product_Indices) == 0)
-                                        {
-                                            printf("\tERROR: Seller not found.\n");
-
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
-                                        }
-
-                                        else
-                                        {
-                                            // loops through the array
-                                            for (i = 0; i < item_Cart_Count; i++)
-                                            {
-                                                // swaps the item to the last element,
-                                                // decrementing the size of the readable array,
-                                                // "deleting" it
-                                                if (user_Cart[i].item.seller_ID == seller_ID)
-                                                {
-                                                    for (j = i; j < item_Cart_Count; j++)
-                                                    {
-                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
-                                                    }
-                                                    i--;
-                                                    item_Cart_Count--;
-                                                }
-                                            }
-
-                                            // shows that operation is done
-                                            printf("\tINFO: Items removed.\n");
-
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
-                                        }
-
-                                        break;
-                                    
-                                    // -------------------------------------------------------------
-                                    // removes a specific item
-                                    case REMOVE_SPECIFIC_ITEM:
-
-                                        // asks for an item ID
-                                        prompt_Long_Long("Enter Item ID: ", &item_ID);
-
-                                        // shows error message if item is not found
-                                        if (give_Item_Index_Via_ID_In_Cart(user_Cart, item_ID, item_Cart_Count) == -1)
-                                        {
-                                            printf("\tERROR: Item not found/\n");
-
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
-                                        }
-
-                                        else
-                                        {
-                                            // loops through the array
-                                            for (i = 0; i < item_Cart_Count; i++)
-                                            {
-                                                // swaps the item to the last element,
-                                                // decrementing the size of the readable array,
-                                                // "deleting" it
-                                                if (user_Cart[i].item.product_ID == item_ID)
-                                                {
-                                                    for (j = i; j < item_Cart_Count; j++)
-                                                    {
-                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
-                                                    }
-                                                    i--;
-                                                    item_Cart_Count--;
-                                                }
-                                            }
-                                        }
-
-                                        break;
-                            
-                                    // -------------------------------------------------------------
-                                    case EDIT_QUANTITY:
-                                        prompt_Long_Long("Enter Item ID: ", &item_ID);
-
-                                        item_Index = give_Item_Index_Via_ID_In_Cart (user_Cart, 
-                                                                                     item_ID, 
-                                                                                     item_Database_Count);
-                                        if (item_Index == -1)
-                                        {
-                                            printf("\tERROR: Item not found.\n");
-
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
-                                        }
-
-                                        else
-                                        {
-                                            prompt_Long_Long("Enter new item quantity: ",
-                                                             &user_Cart[item_Index].quantity_Desired);
-                                        }
-
-                                        break;
-                                    
-                                    // -------------------------------------------------------------
-                                    case FINISH_EDIT_CART:
-                                        edit_Cart_Done = TRUE;
-
-                                        break; 
-                                    }
-                                    
-                                } while (!edit_Cart_Done);
-                                    
-                                break;
-
-                            
-                            // ---------------------------------------------------------------------
-                            case CHECK_OUT:
-                                check_Out_Done = FALSE;
-
-                                prompt_Date (&date);
-
-                                update_Product_Count = 0;
-
-                                update_Product_Count = enumerate_Differing_Product (item_Database,
-                                                                                    item_Database_Count,
-                                                                                    user_Cart,
-                                                                                    item_Cart_Count,
-                                                                                    update_Product_Indices);
+                                // shows an error message if cart is empty
+                                if (item_Cart_Count <= 0)
+                                    printf("\tERROR: Cart is empty.\n");
                                 
-                                if (update_Product_Count > 0)
+                                else
                                 {
-                                    printf("\tWARNING: Updates found.\n");
-                                    printf("\tUpdating...\n");
-                                    new_Line();
-                                    printf("\tUpdated Items:\n");
-                                    printf("\t-------------------------------------------------\n");
-                                    for (int i = 0; i < update_Product_Count; i++)
-                                    {
-                                        new_Line();
-                                        printf("\t%d\n", i+1);
-                                        new_Line();
-                                        printf("\tOld:\n");
-                                        display_Item(user_Cart[update_Product_Indices[i]].item);
-                                        new_Line();
-                                        printf("\tNew:\n");
-                                        display_Item(item_Database[give_Item_Index_Via_ID(item_Database, 
-                                                                                          user_Cart[update_Product_Indices[i]].item.product_ID, 
-                                                                                          item_Database_Count)]);
-                                        new_Line();
-                                        printf("\t-------------------------------------------------\n");
+                                    // initialization of sentinel values
+                                    edit_Cart_Done = FALSE;
+                                    valid_Input = TRUE;
 
-                                        user_Cart[update_Product_Indices[i]].item = item_Database[give_Item_Index_Via_ID(item_Database, 
-                                                                                                                         user_Cart[update_Product_Indices[i]].item.product_ID, 
-                                                                                                                         item_Database_Count)];
-                                    }
+                                    do
+                                    {   
+                                        // shows product table       
+                                        display_Product_Table (user_Cart, item_Cart_Count);
 
-                                    new_Line();
-                                    printf("\tINFO: Cart updated!\n");
-                                    printf("\tINFO: You can still go back to Edit Cart.\n");
-
-                                    // lets the user read the outputs before proceeding
-                                    let_Read();
-                                }
-
-                                do
-                                {    
-                                    choice = display_Menu("Check Out", check_Out_Choices, 4);
-                                    
-                                    // activate commands based on the user's choice
-                                    switch (choice)
-                                    {
-
-                                    // -------------------------------------------------------------
-                                    case BUY_ALL:
-                                        unique_Sellers_Count = enumerate_Unique_Sellers (user_Cart, item_Cart_Count, unique_Sellers_IDs);
-
-                                        for (k = 0; k < unique_Sellers_Count; k++)
+                                        // shows edit cart menu and asks for a choice
+                                        choice = display_Menu("Cart Edit", edit_Cart_Choices, 4);
+                                        
+                                        // activate commands based on the user's choice
+                                        switch (choice)
                                         {
-                                            seller_Product_Count = find_User_Product_In_Cart (user_Cart, item_Cart_Count, unique_Sellers_IDs[k], seller_Product_Indices);
+                                        
+                                        // -------------------------------------------------------------
+                                        // removes products of seller from cart
+                                        case REMOVE_ITEMS_OF_SELLER:
+                                            // asks for seller ID
+                                            prompt_Long_Long ("Enter Seller ID:", &seller_ID);
 
-                                            if (seller_Product_Count == 0)
+                                            // shows error message if seller is not found
+                                            if (find_User_Product_In_Cart(user_Cart, 
+                                                                        item_Cart_Count, 
+                                                                        seller_ID,
+                                                                        seller_Product_Indices) == 0)
                                             {
                                                 printf("\tERROR: Seller not found.\n");
 
@@ -913,21 +745,255 @@ main()
                                             }
 
                                             else
-                                            {                                                
+                                            {
+                                                // loops through the array
+                                                for (i = 0; i < item_Cart_Count; i++)
+                                                {
+                                                    // swaps the item to the last element,
+                                                    // decrementing the size of the readable array,
+                                                    // "deleting" it
+                                                    if (user_Cart[i].item.seller_ID == seller_ID)
+                                                    {
+                                                        for (j = i; j < item_Cart_Count; j++)
+                                                        {
+                                                            swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                        }
+                                                        i--;
+                                                        item_Cart_Count--;
+                                                    }
+                                                }
+
+                                                // shows that operation is done
+                                                printf("\tINFO: Items removed.\n");
+
+                                                // lets the user read the outputs before proceeding
+                                                let_Read();
+                                            }
+
+                                            break;
+                                        
+                                        // -------------------------------------------------------------
+                                        // removes a specific item
+                                        case REMOVE_SPECIFIC_ITEM:
+
+                                            // asks for an item ID
+                                            prompt_Long_Long("Enter Item ID: ", &item_ID);
+
+                                            // shows error message if item is not found
+                                            if (give_Item_Index_Via_ID_In_Cart(user_Cart, item_ID, item_Cart_Count) == -1)
+                                            {
+                                                printf("\tERROR: Item not found/\n");
+
+                                                // lets the user read the outputs before proceeding
+                                                let_Read();
+                                            }
+
+                                            else
+                                            {
+                                                // loops through the array
+                                                for (i = 0; i < item_Cart_Count; i++)
+                                                {
+                                                    // swaps the item to the last element,
+                                                    // decrementing the size of the readable array,
+                                                    // "deleting" it
+                                                    if (user_Cart[i].item.product_ID == item_ID)
+                                                    {
+                                                        for (j = i; j < item_Cart_Count; j++)
+                                                        {
+                                                            swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                        }
+                                                        i--;
+                                                        item_Cart_Count--;
+                                                    }
+                                                }
+                                            }
+
+                                            break;
+                                
+                                        // -------------------------------------------------------------
+                                        // edits quantity wanted
+                                        case EDIT_QUANTITY:
+                                            // asks for item ID
+                                            prompt_Long_Long("Enter Item ID: ", &item_ID);
+
+                                            // gets the index of item in cart
+                                            item_Index = give_Item_Index_Via_ID_In_Cart (user_Cart, 
+                                                                                        item_ID, 
+                                                                                        item_Database_Count);
+
+                                            // shows an error if the item is not found
+                                            if (item_Index == -1)
+                                            {
+                                                printf("\tERROR: Item not found.\n");
+
+                                                // lets the user read the outputs before proceeding
+                                                let_Read();
+                                            }
+
+                                            // enters a new item quantity
+                                            else
+                                            {
+                                                // assumes valid input is given
+                                                valid_Input = TRUE;
+
+                                                do  
+                                                {
+                                                    // shows an error message if invalid input is given
+                                                    if (!valid_Input)
+                                                        printf("\tERROR: Invalid input (must be greater than 0).\n");
+
+                                                    // asks for a new quantity
+                                                    prompt_Long_Long("Enter new item quantity: ",
+                                                                &user_Cart[item_Index].quantity_Desired);
+
+                                                    // if the input is invalid, it is marked so
+                                                    if (user_Cart[item_Index].quantity_Desired <= 0)
+                                                        valid_Input = FALSE;
+
+                                                // continues until input is invalid
+                                                } while (!valid_Input);
+                                            }
+
+                                            break;
+                                        
+                                        // -------------------------------------------------------------
+                                        // finish editing cart
+                                        case FINISH_EDIT_CART:
+                                            edit_Cart_Done = TRUE; // exits loop
+
+                                            break; 
+                                        }
+                                        
+                                    } while (!edit_Cart_Done);
+                                }
+                                    
+                                break;
+
+                            
+                            // ---------------------------------------------------------------------
+                            // check out menu
+                            case CHECK_OUT:
+
+                                if (item_Cart_Count <= 0)
+                                    printf ("\tERROR: Cart is empty.\n");
+                                else
+                                {
+                                    // assumes user is not done checking out
+                                    check_Out_Done = FALSE;
+
+                                    // asks for date
+                                    prompt_Date (&date);
+
+                                    // assumes there are no updated products
+                                    update_Product_Count = 0;
+
+                                    // counts and gets updated products
+                                    update_Product_Count = enumerate_Differing_Product (item_Database,
+                                                                                        item_Database_Count,
+                                                                                        user_Cart,
+                                                                                        item_Cart_Count,
+                                                                                        update_Product_Indices);
+                                    
+                                    // activated if there are any updated products
+                                    if (update_Product_Count > 0)
+                                    {
+                                        // shows a warning
+                                        printf("\tWARNING: Updates found.\n");
+
+                                        // indicates that the program is updating the items
+                                        printf("\tUpdating...\n");
+                                        new_Line();
+
+                                        // shows updated items
+                                        printf("\tUpdated Items:\n");
+
+                                        // shows border
+                                        printf("\t-------------------------------------------------\n");
+                                        for (int i = 0; i < update_Product_Count; i++)
+                                        {
+                                            new_Line();
+                                            printf("\t%d\n", i+1); // shows a number for indexing and
+                                                                // orderliness
+                                                
+                                            new_Line();
+
+                                            // shows old item details
+                                            printf("\tOld:\n");
+                                            display_Item(user_Cart[update_Product_Indices[i]].item);
+                                            new_Line();
+
+                                            // shows new item details
+                                            printf("\tNew:\n");
+                                            display_Item(item_Database[give_Item_Index_Via_ID(item_Database, 
+                                                                                            user_Cart[update_Product_Indices[i]].item.product_ID, 
+                                                                                            item_Database_Count)]);
+                                            new_Line();
+
+                                            // shows border
+                                            printf("\t-------------------------------------------------\n");
+
+                                            // updates item
+                                            user_Cart[update_Product_Indices[i]].item = item_Database[give_Item_Index_Via_ID(item_Database, 
+                                                                                                                            user_Cart[update_Product_Indices[i]].item.product_ID, 
+                                                                                                                            item_Database_Count)];
+                                        }
+
+                                        new_Line();
+
+                                        // says the cart has been updated
+                                        printf("\tINFO: Cart updated!\n");
+
+                                        // says user can still edit cart
+                                        printf("\tINFO: You can still go back to Edit Cart.\n");
+
+                                        // lets the user read the outputs before proceeding
+                                        let_Read();
+                                    }
+
+                                    // loops while user is not done
+                                    do
+                                    {    
+                                        // shows check out menu choices and asks for choice
+                                        choice = display_Menu("Check Out", check_Out_Choices, 4);
+                                        
+                                        // activate commands based on the user's choice
+                                        switch (choice)
+                                        {
+
+                                        // -------------------------------------------------------------
+                                        // buy all contents of cart
+                                        case BUY_ALL:
+                                            // counts and enumerates the unique sellers in user cart
+                                            unique_Sellers_Count = enumerate_Unique_Sellers (user_Cart, item_Cart_Count, unique_Sellers_IDs);
+
+                                            // goes through every unique seller
+                                            for (k = 0; k < unique_Sellers_Count; k++)
+                                            {
+                                                // counts and enumerates the items that seller is selling
+                                                // in the cart
+                                                seller_Product_Count = find_User_Product_In_Cart (user_Cart, item_Cart_Count, unique_Sellers_IDs[k], seller_Product_Indices);
+
+                                                // initialize transaction data                       
                                                 transaction.date = date;
                                                 transaction.buyer_ID = user_ID;
                                                 transaction.seller_ID = seller_ID;
                                                 transaction.items_Ordered = 0;
 
+                                                // goes through the products of the seller
                                                 for (i = 0; i < seller_Product_Count; i++)
                                                 {
+                                                    // skips items which cannot be fulfilled by the
+                                                    // slated quantity
                                                     if (user_Cart[seller_Product_Indices[i]].quantity_Desired > user_Cart[seller_Product_Indices[i]].item.quantity)
                                                     {
+                                                        // shows error message and declaration that it
+                                                        // will skip that item
                                                         printf("\tERROR: Item %c%s%c (ID#%I64d) is out of stock. Skipping item...\n", 
                                                             '"', user_Cart[seller_Product_Indices[i]].item.name, '"', 
                                                             user_Cart[seller_Product_Indices[i]].item.product_ID);
                                                     }
 
+                                                    // logs the item into the transaction, otherwise
                                                     else
                                                     {
                                                         transaction.transaction_Log[transaction.items_Ordered] = user_Cart[seller_Product_Indices[i]];
@@ -936,28 +1002,47 @@ main()
 
                                                     if (transaction.items_Ordered == 5)
                                                     {
+                                                        // displays the transaction
                                                         display_Transaction (&transaction, user_Database, user_Database_Count);
 
+                                                        // updates the quantities of the items in the
+                                                        // array to reflect the transaction
                                                         for (j = 0; j < 5; j++)
                                                             item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
                                                         
+                                                        // opens transaction file pointer
                                                         transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+
+                                                        // writes down transaction
                                                         fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+
+                                                        // closes file pointer
                                                         fclose (transaction_File_Pointer);
 
+                                                        // resets the amount of items ordered
                                                         transaction.items_Ordered = 0;
                                                     }
                                                 }
 
+                                                // deals with the other items not dealt with the earlier
+                                                // transaction round up
                                                 if (transaction.items_Ordered != 0)
                                                 {
+                                                    // displays the transaction
                                                     display_Transaction (&transaction, user_Database, user_Database_Count);
 
-                                                    for (j = 0; j < 5; j++)
+                                                    // updates the quantities of the items in the
+                                                    // array to reflect the transaction
+                                                    for (j = 0; j < transaction.items_Ordered; j++)
                                                         item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
                                                     
+                                                    // opens transaction file pointer
                                                     transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+
+                                                    // writes down transaction
                                                     fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+
+                                                    // closes file pointer
                                                     fclose (transaction_File_Pointer);
                                                 }
                                                 new_Line();
@@ -965,177 +1050,236 @@ main()
                                                 // lets the user read the outputs before proceeding
                                                 let_Read();
 
-                                                
-                                            }
-
-                                            for (i = 0; i < item_Cart_Count; i++)
-                                            {
-                                                if (user_Cart[i].item.seller_ID == seller_ID)
+                                                // swaps the item to the last element,
+                                                // decrementing the size of the readable array,
+                                                // "deleting" it, for all items of specified seller
+                                                for (i = 0; i < item_Cart_Count; i++)
                                                 {
-                                                    for (j = i; j < item_Cart_Count; j++)
+                                                    if (user_Cart[i].item.seller_ID == unique_Sellers_IDs[k])
                                                     {
-                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                        for (j = i; j < item_Cart_Count; j++)
+                                                        {
+                                                            swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                        }
+                                                        i--;
+                                                        item_Cart_Count--;
                                                     }
-                                                    i--;
-                                                    item_Cart_Count--;
                                                 }
                                             }
-                                        }
 
-                                        break;
+                                            break;
 
-                                    // -------------------------------------------------------------
-                                    case BUY_BY_CERTAIN_SELLER:
-                                        prompt_Long_Long ("Insert seller ID: ", &seller_ID);
+                                        // -------------------------------------------------------------
+                                        // buy specific items from a seller
+                                        case BUY_BY_CERTAIN_SELLER:
 
-                                        seller_Product_Count = find_User_Product_In_Cart (user_Cart, item_Cart_Count, seller_ID, seller_Product_Indices);
+                                            // ask for seller ID
+                                            prompt_Long_Long ("Insert seller ID: ", &seller_ID);
 
-                                        if (seller_Product_Count == 0)
-                                        {
-                                            printf("\tERROR: Seller not found.\n");
+                                            // counts and enumerates the items that seller is selling
+                                            // in the cart
+                                            seller_Product_Count = find_User_Product_In_Cart (user_Cart, item_Cart_Count, seller_ID, seller_Product_Indices);
 
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
-                                        }
-
-                                        else
-                                        {                                                
-                                            transaction.date = date;
-                                            transaction.buyer_ID = user_ID;
-                                            transaction.seller_ID = seller_ID;
-                                            transaction.items_Ordered = 0;
-
-                                            for (i = 0; i < seller_Product_Count; i++)
+                                            // shows an error message if none of the items are being
+                                            // offered by the seller
+                                            if (seller_Product_Count == 0)
                                             {
-                                                if (user_Cart[seller_Product_Indices[i]].quantity_Desired > user_Cart[seller_Product_Indices[i]].item.quantity)
+                                                printf("\tERROR: Seller not found.\n");
+
+                                                // lets the user read the outputs before proceeding
+                                                let_Read();
+                                            }
+
+
+                                            else
+                                            {                      
+                                                // initializes transaction data                          
+                                                transaction.date = date;
+                                                transaction.buyer_ID = user_ID;
+                                                transaction.seller_ID = seller_ID;
+                                                transaction.items_Ordered = 0;
+
+                                                // goes through the products of the seller
+                                                for (i = 0; i < seller_Product_Count; i++)
                                                 {
-                                                    printf("\tERROR: Item %c%s%c (ID#%I64d) is out of stock. Skipping item...\n", 
-                                                        '"', user_Cart[seller_Product_Indices[i]].item.name, '"', 
-                                                        user_Cart[seller_Product_Indices[i]].item.product_ID);
+                                                    // skips items which cannot be fulfilled by the
+                                                    // slated quantity
+                                                    if (user_Cart[seller_Product_Indices[i]].quantity_Desired > user_Cart[seller_Product_Indices[i]].item.quantity)
+                                                    {
+                                                        // shows error message and declaration that it
+                                                        // will skip that item
+                                                        printf("\tERROR: Item %c%s%c (ID#%I64d) is out of stock. Skipping item...\n", 
+                                                            '"', user_Cart[seller_Product_Indices[i]].item.name, '"', 
+                                                            user_Cart[seller_Product_Indices[i]].item.product_ID);
+                                                    }
+
+                                                    // logs the item into the transaction, otherwise
+                                                    else
+                                                    {
+                                                        transaction.transaction_Log[transaction.items_Ordered] = user_Cart[seller_Product_Indices[i]];
+                                                        transaction.items_Ordered++;
+                                                    }
+
+                                                    // activates once theres enough items in a 
+                                                    // transaction
+                                                    if (transaction.items_Ordered == 5)
+                                                    {
+                                                        // displays the transaction
+                                                        display_Transaction (&transaction, user_Database, user_Database_Count);
+
+                                                        // updates the quantities of the items in the
+                                                        // array to reflect the transaction
+                                                        for (j = 0; j < 5; j++)
+                                                            item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
+                                                        
+                                                        // opens transaction file pointer
+                                                        transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+
+                                                        // writes down transaction
+                                                        fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+
+                                                        // closes file pointer
+                                                        fclose (transaction_File_Pointer);
+
+                                                        // resets the amount of items ordered
+                                                        transaction.items_Ordered = 0;
+                                                    }
                                                 }
 
-                                                else
+                                                // deals with the other items not dealt with the earlier
+                                                // transaction round up
+                                                if (transaction.items_Ordered != 0)
                                                 {
-                                                    transaction.transaction_Log[transaction.items_Ordered] = user_Cart[seller_Product_Indices[i]];
-                                                    transaction.items_Ordered++;
-                                                }
-
-                                                if (transaction.items_Ordered == 5)
-                                                {
+                                                    // displays the transaction
                                                     display_Transaction (&transaction, user_Database, user_Database_Count);
 
-                                                    for (j = 0; j < 5; j++)
+                                                    // updates the quantities of the items in the
+                                                    // array to reflect the transaction
+                                                    for (j = 0; j < transaction.items_Ordered; j++)
                                                         item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
                                                     
+                                                    // opens transaction file pointer
                                                     transaction_File_Pointer = fopen ("Transactions.dat", "ab");
-                                                    fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
-                                                    fclose (transaction_File_Pointer);
 
-                                                    transaction.items_Ordered = 0;
+                                                    // writes down transaction
+                                                    fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+
+                                                    // closes file pointer
+                                                    fclose (transaction_File_Pointer);
+                                                }
+                                                new_Line();
+
+                                                // lets the user read the outputs before proceeding
+                                                let_Read();
+
+                                                // swaps the item to the last element,
+                                                // decrementing the size of the readable array,
+                                                // "deleting" it, for all items of specified seller
+                                                for (i = 0; i < item_Cart_Count; i++)
+                                                {
+                                                    if (user_Cart[i].item.seller_ID == seller_ID)
+                                                    {
+                                                        for (j = i; j < item_Cart_Count; j++)
+                                                        {
+                                                            swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                        }
+                                                        i--;
+                                                        item_Cart_Count--;
+                                                    }
                                                 }
                                             }
+                                            break;
 
-                                            if (transaction.items_Ordered != 0)
+                                        // -------------------------------------------------------------
+                                        // buy only a specific item
+                                        case BUY_SPECIFIC_ITEM:
+                                            // asks for item ID
+                                            prompt_Long_Long ("Insert item ID: ", &item_ID);
+
+                                            // gets the index of item in cart
+                                            item_Index = give_Item_Index_Via_ID_In_Cart (user_Cart, 
+                                                                                        item_ID,
+                                                                                        item_Cart_Count);
+
+                                            // shows an error if the item is not found
+                                            if (item_Index == -1)
                                             {
+                                                printf("\tERROR: Item not found.\n");
+
+                                                // lets the user read the outputs before proceeding
+                                                let_Read();
+                                            }
+
+                                            // shows an error if the item stocks cannot accomodate the
+                                            // request
+                                            else if (user_Cart[item_Index].item.quantity < 
+                                                    user_Cart[item_Index].quantity_Desired)
+                                            {
+                                                printf("\tERROR: Item stocks less than desired.\n");
+
+                                                // lets the user read the outputs before proceeding
+                                                let_Read();
+                                            }
+
+                                            else
+                                            {
+                                                // initializes transaction data
+                                                transaction.date = date;
+                                                transaction.buyer_ID = user_ID;
+                                                transaction.items_Ordered = 1;
+                                                transaction.transaction_Log[0] = user_Cart[item_Index];
+                                                transaction.seller_ID = user_Cart[item_Index].item.seller_ID;
+
+                                                // displays the transaction
                                                 display_Transaction (&transaction, user_Database, user_Database_Count);
 
-                                                for (j = 0; j < 5; j++)
-                                                    item_Database[give_Item_Index_Via_ID(item_Database, transaction.transaction_Log[j].item.product_ID, item_Database_Count)].quantity -= transaction.transaction_Log[j].quantity_Desired;
+                                                // updates the quantities of the item in the database
+                                                // to reflect the user buying it
+                                                item_Database[give_Item_Index_Via_ID(item_Database, user_Cart[item_Index].item.product_ID, item_Database_Count)].quantity -= user_Cart[item_Index].quantity_Desired;
                                                 
+                                                // lets the user read the outputs before proceeding
+                                                let_Read();
+
+                                                // swaps the item to the last element,
+                                                // decrementing the size of the readable array,
+                                                // "deleting" it
+                                                for (i = 0; i < item_Cart_Count; i++)
+                                                {
+                                                    if (user_Cart[i].item.product_ID == transaction.transaction_Log[0].item.product_ID)
+                                                    {
+                                                        for (j = i; j < item_Cart_Count; j++)
+                                                        {
+                                                            swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                        }
+                                                        i--;
+                                                        item_Cart_Count
+                                                        --;
+                                                    }
+                                                }
+
+                                                // open transaction file pointer
                                                 transaction_File_Pointer = fopen ("Transactions.dat", "ab");
+
+                                                // writes down transaction
                                                 fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
+
+                                                // closes file pointer
                                                 fclose (transaction_File_Pointer);
                                             }
-                                            new_Line();
 
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
+                                            break;
 
-                                            for (i = 0; i < item_Cart_Count; i++)
-                                            {
-                                                if (user_Cart[i].item.seller_ID == unique_Sellers_IDs[k])
-                                                {
-                                                    for (j = i; j < item_Cart_Count; j++)
-                                                    {
-                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
-                                                    }
-                                                    i--;
-                                                    item_Cart_Count--;
-                                                }
-                                            }
+                                        // -------------------------------------------------------------
+                                        // exits user from check out menu
+                                        case EXIT_CHECK_OUT:
+                                            check_Out_Done = TRUE; // stops the loop
+
+                                            break;
                                         }
-                                        break;
-
-                                    // -------------------------------------------------------------
-                                    case BUY_SPECIFIC_ITEM:
-                                        prompt_Long_Long ("Insert item ID: ", &item_ID);
-
-                                        item_Index = give_Item_Index_Via_ID_In_Cart (user_Cart, 
-                                                                                     item_ID,
-                                                                                     item_Cart_Count);
                                         
-                                        if (item_Index == -1)
-                                        {
-                                            printf("\tERROR: Item not found.\n");
+                                    } while (!check_Out_Done);
+                                }
 
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
-                                        }
-
-                                        else if (user_Cart[item_Index].item.quantity < 
-                                                 user_Cart[item_Index].quantity_Desired)
-                                        {
-                                            printf("\tERROR: Item stocks less than desired.\n");
-
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
-                                        }
-
-                                        else
-                                        {
-                                            transaction.date = date;
-                                            transaction.buyer_ID = user_ID;
-                                            transaction.items_Ordered = 1;
-                                            transaction.transaction_Log[0] = user_Cart[item_Index];
-                                            transaction.seller_ID = user_Cart[item_Index].item.seller_ID;
-
-                                            display_Transaction (&transaction, user_Database, user_Database_Count);
-                                            item_Database[give_Item_Index_Via_ID(item_Database, user_Cart[item_Index].item.product_ID, item_Database_Count)].quantity -= user_Cart[item_Index].quantity_Desired;
-                                            
-                                            // lets the user read the outputs before proceeding
-                                            let_Read();
-
-                                            for (i = 0; i < item_Cart_Count; i++)
-                                            {
-                                                if (user_Cart[i].item.product_ID == transaction.transaction_Log[0].item.product_ID)
-                                                {
-                                                    for (j = i; j < item_Cart_Count; j++)
-                                                    {
-                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
-                                                    }
-                                                    i--;
-                                                    item_Cart_Count
-                                                    --;
-                                                }
-                                            }
-
-                                            transaction_File_Pointer = fopen ("Transactions.dat", "ab");
-                                            fwrite(&transaction, sizeof(transactionType), 1, transaction_File_Pointer);
-                                            fclose (transaction_File_Pointer);
-                                        }
-
-                                        break;
-
-                                    // -------------------------------------------------------------
-                                    // exits user from check out menu
-                                    case EXIT_CHECK_OUT:
-                                        check_Out_Done = TRUE; // stops the loop
-
-                                        break;
-                                    }
-                                    
-                                } while (!check_Out_Done);
-                                    
                                 break;
                             
                             // ---------------------------------------------------------------------
