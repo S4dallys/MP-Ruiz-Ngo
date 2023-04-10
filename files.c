@@ -10,36 +10,46 @@
  * @param user_File_Pointer - file pointer set to Users.txt using fopen() function
  * @param user_Database - struct array containing users
  * @param user_Database_Count - number of users in user_Database
+ * @return TRUE if the data is correctly formatted and uncorrupted; FALSE, otherwise
 */
-void
+boolean
 initialize_User_Database (FILE *    user_File_Pointer,
                           userType  user_Database[],
                           int *     user_Database_Count)
 {
     // local variable declaration
-    userType  user_Instance;
-    int       inputs;
-    char      white_Space;
+    userType  user_Instance;  // temporary receptacle for a user instance
+    int       inputs;         // counts how many batches of inputs have been inputted
+    char      white_Space;    // receptacle for whitespace characters
 
     // reads user data from the text file
     do
     {
+        // assume there have been no inputs
         inputs = 0;
 
+        // reads user ID
         inputs += fscanf (user_File_Pointer, "%I64d", &user_Instance.user_ID);
 
+        // reads following whitespace character
         inputs += fscanf (user_File_Pointer, "%c", &white_Space);
 
+        // reads user password
         inputs += fscanf (user_File_Pointer, "%[^\n]s", user_Instance.password);
-
+        
+        // reads following whitespace character
         inputs += fscanf (user_File_Pointer, "%c", &white_Space);
 
+        // reads user name
         inputs += fscanf (user_File_Pointer, "%[^\n]s", user_Instance.name);
 
+        // reads following whitespace character
         inputs += fscanf (user_File_Pointer, "%c", &white_Space);
 
+        // reads user address
         inputs += fscanf (user_File_Pointer, "%[^\n]s", user_Instance.address);
 
+        // reads user contact number
         inputs += fscanf (user_File_Pointer, "%I64d", &user_Instance.contact);
 
         // if the read is complete, record the read data into the array
@@ -66,35 +76,44 @@ initialize_Item_Database (FILE *    item_File_Pointer,
                           int *     item_Database_Count)
 {
     // local variable declaration
-    itemType  item_Instance;
-    int       inputs;
-    char      white_Space;
+    itemType  item_Instance;  // temporary receptacle for an item+ instance
+    int       inputs;         // counts how many batches of inputs have been inputted
+    char      white_Space;    // receptacle for whitespace characters
 
     // reads user data from the text file
     do
     {
+        // assume there have been no inputs
         inputs = 0;
 
+        // reads product ID
         inputs += fscanf (item_File_Pointer, "%I64d", &item_Instance.product_ID);
 
+        // reads seller ID
         inputs += fscanf (item_File_Pointer, "%I64d", &item_Instance.seller_ID);
 
+        // reads white space
         inputs += fscanf (item_File_Pointer, "%c", &white_Space);
 
+        // reads item name
         inputs += fscanf (item_File_Pointer, "%[^\n]s", item_Instance.name);
 
+        // reads white space
         inputs += fscanf (item_File_Pointer, "%c", &white_Space);
 
+        // reads item category
         inputs += fscanf (item_File_Pointer, "%[^\n]s", item_Instance.category);
-        
+
+        // reads white space
         inputs += fscanf (item_File_Pointer, "%c", &white_Space);
 
-        inputs += fscanf (item_File_Pointer, "%[^\n]s", 
-                          item_Instance.description);
+        // reads item description
+        inputs += fscanf (item_File_Pointer, "%[^\n]s", item_Instance.description);
 
-        inputs += fscanf (item_File_Pointer, "%I64d",         
-                          &item_Instance.quantity);
+        // reads item quantity
+        inputs += fscanf (item_File_Pointer, "%I64d", &item_Instance.quantity);
 
+        // reads item unit price
         inputs += fscanf (item_File_Pointer, "%lf", &item_Instance.unit_Price);
         
         // if the read is complete, record the read data into the array
@@ -119,8 +138,10 @@ upload_User_Database (userType  user_Database[],
                       int       user_Database_Count)
 {
     // local variable declaration
-    FILE *user_File_Pointer = fopen("Users.txt", "w");
-    int index;
+    FILE *user_File_Pointer;  // pointer to Users.txt
+    int index;  // indexing variable for later loop
+
+    user_File_Pointer = fopen("Users.txt", "w"); // initialize file pointer
 
     // print every user in the array to the Users.txt file
     for (index = 0; index < user_Database_Count; index++)
@@ -133,7 +154,8 @@ upload_User_Database (userType  user_Database[],
                 user_Database[index].contact);
     }
 
-    fclose(user_File_Pointer);
+    // close file pointer
+    fclose(user_File_Pointer); 
 }
 
 /**
@@ -146,8 +168,10 @@ upload_Item_Database (itemType  item_Database[],
                       int       item_Database_Count)
 {
     // local variable declaration
-    FILE *item_File_Pointer = fopen ("Items.txt", "w");
-    int index;
+    FILE *item_File_Pointer;  // pointer to Items.txt
+    int index;  // indexing variable for later loop
+
+    item_File_Pointer = fopen ("Items.txt", "w");
 
     // print every item in the array to the Items.txt file
     for (index = 0; index < item_Database_Count; index++)
@@ -162,6 +186,7 @@ upload_Item_Database (itemType  item_Database[],
                 item_Database[index].unit_Price);
     }
 
+    // close file pointer
     fclose(item_File_Pointer);
 }
 
@@ -179,9 +204,9 @@ load_User_Cart (char     user_Cart_Name[],
                 int*     user_Cart_Count)
 {
     // local variable declaration
-    FILE* user_Cart_File;
+    FILE* user_Cart_File; // file pointer to user cart
 
-    *user_Cart_Count = 0;
+    *user_Cart_Count = 0; // initializes count of cart
 
     // access the binary file in read mode
     user_Cart_File = fopen(user_Cart_Name, "rb");
@@ -195,10 +220,11 @@ load_User_Cart (char     user_Cart_Name[],
         // continues to read until end of file
         while (!feof(user_Cart_File))
         {
-            (*user_Cart_Count)++;
+            (*user_Cart_Count)++; // increments count of items in cart
             fread(&user_Cart[*user_Cart_Count], sizeof(orderType), 1, user_Cart_File);
         }
     }
 
+    // closes file pointer
     fclose(user_Cart_File);
 }
