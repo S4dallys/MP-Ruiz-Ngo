@@ -1422,7 +1422,7 @@ main()
 
                                 // says date bounds given are invalid if user entered a later
                                 // starting date than the former, gives an error
-                                if (compare_Date(duration_Date_1, duration_Date_2) != -1 ||
+                                if (compare_Date(duration_Date_1, duration_Date_2) != -1 &&
                                     compare_Date(duration_Date_1, duration_Date_2) != 0)
                                 {
                                     printf("\tERROR: Invalid date bounds.\n");
