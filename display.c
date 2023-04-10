@@ -26,7 +26,7 @@ display_Choices (String30  choices_list[],
                  int       choices_list_length)
 {
     // local variable declaration
-    int i;
+    int i; // looping variable for later loop
 
     // display header
     printf("\tChoices:\n");
@@ -53,8 +53,8 @@ display_Horizontal_Border_Line (int  number_Of_Columns,
                                 int  column_Width_Array[])
 {
     // local variable declaration
-    int i;
-    int j;
+    int i; // looping variable for later loop
+    int j; // looping variable for later loop
 
     // print a tab character
     printf("\t");
@@ -96,12 +96,12 @@ display_Menu (String30  menu_Name,
               int       choices_List_Length)
 {
     // local variable declaration
-    boolean  error;
-    boolean  done;
-    char     choice;
+    boolean  error; // represents if an error has occured
+    boolean  done;  // represents if the user is done
+    char     choice; // holds a user's choice
 
-    error = FALSE;
-    done = FALSE;
+    error = FALSE; // assumes no error has been made
+    done = FALSE;  // assumes the user is not yet done
 
     // show menu name and choices
     printf("\t%s Menu:\n", menu_Name);
@@ -123,8 +123,10 @@ display_Menu (String30  menu_Name,
 
         // check if the input is part of the choices given
         if (choice < 'A' || choice > 'A' + choices_List_Length - 1)
+            // says an error if it is not a part
             error = TRUE;
         else
+            // ends the loop otherwise
             done = TRUE;
     
     // end the loop once a non-erroneous input is given
@@ -146,11 +148,12 @@ display_Product_Table (orderType order_Array[],
                        int       order_Array_Length)
 {
     // local variable declaration
-    int item_Width_Array[5] = {19, 20, 15, 15, 19};
-    int index;
-    boolean first;
+    int item_Width_Array[5] = {19, 20, 15, 15, 19}; // array of the widths of the values 
+                                                    // in the table
+    int index;      // indexing value for later loop
+    boolean first;  // represents if this is the first go through in the loop
 
-    first = TRUE;
+    first = TRUE; // declares that it is the first run through
 
     // loop through the initialization and the entire array
     for (index = -1; index < order_Array_Length; index++)
@@ -161,11 +164,11 @@ display_Product_Table (orderType order_Array[],
         // print the header at initialization
         if (first)
         {
-            first = FALSE;
+            first = FALSE; // says that it is no longer the first run through
 
             printf("\t| %-19s | %-20s | %-15s | %-15s | %-19s |\n", 
                     "PRODUCT ID", "ITEM NAME", "CATEGORY", "UNIT PRICE", 
-                    "QUANTITY AVAILABLE");
+                    "QUANTITY AVAILABLE"); // prints header
         }
 
         // print the data in each column
@@ -200,11 +203,12 @@ display_Table_Ala_Show_My_Products (itemType  item_Array[],
                                     int       item_Array_Length)
 {
     // local variable declaration
-    int item_Width_Array[5] = {19, 20, 15, 15, 19};
-    int index;
-    boolean first;
+    int item_Width_Array[5] = {19, 20, 15, 15, 19}; // array of the widths of the values 
+                                                    // in the table
+    int index;      // indexing value for later loop
+    boolean first;  // represents if this is the first go through in the loop
 
-    first = TRUE;
+    first = TRUE; // declares that it is the first run through
 
     // loop through the initialization and the entire array
     for (index = -1; index < item_Array_Length; index++)
@@ -215,7 +219,7 @@ display_Table_Ala_Show_My_Products (itemType  item_Array[],
         // print the header at initialization
         if (first)
         {
-            first = FALSE;
+            first = FALSE; // says that it is no longer the first run through
 
             printf("\t| %-19s | %-20s | %-15s | %-15s | %-19s |\n", 
                     "PRODUCT ID", "ITEM NAME", "CATEGORY", "UNIT PRICE", 
@@ -247,11 +251,12 @@ display_Table_Ala_Show_My_Products (itemType  item_Array[],
 void
 display_Item (itemType  item)
 {
-  printf("\tProduct ID:         %I64d\n", item.product_ID);
-  printf("\tName:               %s\n", item.name);
-  printf("\tCategory:           %s\n", item.category);
-  printf("\tQuantity Avaliable: %I64d\n", item.quantity);
-  printf("\tPrice:              %lf\n", item.unit_Price); 
+    // prints ID, name, category, quantity available, price in that order
+    printf("\tProduct ID:         %I64d\n", item.product_ID);
+    printf("\tName:               %s\n", item.name);
+    printf("\tCategory:           %s\n", item.category);
+    printf("\tQuantity Avaliable: %I64d\n", item.quantity);
+    printf("\tPrice:              %lf\n", item.unit_Price); 
 }
 
 /**
@@ -266,11 +271,12 @@ display_User_Table (userType user_Database[],
                     int      user_Database_Size)
 {
     // local variable declaration
-    int user_Width_Array[] = {19, 10, 20, 30, 19};
-    int index;
-    boolean first;
+    int user_Width_Array[] = {19, 10, 20, 30, 19}; // array of the widths of the values 
+                                                   // in the table
+    int index;      // indexing value for later loop
+    boolean first;  // represents if this is the first go through in the loop
 
-    first = TRUE;
+    first = TRUE; // declares that it is the first run through
 
     // loop through the initialization and the entire array
     for (index = -1; index < user_Database_Size; index++)
@@ -320,11 +326,13 @@ display_User_Table_With_Conditions (userType user_Database[],
                                     boolean  permissions_Array[])
 {
     // local variable declaration
-    int user_Width_Array[] = {19, 10, 20, 30, 19};
-    int index;
-    boolean first;
+    int user_Width_Array[] = {19, 10, 20, 30, 19}; // array of the widths of the values 
+                                                   // in the table
 
-    first = TRUE;
+    int index;      // indexing value for later loop
+    boolean first;  // represents if this is the first go through in the loop
+
+    first = TRUE; // declares that it is the first run through
 
     // loop through the initialization and the entire array
     for (index = -1; index < user_Database_Size; index++)
@@ -335,7 +343,7 @@ display_User_Table_With_Conditions (userType user_Database[],
         // print the header at initialization
         if (first)
         {
-            first = FALSE;
+            first = FALSE; // says that it is no longer the first run through
 
             printf("\t| %-19s | %-10s | %-20s | %-30s | %-19s |\n", 
                    "USER ID", "PASSWORD", "NAME", "ADDRESS", 
@@ -403,16 +411,17 @@ display_And_Calculate_Order_Table (orderType transaction_Log[],
                                    int       items_Ordered)
 {
     // local variable declaration
-    int item_Width_Array[5] = {19, 19, 20, 15, 15};
-    int index;
-    boolean first;
+    int item_Width_Array[5] = {19, 19, 20, 15, 15}; // array of the widths of the values 
+                                                    // in the table
+    int index;      // indexing value for later loop
+    boolean first;  // represents if this is the first go through in the loop
 
-    double total_Price;
-    double price_Of_Items;
+    double total_Price;    // holds the total price of the transaction
+    double price_Of_Items; // holds the price of the items given the quantity
 
-    total_Price = 0;
+    first = TRUE; // declares that it is the first run through
 
-    first = TRUE;
+    total_Price = 0; // initialize the total price
 
     // loop through the initialization and the entire array
     for (index = -1; index < items_Ordered; index++)
@@ -423,7 +432,7 @@ display_And_Calculate_Order_Table (orderType transaction_Log[],
         // print the header at initialization
         if (first)
         {
-            first = FALSE;
+            first = FALSE; // says that it is no longer the first run through
 
             printf("\t| %-19s | %-19s | %-20s | %-15s | %-15s |\n", 
                    "QUANTITY", "PRODUCT ID", "ITEM NAME", "UNIT PRICE", "TOTAL PRICE");
@@ -509,11 +518,13 @@ display_Table_Based_On_Money (userType user_Database[],
                               float    sales_Array[])
 {
     // local variable declaration
-    int user_Width_Array[] = {19, 10, 15};
-    int index;
-    boolean first;
+    int user_Width_Array[] = {19, 10, 15}; // array of the widths of the values 
+                                           // in the table
 
-    first = TRUE;
+    int index;      // indexing value for later loop
+    boolean first;  // represents if this is the first go through in the loop
+
+    first = TRUE; // declares that it is the first run through
 
     // loop through the initialization and the entire array
     for (index = -1; index < user_Database_Size; index++)
@@ -524,7 +535,7 @@ display_Table_Based_On_Money (userType user_Database[],
         // print the header at initialization
         if (first)
         {
-            first = FALSE;
+            first = FALSE; // says that it is no longer the first run through
 
             printf("\t| %-19s | %-20s | %-15s |\n", 
                    "ID", "NAME", "SALES");
