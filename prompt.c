@@ -130,6 +130,7 @@ prompt_Char (char    prompt[],
  *                  will be stored
  * @param limit - the maximum number of characters that the
  *                function will accept
+ * Precondition: Limit should be less than string length
 */
 void
 prompt_StringN (char  prompt[],
