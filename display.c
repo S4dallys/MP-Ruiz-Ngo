@@ -518,7 +518,7 @@ display_Table_Based_On_Money (userType user_Database[],
                               float    sales_Array[])
 {
     // local variable declaration
-    int user_Width_Array[] = {19, 10, 15}; // array of the widths of the values 
+    int user_Width_Array[] = {19, 20, 15}; // array of the widths of the values 
                                            // in the table
 
     int index;      // indexing value for later loop
