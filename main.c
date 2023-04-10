@@ -124,42 +124,59 @@ main()
     double sum;
 
     // Initialize USER DATABASE
-    user_File_Pointer = fopen ("Users.txt", "r");
+    user_File_Pointer = fopen ("Users.txt", "r"); // open the file pointer on read mode
 
+    // if the file does not exist, set the number of users to zero
     if (user_File_Pointer == NULL)
         user_Database_Count = 0;
+    // else, download the users and set the number of users as per the users in the file
     else
         initialize_User_Database (user_File_Pointer, 
                                   user_Database, 
                                   &user_Database_Count);
 
-    fclose (user_File_Pointer);
+    fclose (user_File_Pointer); // close the file pointer
 
     // Initialize ITEM DATABASE
-    item_File_Pointer = fopen ("Items.txt", "r");
+    item_File_Pointer = fopen ("Items.txt", "r"); // open the file pointer on read mode
 
+    // if the file does not exist, set the number of items to zero
     if (item_File_Pointer == NULL)
         item_Database_Count = 0;
+
+    // else, download the items and set the number of items as per the items in the file
     else
         initialize_Item_Database (item_File_Pointer, 
                                   item_Database, &item_Database_Count);
 
-    fclose (item_File_Pointer);
+    fclose (item_File_Pointer); // close the file pointer
 
-    done = FALSE;
+    done = FALSE; // assumes the user is not done
 
+    // loops while the user is not done
     do
     {
-        
+        // sorts the users in the array by their ID
         sort_Users_By_ID(user_Database, user_Database_Count);
+
+        // displays the main menu and asks for a choice
         choice = display_Menu ("Main", main_Menu_Choices, 4);
 
+        // activates certain commands based on the user's choices
         switch (choice)
         {
 
         //------------------------------------------------------------------------------------------
         case USER_REGISTRATION: 
-            register_User(user_Database, &user_Database_Count);
+            // registers the user into the database of users
+            if (user_Database_Count < MAX_USERS)
+                register_User(user_Database, &user_Database_Count);
+            // shows an error if the max amount of users is reached and array cannot handle any more
+            else
+            {
+                printf("\tERROR: Max users reached!\n");
+                let_Read(); // lets the user read the error message
+            }
             break;
         
         //------------------------------------------------------------------------------------------
@@ -757,7 +774,20 @@ main()
                                                 new_Line();
                                                 let_Read();
 
-                                                item_Cart_Count = 0;
+                                                
+                                            }
+
+                                            for (i = 0; i < item_Cart_Count; i++)
+                                            {
+                                                if (user_Cart[i].item.seller_ID == seller_ID)
+                                                {
+                                                    for (j = i; j < item_Cart_Count; j++)
+                                                    {
+                                                        swap_Order(&user_Cart[j], &user_Cart[j+1]);
+                                                    }
+                                                    i--;
+                                                    item_Cart_Count--;
+                                                }
                                             }
                                         }
 
@@ -828,7 +858,7 @@ main()
 
                                             for (i = 0; i < item_Cart_Count; i++)
                                             {
-                                                if (user_Cart[i].item.seller_ID == transaction.seller_ID)
+                                                if (user_Cart[i].item.seller_ID == unique_Sellers_IDs[k])
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
                                                     {
@@ -947,33 +977,49 @@ main()
             break;
             
             // -------------------------------------------------------------------------------------
+            // enters into the admin menu
             case ADMIN_MODE: 
+                //asks for the admin's password
                 prompt_StringN("Insert password: ", password, 15);
 
+                // shows an error message if the admin password is incorrect
                 if (strcmp(ADMIN_PASSWORD, password) != 0)
                 {
                     printf("\tError: Invalid Password!\n");
                     let_Read();
                 }
+
+                // activates the admin menu if correct
                 else
                 {
+                    // assumes the admin is not yet done with the menu
                     admin_Done = FALSE;
+
+                    // loops while the admin is not yet done
                     do
                     {
-                        system("cls");
+                        // displays the choices from the admin menu and asks for a choice from the
+                        // user
                         choice = display_Menu ("Admin", admin_Menu_Choices, 6);
+
+                        // activates certain commands based on user input
                         switch (choice)
                         {
 
                         // -------------------------------------------------------------------------
+                        // shows all of the users in tabular format, arranged in ascending order by
+                        // their IDs
                         case SHOW_ALL_USERS:
-                            display_User_Table(user_Database, user_Database_Count);
-                            new_Line();
-                            let_Read();
+                            display_User_Table(user_Database, user_Database_Count); // shows table
+                            new_Line(); // shows new line
+                            let_Read(); // lets the user read the table before proceeding
                             break;
 
                         // -------------------------------------------------------------------------
+                        // shows all users which have items registered in the item array in tabular
+                        // format
                         case SHOW_ALL_SELLERS:
+
                             for (i = 0; i < user_Database_Count; i++)
                               permissions_Array[i] = count_User_Items (item_Database, 
                                                                        item_Database_Count, 
@@ -1075,6 +1121,7 @@ main()
                         
                         // -------------------------------------------------------------------------
                         case EXIT_ADMIN:
+                            // exits the admin menu loop
                             admin_Done = TRUE;
 
                             break;
@@ -1085,10 +1132,18 @@ main()
                 break;
             
             // -------------------------------------------------------------------------------------
+            // ends the loop
             case EXIT_PROGRAM:
+                // displays an exit message
+                printf("\tThank you for shopping with us! (uwu)\n");
+
+                // uploads the items to Items.txt
                 upload_Item_Database(item_Database, item_Database_Count);
+
+                // uploads the users to Users.txt
                 upload_User_Database(user_Database, user_Database_Count);
 
+                // ends the main program loop
                 done = TRUE;
 
                 break;
