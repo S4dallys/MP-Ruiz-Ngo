@@ -529,12 +529,12 @@ display_Table_Based_On_Money (userType user_Database[],
     // loop through the initialization and the entire array
     for (index = -1; index < user_Database_Size; index++)
     {
-        // display a horizontal border line
-        display_Horizontal_Border_Line(3, user_Width_Array);
-
         // print the header at initialization
         if (first)
         {
+            // display a horizontal border line
+            display_Horizontal_Border_Line(3, user_Width_Array);
+
             first = FALSE; // says that it is no longer the first run through
 
             printf("\t| %-19s | %-20s | %-15s |\n", 
@@ -546,6 +546,9 @@ display_Table_Based_On_Money (userType user_Database[],
         // printed, i.e., if they have any sales
         else if (sales_Array[index] > 0)
         {
+            // display a horizontal border line
+            display_Horizontal_Border_Line(3, user_Width_Array);
+
             printf("\t| %19I64d | %-20s | %15.2lf |\n",
                    user_Database[index].user_ID,
                    user_Database[index].name,
