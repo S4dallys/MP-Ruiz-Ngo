@@ -928,6 +928,7 @@ main()
                                             new_Line();
                                             let_Read();
 
+                                            k = 0;
                                             for (i = 0; i < item_Cart_Count; i++)
                                             {
                                                 if (user_Cart[i].item.seller_ID == unique_Sellers_IDs[k])
@@ -939,6 +940,7 @@ main()
                                                     i--;
                                                     item_Cart_Count--;
                                                 }
+                                                k++;
                                             }
                                         }
                                         break;

@@ -67,5 +67,5 @@ void make_Bag_Txt (char * fi, char* fo)
 
 int main ()
 {
-    make_Bag_Txt("46.bag", TEST);
+    make_Transaction_txt();
 }
