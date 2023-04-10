@@ -344,7 +344,7 @@ display_User_Table_With_Conditions (userType user_Database[],
         }
 
         // print the data in each column, if that is allowed to be
-        // printed
+        // printed by the permission in permissions array
         else if (permissions_Array[index] == TRUE)
         {
             printf("\t| %19I64d | %-10s | %-20s | %-30s | %19I64d |\n",
@@ -391,6 +391,13 @@ new_Line()
   printf("\n");
 }
 
+/**
+ * display_And_Calculate_Order_Table displays the orders inside
+ * an array of order structures.
+ * @param transaction_Log - an array of orders
+ * @param items_Ordered - the amount of orders in transaction_Log
+ * @return the total amount of the transaction
+*/
 double
 display_And_Calculate_Order_Table (orderType transaction_Log[],
                                    int       items_Ordered)
@@ -425,9 +432,11 @@ display_And_Calculate_Order_Table (orderType transaction_Log[],
         // print the data in each column
         else
         {
+            // calculates the price of all items of given quantity
             price_Of_Items = transaction_Log[index].quantity_Desired *
                              transaction_Log[index].item.unit_Price;
 
+            // displays the data in rows
             printf("\t| %19I64d | %19I64d | %-20s | %15.2f | %15.2f |\n",
                    transaction_Log[index].quantity_Desired,
                    transaction_Log[index].item.product_ID,
@@ -435,6 +444,7 @@ display_And_Calculate_Order_Table (orderType transaction_Log[],
                    transaction_Log[index].item.unit_Price,
                    price_Of_Items);
             
+            // adds the price of each item type together
             total_Price += price_Of_Items;
         }
     }
@@ -445,38 +455,53 @@ display_And_Calculate_Order_Table (orderType transaction_Log[],
     return total_Price;
 }
 
+/**
+ * display_Transaction displays a receipt or summary of a given transaction.
+ * @param transaction - a pointer to the transaction structure to be displayed
+ * @param user_Database - an array of users
+ * @param user_Database_Size - the amount of users in user_Database
+*/
 void
 display_Transaction (transactionType *transaction,
                      userType        user_Database[],
                      int             user_Database_Size)
 {
-    double total_Price;
-
+    // prints a header
     printf("\t*****************************************SUMMARY OF TRANSACTION*****************************************");
     new_Line();
+
+    // indicates the date of the transaction
     printf("\tDate of Transaction: %04d-%02d-%02d", transaction->date.year, 
                                                     transaction->date.month, 
                                                     transaction->date.day);
     new_Line();
-    total_Price = display_And_Calculate_Order_Table (transaction->transaction_Log, transaction->items_Ordered);
+
+    // shows the table of orders and calculates the total amount of the transaction
+    // the latter result is used to initialize the transaction's amount
+    transaction->amount = display_And_Calculate_Order_Table (transaction->transaction_Log, transaction->items_Ordered);
     new_Line();
-    printf("\tTotal Price of Transaction: %.2f\n", total_Price);
+
+    // shows the total price of the transaction
+    printf("\tTotal Price of Transaction: %.2f\n", transaction->amount);
     new_Line();
-    printf("\tPayable to: %s, User ID# %-19I64d\n", 
+
+    // shows who the transaction is payable to, a.k.a. the seller
+    printf("\tPayable to: %s, User ID# %-I64d\n", 
            user_Database[search_User(user_Database, user_Database_Size, transaction->seller_ID)].name, 
            transaction->seller_ID);
-    transaction->amount = total_Price;
+
     new_Line();
 }
 
 /**
- * display_User_Table_With_Conditions displays the user structures
+ * display_User_Based_On_Money displays the user structures
  * in an array in a tabular format. Each structure will only be
- * displayed if they are allowed to do so by their corresponding
- * permissions in another array.
+ * displayed if they have any sales based on an array which
+ * represents their sales
  * @param user_Database - array of user tructures
  * @param user_Database_Size - number of users in user_Database
- * @param permissions_Array - an array of boolean values
+ * @param sales_Array - an array of doubles which represent each
+ *                      user's sales
 */
 void
 display_Table_Based_On_Money (userType user_Database[], 
@@ -507,7 +532,7 @@ display_Table_Based_On_Money (userType user_Database[],
         }
 
         // print the data in each column, if that is allowed to be
-        // printed
+        // printed, i.e., if they have any sales
         else if (sales_Array[index] > 0)
         {
             printf("\t| %19I64d | %-20s | %15.2lf |\n",
