@@ -1,5 +1,14 @@
 /********** INTRODUCTORY DIVISION **********/ 
 
+/********************************************************************************************************* 
+This is to certify that this project is our own work, based on our personal efforts in studying and applying the concepts learned. We 
+have constructed the functions and their respective algorithms and corresponding code by ourselves. The program was run, tested, 
+and debugged by our own efforts. We further certify that we have not copied in part or whole or otherwise plagiarized the work of other 
+students and/or persons.
+ Rendell Christian. J. Ngo, DLSU ID# 12279285
+ James Christian T. Ruiz, DLSU ID# 12208973 
+*********************************************************************************************************/
+
 /*******************************************/
 
 // main header
