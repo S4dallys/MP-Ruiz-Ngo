@@ -706,7 +706,10 @@ main()
 
                                 // shows an error message if cart is empty
                                 if (item_Cart_Count <= 0)
+                                {
                                     printf("\tERROR: Cart is empty.\n");
+                                    let_Read();
+                                }
                                 
                                 else
                                 {
