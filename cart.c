@@ -25,7 +25,9 @@ add_Item_To_Cart (itemType    item_Database[],
     long long quantity;  // represents how much of that item the user wants to add to cart
     int item_Index;      // represents the index where the user can find the item in item_Database
 
-    // promp for user_ID
+    boolean valid_Input; // boolean if input is valid
+
+    // prompt for user_ID
     prompt_Long_Long ("ID: ", &item_ID);
 
     // see if item is already in cart, shows an error if so
@@ -38,9 +40,21 @@ add_Item_To_Cart (itemType    item_Database[],
 
     else
     {
-        // prompt for quantity
-        prompt_Long_Long ("Quantity: ", &quantity);
+        // assume input is valid
+        valid_Input = TRUE;
+        do
+        {
+            // shows error for invalid input
+            if (!valid_Input)
+                printf("\tERROR: Input must be greater than 0.\n");
 
+            // prompt for quantity
+            prompt_Long_Long ("Quantity: ", &quantity);
+
+            // checks if quantity is greater than 0
+            valid_Input = quantity > 0;
+        } while (!valid_Input);
+        
         // find index of item in item_Database
         item_Index = give_Item_Index_Via_ID (item_Database, item_ID, item_Database_Count);
 
