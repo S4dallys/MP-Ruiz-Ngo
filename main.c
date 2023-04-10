@@ -79,7 +79,7 @@ main()
                                       "Exit Sell Menu"};
     
     String30 buy_Menu_Choices[8] =   {"View All Products",
-                                      "Show Products by Certain Seller",
+                                      "Show Products by Seller",
                                       "Search Products by Category",
                                       "Search Products by Name",
                                       "Add to Cart",
