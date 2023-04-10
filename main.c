@@ -425,13 +425,18 @@ main()
 
                                 // goes through user's items while the user has not yet 
                                 // inputted x
-                                while (i < user_Product_Count && (choice != 'X' || choice != 'x'))
+                                while (i < user_Product_Count && choice != 'X' && choice != 'x')
                                 {
                                     // checks if the quantity of an item is less than 5
                                     if (item_Database[user_Product_Indices[i]].quantity < 5)
                                     {
-                                        // displays the item
-                                        display_Item(item_Database[user_Product_Indices[i]]);
+                                        // prints ID, name, category, description, quantity available, price in that order
+                                        printf("\tProduct ID:         %I64d\n", item_Database[user_Product_Indices[i]].product_ID);
+                                        printf("\tName:               %s\n", item_Database[user_Product_Indices[i]].name);
+                                        printf("\tCategory:           %s\n", item_Database[user_Product_Indices[i]].category);
+                                        printf("\tDescription:        %s\n", item_Database[user_Product_Indices[i]].description);
+                                        printf("\tQuantity Avaliable: %I64d\n", item_Database[user_Product_Indices[i]].quantity);
+                                        printf("\tPrice:              %lf\n", item_Database[user_Product_Indices[i]].unit_Price); 
                                         new_Line();
 
                                         // asks the user for a choice of exiting or going to the next
@@ -448,7 +453,7 @@ main()
                                 }
 
                                 // says that nothing follows once user has reached end of list
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
 
                                 // allows user to read outputs before proceeding
                                 let_Read();
@@ -527,7 +532,7 @@ main()
                                 }
 
                                 // show that nothing follows
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
                                 let_Read();
 
                                 break;
@@ -612,7 +617,7 @@ main()
                                 }
 
                                 // show that nothing follows
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
                                 
                                 // lets the user read the outputs before proceeding
                                 let_Read();
@@ -665,7 +670,7 @@ main()
                                 }
 
                                 // show that nothing follows
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
 
                                 // lets the user read the outputs before proceeding
                                 let_Read();

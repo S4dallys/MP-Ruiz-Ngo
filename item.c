@@ -134,11 +134,39 @@ register_Product (itemType   item_Database[],
     // asks for the item's description
     prompt_StringN("Description: ", item.description, 30);
 
-    // asks for how many items there are available
-    prompt_Long_Long("Quantity Available: ", &item.quantity);
+    // insists on attaining a unique item ID
+    do
+    {
+        // displays a message if the user previously gave an 
+        // erroneous input
+        if (!valid_Response)
+            printf("\tInvalid quantity.\n");
+        
+        // asks for how many items there are available
+        prompt_Long_Long("Quantity Available: ", &item.quantity);
 
-    // asks for the price the user is selling them at
-    prompt_Double("Price: ", &item.unit_Price);
+        // checks if valid
+        valid_Response = item.quantity >= 0;
+
+    // loop ends when valid
+    } while (!valid_Response);
+
+    // insists on attaining a unique item ID
+    do
+    {
+        // displays a message if the user previously gave an 
+        // erroneous input
+        if (!valid_Response)
+            printf("\tInvalid price.\n");
+        
+        // asks for the price the user is selling them at
+        prompt_Double("Price: ", &item.unit_Price);
+
+        // checks if valid
+        valid_Response = item.unit_Price >= 0;
+
+    // loop ends when valid
+    } while (!valid_Response);
 
     // tags the ID of the user to as the item's seller ID
     item.seller_ID = user_ID;

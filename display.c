@@ -119,7 +119,7 @@ display_Menu (String30  menu_Name,
 
         // transforms lowercase input to uppercase, if ever
         if (choice >= 'a' && choice <= 'z')
-            choice = choice - ('A' - 'a');
+            choice = choice  - 'a' + 'A';
 
         // check if the input is part of the choices given
         if (choice < 'A' || choice > 'A' + choices_List_Length - 1)
