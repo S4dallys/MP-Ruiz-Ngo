@@ -22,10 +22,13 @@ check_Unique_Item_ID (itemType   item_Database[],
 				      long long  item_ID)
 {
     // local variable declaration
-	boolean  flag;
-	int      index;
+    boolean  flag;  // represents if an ID is unique to the array
+	int      index; // index variable to be used in the coming loop
 	
-	flag = TRUE;
+    // assume the ID to be unique
+	flag = TRUE; 
+
+    // initialize the indexing variable
 	index = 0;
 	
     // looping through the array until it reaches the end
@@ -49,10 +52,13 @@ check_Unique_Seller_ID (long long   item_Database[],
 				      long long  item_ID)
 {
     // local variable declaration
-	boolean  flag;
-	int      index;
+    boolean  flag;  // represents if an ID is unique to the array
+	int      index; // index variable to be used in the coming loop
 	
-	flag = TRUE;
+    // assume the ID to be unique
+	flag = TRUE; 
+
+    // initialize the indexing variable
 	index = 0;
 	
     // looping through the array until it reaches the end
@@ -89,10 +95,10 @@ register_Product (itemType   item_Database[],
                   long long  user_ID)
 {
     // local variable declaration
-    itemType  item;
-    boolean   valid_Response;
+    itemType  item;  // temporary bin for an item structure
+    boolean   valid_Response; // represents if a valid response is given or not
 
-    valid_Response = TRUE;
+    valid_Response = TRUE;  // assumes a valid response has been given
 
     // insists on attaining a unique item ID
     do
@@ -169,10 +175,10 @@ find_User_Product (itemType   item_Database[],
                    int        item_Indices_Array[])
 {
     // local variable declaration
-    int index;
-    int i;
+    int index; // holds the count of user's products
+    int i; // indexing variable for later loop
 
-    index = 0;
+    index = 0; // initializes counter
 
     // loops through the array
     for (i = 0; i < item_Database_Size; i++)
@@ -215,10 +221,10 @@ find_User_Product_In_Cart (orderType  order_Database[],
                            int        order_Indices_Array[])
 {
     // local variable declaration
-    int index;
-    int i;
+    int index; // holds the count of user's products
+    int i; // indexing variable for later loop
 
-    index = 0;
+    index = 0; // initializes counter
 
     // loops through the array
     for (i = 0; i < order_Database_Size; i++)
@@ -260,11 +266,11 @@ find_Product_In_List (itemType    item_Database[],
                       int         item_Indices_Array_Length)
 {
     // local variable declaration
-    boolean found;
-    int i;
+    boolean found;  // represents if a product has been found
+    int i;  // indexing variable for later loop
 
-    found = FALSE;
-    i = 0;
+    found = FALSE; // assumes that product has not yet been found
+    i = 0;  // initialization of indexing variable
 
     // looping through the array until it reaches the end
     // or an instance has been found
@@ -297,11 +303,11 @@ give_Item_Index_Via_ID (itemType   item_Database[],
                         int        item_Database_Count)
 {
     // local variable declaration
-    int index;
-    int i;
+    int index;  // receptacle for index of item
+    int i; // indexing variable for later loop
 
-    index = -1;
-    i = 0;
+    index = -1;  // initialization of index
+    i = 0;       // initialization of indexing variable
 
     // looping through the array until it reaches the end
     // or an instance has been found
@@ -324,11 +330,11 @@ give_Item_Index_Via_ID_Ordertype (orderType   item_Database[],
                         int        item_Database_Count)
 {
     // local variable declaration
-    int index;
-    int i;
+    int index;  // receptacle for index of item
+    int i; // indexing variable for later loop
 
-    index = -1;
-    i = 0;
+    index = -1;  // initialization of index
+    i = 0;       // initialization of indexing variable
 
     // looping through the array until it reaches the end
     // or an instance has been found
@@ -361,11 +367,11 @@ give_Item_Index_Via_ID_In_Cart (orderType  order_Database[],
                                 int        order_Database_Count)
 {
     // local variable declaration
-    int index;
-    int i;
+    int index;  // receptacle for index of item
+    int i; // indexing variable for later loop
 
-    index = -1;
-    i = 0;
+    index = -1;  // initialization of index
+    i = 0;       // initialization of indexing variable
 
     // looping through the array until it reaches the end
     // or an instance has been found
@@ -406,11 +412,11 @@ give_User_Item_Index_Via_ID (itemType   item_Database[],
                              int        item_Indices_Array_Length)
 {
     // local variable declaration
-    int index;
-    int i;
+    int index;  // receptacle for index of item
+    int i; // indexing variable for later loop
 
-    index = -1;
-    i = 0;
+    index = -1;  // initialization of index
+    i = 0;       // initialization of indexing variable
 
     // looping through the array until it reaches the end
     // or an instance has been found
@@ -444,10 +450,10 @@ count_User_Items (itemType   item_Database[],
                   long long  userID)
 {
     // local variable declaration
-    int counter;
-    int i;
+    int counter; // stores count of how many items a user is selling
+    int i;  // indexing variable for later loop
 
-    counter = 0;
+    counter = 0; //initializes counter
 
     // loops though the array
     for (i = 0; i < item_Database_Count; i++)
@@ -462,9 +468,9 @@ count_User_Items (itemType   item_Database[],
 }
 
 /**
- * sort_Item_Array sorts an array of item indices with respect
- * to the item IDs of the item they represent, in ascending 
- * order.
+ * sort_Item_Array_By_ID sorts an array of item indices 
+ * with respect to the item IDs of the item they represent, 
+ * in ascending order.
  * @param item_Database - an array of item structures
  * @param item_Index_Array - an array of array indices
  * @param item_Array_Size - the number of indices in 
@@ -476,10 +482,10 @@ sort_Item_Array_By_ID (itemType  item_Database[],
                        int       item_Array_Size)
 {
     // local variable declaration
-    int lowest;
-    int temp;
-    int i;
-    int j;
+    int       lowest; // represents the index of the user with the lowest ID
+    int       temp;   // temporary bin
+    int       i;      // indexing value used for a later loop
+    int       j;      // indexing value used for a later loop
 
     // loops through all of the indices in item_Idex_Array
     for (i = 0; i < item_Array_Size - 1; i++)
@@ -508,15 +514,23 @@ sort_Item_Array_By_ID (itemType  item_Database[],
     }
 }
 
+/**
+ * sort_Item_Array_By_SellerID sorts an array of item indices 
+ * with respect to the seller IDs of the item they represent, 
+ * in ascending order.
+ * @param item_Database - an array of item structures
+ * @param item_Index_Array - an array of array indices
+ * @param item_Array_Size - the number of indices in 
+ *                          item_Index_Array
+*/
 void
 sort_Item_Array_By_SellerID (orderType  item_Database[],
-                       int       item_Array_Size)
+                             int       item_Array_Size)
 {
     // local variable declaration
-    int lowest;
-    orderType temp;
-    int i;
-    int j;
+    int       lowest; // represents the index of the user with the lowest ID
+    int       i;      // indexing value used for a later loop
+    int       j;      // indexing value used for a later loop
 
     // loops through all of the indices in item_Idex_Array
     for (i = 0; i < item_Array_Size - 1; i++)
@@ -537,11 +551,7 @@ sort_Item_Array_By_SellerID (orderType  item_Database[],
         // switches if the ith element does not represent the
         // item with the lowest ID from range (i, item_Array_Size)
         if (lowest != i)
-        {
-            temp = item_Database[i];
-            item_Database[i] = item_Database[lowest];
-            item_Database[lowest] = temp;
-        }
+            swap_Item (&item_Database[i], &item_Database[lowest]);
     }
 }
 
@@ -555,7 +565,7 @@ void swap_Item (itemType *  a,
                 itemType *  b)
 {
     // local variable declaration
-    itemType temp;
+    itemType temp; // temporary receptacle for one item structure
 
     // switches the contents
     temp = *a;
@@ -574,7 +584,7 @@ swap_Order (orderType *  a,
             orderType *  b)
 {
     // local variable declaration
-    orderType temp;
+    orderType temp; // temporary order structure
 
     // switches the contents
     temp = *a;
