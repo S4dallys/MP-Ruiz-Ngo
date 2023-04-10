@@ -137,10 +137,10 @@ prompt_StringN (char  prompt[],
                 int   limit)
 {
     // local variable declaration
-    char  input;
-    int   index;
+    char  input; // temporary bin for character input
+    int   index; // indexing value aiding in string storage
 
-    index = 0;
+    index = 0; // initialization of indexing value
     
     // shows prompt parameter
     printf("\t%s", prompt);
@@ -150,13 +150,17 @@ prompt_StringN (char  prompt[],
     // in an array
     do
     {
+        // gets a character
         scanf("%c", &input);
 
+        // records it into the destination string
         address[index] = input;
 
+        // continues while there is no new line
         if (input != '\n')
             index++;
 
+    // stops after reaching the limit or encountering a new line
     } while (input != '\n' && index < limit);
 
     // cleans input stream in the case of excess input
@@ -169,64 +173,96 @@ prompt_StringN (char  prompt[],
 }
 
 /**
- * Prompts user for a date and creates a dateType struct.
+ * prompt_Date prompts user for a date and creates a 
+ * date structure.
  * @param date dateType pointer to set new dateType to
+ * Precondition: Year must be greater than 0 and less than 10000
 */
 void
 prompt_Date (dateType* date)
 {
-    boolean gave_Error;
-    boolean gave_Valid;
-    boolean is_Leap_Year;
+    // local variable declaration
+    boolean gave_Error;   // represents if user has given an error in a  data entry loop
+    boolean gave_Valid;   // represents if user has given a valid input
+    boolean is_Leap_Year; // represents if the date the user gave is a leap year
 
-    int max_Days;
+    int max_Days; // represents the maximum days a month could have, considering the year
 
-    // prompt for date year
-    printf("\tYears in ISO 8601 prescribe 1 BC as 0, 2 BC as -1, and so on.\n");
-    printf("\tYears after 1 BC are written normally.\n");
-    printf("\tInsert year (considering ISO 8601): ");
-    scanf("%d", &date->year);
+    gave_Error = FALSE; // initialization of error-indicating value
+    gave_Valid = FALSE; // initialization of sentinel value
+
+    // loops until a valid year is given
+    do 
+    {
+        // gives an error if user previously gave erroneous input
+        if (gave_Error)
+            printf("\tERROR: Invalid year.\n");
+
+        // prompt for date year
+        printf("\tInsert year (1 AD - 9999 AD): ");
+        scanf("%d", &date -> year); // gets year
+
+        // says that an erroneous input was given
+        if (date -> year < 1 || date -> year > 9999)
+            gave_Error = TRUE;
+        
+        // exits loop
+        else
+            gave_Valid = TRUE;
+
+    } while (!gave_Valid);
 
     // checks if year is leap year
     is_Leap_Year = is_Leap(date -> year);
 
-    gave_Error = FALSE;
-    gave_Valid = FALSE;
+    gave_Error = FALSE; // initialization of error-indicating value
+    gave_Valid = FALSE; // initialization of sentinel value
 
+    // loops until a valid month is given
     do 
     {
+        // gives an error if user previously gave erroneous input
         if (gave_Error)
             printf("\tERROR: Invalid month.\n");
 
         // prompt for date month
         printf("\tInsert month (1-12): ");
-        scanf("%d", &date->month);
-        
+        scanf("%d", &date->month); // gets month
+
+        // says that an erroneous input was given
         if (date -> month < 1 || date -> month > 12)
             gave_Error = TRUE;
+        
+        // exits the loop
         else
             gave_Valid = TRUE;
     } while (!gave_Valid);
 
-    // sets ma days in month based on year and month
+    // sets max days in month based on year and month
     max_Days = give_Max_Days_In_Month(is_Leap_Year, date -> month);
 
-    gave_Error = FALSE;
-    gave_Valid = FALSE;
+    gave_Error = FALSE; // initialization of error-indicating value
+    gave_Valid = FALSE; // initialization of sentinel value
 
+    // loops until a valid day is given
     do
     {
+        // gives an error if user previously gave erroneous input
         if (gave_Error)
             printf("\tERROR: Invalid date.\n");
 
         // prompt date day
         printf("\tInsert date (1-%d): ", max_Days);
-        scanf("%d", &date->day);
+        scanf("%d", &date->day); // gets day
         
+        // says that an erroneous input was given
         if (date -> day < 1 || date -> day > max_Days)
             gave_Error = TRUE;
+
+        // exits the loop
         else
             gave_Valid = TRUE;
+            
     } while (!gave_Valid);
     
     // removes garbage input from stream
