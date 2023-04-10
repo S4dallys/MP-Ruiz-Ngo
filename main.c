@@ -469,12 +469,15 @@ main()
                         break;
                     
                     // -----------------------------------------------------------------------------
+                    // initializes buy menu
                     case BUY_MENU:
+                        // assumes user is not done with buy menu
                         buy_Done = FALSE;
                         
+                        // loops while user is not yet done
                         do
                         {
-                            
+                            // displays buy menu choices and asks for choice
                             choice = display_Menu("Buy", buy_Menu_Choices, 8);
                             
                             // activate commands based on the user's choice
@@ -482,135 +485,210 @@ main()
                             {
                             
                             // ---------------------------------------------------------------------
+                            // views all the products in the item array
                             case VIEW_ALL_PRODUCTS:
+                                // sorts the user array by their ID
                                 sort_Users_By_ID(user_Database, user_Database_Count);
 
-                                i = 0;
+                                i = 0; // indexing variable initialization
+
+                                // loops through the users while user wishes to do so
                                 while (i < user_Database_Count && choice != 'X' && choice != 'x')
                                 {
+                                    // counts the amount of items the user has
                                     user_Product_Count = count_User_Items(item_Database, item_Database_Count,  
                                                                         user_Database[i].user_ID);
 
+                                    // if user has a product
                                     if (user_Product_Count > 0)
                                     {
+                                        // record the products and the number of such
                                         find_User_Product(item_Database, item_Database_Count, 
                                                         user_Database[i].user_ID, user_Product_Indices);
 
+                                        // show the seller's ID
                                         printf ("\tUser ID: %I64d\n", user_Database[i].user_ID);
                                         new_Line();
 
+                                        // display the products in a table
                                         display_Table_Ala_Show_My_Products(item_Database, user_Product_Indices, 
                                                                             user_Product_Count);
                                         new_Line();
 
+                                        // ask user if they wish to proceed or exit
                                         prompt_Char("Enter 'N' to go to next item, and 'X' to exit... ", &choice);
                                         
+                                        // proceed to the next user if the user wishes to
                                         if (choice == 'N' || choice == 'n') i++;
                                     }
+
+                                    // skip users which have no products
                                     else i++;     
                                 }
 
+                                // show that nothing follows
                                 printf("Nothing follows...\n");
                                 let_Read();
 
                                 break;
                             
                             // ---------------------------------------------------------------------
+                            // show products of certain seller
                             case USE_SELLER_LENS:
-                                prompt_Long_Long("Insert Seller ID: ", &user_ID);
+                                // ask for seller ID
+                                prompt_Long_Long("Insert Seller ID: ", &seller_ID);
                                 new_Line();
 
+                                // counts the amount of products the user has
                                 user_Product_Count = count_User_Items (item_Database, 
                                                                        item_Database_Count, 
-                                                                       user_ID);
+                                                                       seller_ID);
 
-                                find_User_Product(item_Database, item_Database_Count, 
-                                                user_ID, user_Product_Indices);
+                                if (user_Product_Count > 0)
+                                {
+                                    // finds the sellers products and stores them in an array
+                                    find_User_Product(item_Database, item_Database_Count, 
+                                                    seller_ID, user_Product_Indices);
 
-                                display_Table_Ala_Show_My_Products (item_Database, 
-                                                                    user_Product_Indices, 
-                                                                    user_Product_Count);
-                                new_Line();
+                                    // displays the sellers products in a table
+                                    display_Table_Ala_Show_My_Products (item_Database, 
+                                                                        user_Product_Indices, 
+                                                                        user_Product_Count);
+                                    new_Line();
+                                }
+
+                                // shows an error message if they have no products
+                                else
+                                    printf ("\tERROR: User has no products.\n");
+
+                                // lets the user read the outputs before proceeding
                                 let_Read();
 
                                 break;
                             
                             // ---------------------------------------------------------------------
+                            // search by category
                             case USE_CATEGORY_LENS:
-                                i = 0;
+                                i = 0; // initialize indexing variable
 
+                                // initialize string with null bytes
                                 memset(low_Category_Copy1, 0, 16);
 
+                                // ask for category
                                 prompt_StringN("Insert category: ", low_Category_Copy1, 15);
+
+                                // set it to lowercase
                                 to_Lowercase(low_Category_Copy1, low_Category_Copy1);
 
+                                // initialize choice
                                 choice = '\0';
 
+                                // loop through item array until user wants to exit
                                 while (i < item_Database_Count && choice != 'X' && choice != 'x')
                                 {
+                                    // initialize bin for category of item
                                     memset(low_Category_Copy2, 0, 16);
 
+                                    // set it to lowercase
                                     to_Lowercase(item_Database[i].category, low_Category_Copy2);
 
+                                    // see if they are the same
                                     if (strcmp(low_Category_Copy1, low_Category_Copy2) == 0)
                                     {
+                                        // show the item
                                         display_Item(item_Database[i]);
                                         new_Line();
 
+                                        // ask user if they want to go to the next one or if they 
+                                        // want to exit
                                         prompt_Char("Enter 'N' to go to next item, and 'X' to exit... ", &choice);
 
+                                        // go to the next if they want to go to the next one
                                         if (choice == 'N' || choice == 'n') i++;
                                     }
+
+                                    // skip items with unmatching categories
                                     else i++;
                                 }
+
+                                // show that nothing follows
                                 printf("Nothing follows...\n");
+                                
+                                // lets the user read the outputs before proceeding
                                 let_Read();
 
                                 break;
                             
                             // ---------------------------------------------------------------------
+                            // search by item name
                             case USE_NAME_LENS:
-                                i = 0;
+                                i = 0; // initialize indexing variable
 
+                                // initialize string with null bytes
                                 memset(low_Name_Copy1, 0, 16);
 
+                                // ask for keyword in name
                                 prompt_StringN("Insert keyword: ", low_Name_Copy1, 15);
+
+                                // set it to lower case
                                 to_Lowercase(low_Name_Copy1, low_Name_Copy1);
 
+                                // initialize choice
                                 choice = '\0';
 
+                                // loop through item array until user wants to exit
                                 while (i < item_Database_Count && choice != 'X' && choice != 'x')
                                 {
+                                    // initialize bin for name of item
                                     memset(low_Name_Copy2, 0, 16);
 
+                                    // set it to lowercase
                                     to_Lowercase(item_Database[i].name, low_Name_Copy2);
 
+                                    // see if the keyword is a substring to the name
                                     if (substring_Search(low_Name_Copy2, low_Name_Copy1))
                                     {
+                                        // display if so
                                         display_Item(item_Database[i]);
                                         new_Line();
 
+                                        // ask user if they want to go to the next one or if they 
+                                        // want to exit
                                         prompt_Char("Enter 'N' to go to next item, and 'X' to exit... ", &choice);
 
+                                        // go to the next if they want to go to the next one
                                         if (choice == 'N' || choice == 'n') i++;
                                     }
+
+                                    // skip items if it does not have the keyword
                                     else i++;
                                 }
 
+                                // show that nothing follows
                                 printf("Nothing follows...\n");
+
+                                // lets the user read the outputs before proceeding
                                 let_Read();
 
                                 break;
                             
                             // ---------------------------------------------------------------------
+                            // adds item to cart
                             case ADD_TO_CART:
+                                // checks if cart can handle any more items
                                 if (item_Cart_Count >= 10)
                                 {
-                                    printf("\tOnly 10 items allowed in the cart at a time.\n");
-                                    printf("\tPlease Edit Cart or Checkout first before adding another item.\n");
+                                    // shows error message
+                                    printf("\tERROR: Only 10 items allowed in the cart at a time.\n");
+
+                                    // shows advice
+                                    printf("\tINFO:Please Edit Cart or Checkout first before adding another item.\n");
+
+                                    // lets the user read the outputs before proceeding
                                     let_Read();
                                 }     
 
+                                // adds item to cart if possible
                                 else
                                 {
                                     add_Item_To_Cart (item_Database, 
@@ -623,14 +701,19 @@ main()
                                 break;
 
                             // ---------------------------------------------------------------------
+                            // lets user edit cart
                             case EDIT_CART:
+
+                                // initialization of sentinel values
                                 edit_Cart_Done = FALSE;
                                 valid_Input = TRUE;
 
                                 do
-                                {          
+                                {   
+                                    // shows product table       
                                     display_Product_Table (user_Cart, item_Cart_Count);
 
+                                    // shows edit cart menu and asks for a choice
                                     choice = display_Menu("Cart Edit", edit_Cart_Choices, 4);
                                     
                                     // activate commands based on the user's choice
@@ -638,19 +721,31 @@ main()
                                     {
                                     
                                     // -------------------------------------------------------------
+                                    // removes products of seller from cart
                                     case REMOVE_ITEMS_OF_SELLER:
+                                        // asks for seller ID
                                         prompt_Long_Long ("Enter Seller ID:", &seller_ID);
 
-                                        if (give_Item_Index_Via_ID_In_Cart(user_Cart, seller_ID, item_Cart_Count) == 0)
+                                        // shows error message if seller is not found
+                                        if (find_User_Product_In_Cart(user_Cart, 
+                                                                      item_Cart_Count, 
+                                                                      seller_ID,
+                                                                      seller_Product_Indices) == 0)
                                         {
                                             printf("\tERROR: Seller not found.\n");
+
+                                            // lets the user read the outputs before proceeding
                                             let_Read();
                                         }
 
                                         else
                                         {
+                                            // loops through the array
                                             for (i = 0; i < item_Cart_Count; i++)
                                             {
+                                                // swaps the item to the last element,
+                                                // decrementing the size of the readable array,
+                                                // "deleting" it
                                                 if (user_Cart[i].item.seller_ID == seller_ID)
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
@@ -661,24 +756,40 @@ main()
                                                     item_Cart_Count--;
                                                 }
                                             }
+
+                                            // shows that operation is done
+                                            printf("\tINFO: Items removed.\n");
+
+                                            // lets the user read the outputs before proceeding
+                                            let_Read();
                                         }
 
                                         break;
                                     
                                     // -------------------------------------------------------------
+                                    // removes a specific item
                                     case REMOVE_SPECIFIC_ITEM:
+
+                                        // asks for an item ID
                                         prompt_Long_Long("Enter Item ID: ", &item_ID);
 
+                                        // shows error message if item is not found
                                         if (give_Item_Index_Via_ID_In_Cart(user_Cart, item_ID, item_Cart_Count) == -1)
                                         {
                                             printf("\tERROR: Item not found/\n");
+
+                                            // lets the user read the outputs before proceeding
                                             let_Read();
                                         }
 
                                         else
                                         {
+                                            // loops through the array
                                             for (i = 0; i < item_Cart_Count; i++)
                                             {
+                                                // swaps the item to the last element,
+                                                // decrementing the size of the readable array,
+                                                // "deleting" it
                                                 if (user_Cart[i].item.product_ID == item_ID)
                                                 {
                                                     for (j = i; j < item_Cart_Count; j++)
@@ -702,7 +813,9 @@ main()
                                                                                      item_Database_Count);
                                         if (item_Index == -1)
                                         {
-                                            printf("\tERROR: Item not found/\n");
+                                            printf("\tERROR: Item not found.\n");
+
+                                            // lets the user read the outputs before proceeding
                                             let_Read();
                                         }
 
@@ -770,6 +883,8 @@ main()
                                     new_Line();
                                     printf("\tINFO: Cart updated!\n");
                                     printf("\tINFO: You can still go back to Edit Cart.\n");
+
+                                    // lets the user read the outputs before proceeding
                                     let_Read();
                                 }
 
@@ -792,6 +907,8 @@ main()
                                             if (seller_Product_Count == 0)
                                             {
                                                 printf("\tERROR: Seller not found.\n");
+
+                                                // lets the user read the outputs before proceeding
                                                 let_Read();
                                             }
 
@@ -844,6 +961,8 @@ main()
                                                     fclose (transaction_File_Pointer);
                                                 }
                                                 new_Line();
+
+                                                // lets the user read the outputs before proceeding
                                                 let_Read();
 
                                                 
@@ -874,6 +993,8 @@ main()
                                         if (seller_Product_Count == 0)
                                         {
                                             printf("\tERROR: Seller not found.\n");
+
+                                            // lets the user read the outputs before proceeding
                                             let_Read();
                                         }
 
@@ -926,6 +1047,8 @@ main()
                                                 fclose (transaction_File_Pointer);
                                             }
                                             new_Line();
+
+                                            // lets the user read the outputs before proceeding
                                             let_Read();
 
                                             for (i = 0; i < item_Cart_Count; i++)
@@ -954,6 +1077,8 @@ main()
                                         if (item_Index == -1)
                                         {
                                             printf("\tERROR: Item not found.\n");
+
+                                            // lets the user read the outputs before proceeding
                                             let_Read();
                                         }
 
@@ -961,6 +1086,8 @@ main()
                                                  user_Cart[item_Index].quantity_Desired)
                                         {
                                             printf("\tERROR: Item stocks less than desired.\n");
+
+                                            // lets the user read the outputs before proceeding
                                             let_Read();
                                         }
 
@@ -974,6 +1101,8 @@ main()
 
                                             display_Transaction (&transaction, user_Database, user_Database_Count);
                                             item_Database[give_Item_Index_Via_ID(item_Database, user_Cart[item_Index].item.product_ID, item_Database_Count)].quantity -= user_Cart[item_Index].quantity_Desired;
+                                            
+                                            // lets the user read the outputs before proceeding
                                             let_Read();
 
                                             for (i = 0; i < item_Cart_Count; i++)
@@ -985,7 +1114,8 @@ main()
                                                         swap_Order(&user_Cart[j], &user_Cart[j+1]);
                                                     }
                                                     i--;
-                                                    item_Cart_Count--;
+                                                    item_Cart_Count
+                                                    --;
                                                 }
                                             }
 
@@ -997,8 +1127,9 @@ main()
                                         break;
 
                                     // -------------------------------------------------------------
+                                    // exits user from check out menu
                                     case EXIT_CHECK_OUT:
-                                        check_Out_Done = TRUE;
+                                        check_Out_Done = TRUE; // stops the loop
 
                                         break;
                                     }
@@ -1008,8 +1139,9 @@ main()
                                 break;
                             
                             // ---------------------------------------------------------------------
+                            // exits the user from buy menu
                             case EXIT_BUY:
-                                buy_Done = TRUE;
+                                buy_Done = TRUE; // stops the loop
 
                                 break;
                             }
@@ -1019,23 +1151,34 @@ main()
                         break;
                     
                     // -----------------------------------------------------------------------------
+                    // exits user
                     case EXIT_USER:
-                        user_Done = TRUE;
+                        user_Done = TRUE; // stops the loop
 
+                        // activates if there are still items in the user's cart
                         if (item_Cart_Count > 0)
                         {
+                            // open cart file pointer
                             cart_File_Pointer = fopen (user_Cart_Name, "wb");
-                            fseek(cart_File_Pointer, 0, SEEK_SET);
-                            for (i = 0; i < item_Cart_Count; i++) //{
+
+                            // records the cart contents into the binary file
+                            for (i = 0; i < item_Cart_Count; i++)
                                 fwrite(&user_Cart[i], sizeof(orderType), 1, cart_File_Pointer);
+
+                            // closes file pointer
                             fclose (cart_File_Pointer);
                         }
 
                         else
                         {
+                            // open cart file pointer
                             cart_File_Pointer = fopen (user_Cart_Name, "rb");
+
+                            // checks if user cart exists
                             if (cart_File_Pointer != NULL)
-                                remove(user_Cart_Name);
+                                remove(user_Cart_Name); // removes it if so
+
+                            // closes file pointer
                             fclose (cart_File_Pointer);
                         }
                         break;

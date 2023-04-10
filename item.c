@@ -54,8 +54,8 @@ check_Unique_Item_ID (itemType   item_Database[],
 
 boolean
 check_Unique_Seller_ID (long long   item_Database[],
-                         int        item_Database_Size,
-				      long long  item_ID)
+                        int        item_Database_Size,
+				        long long  item_ID)
 {
     // local variable declaration
     boolean  flag;  // represents if an ID is unique to the array
@@ -205,10 +205,10 @@ find_User_Product (itemType   item_Database[],
 }
 
 /**
- * find_User_Product searches for a user's products in an 
- * array of orders and stores the indices of these products
- * in an integer array and returns the number of products
- * found.
+ * find_User_Product_In_Cart searches for a user's products 
+ * in an array of orders and stores the indices of these 
+ * products in an integer array and returns the number of 
+ * products found.
  * @param item_Database - an array of item structures
  * @param item_Database_Size - the number of items inside
  *                             item_Database
@@ -321,33 +321,6 @@ give_Item_Index_Via_ID (itemType   item_Database[],
     {
         // flags an instance of item_ID in the array
         if (item_Database[i].product_ID == itemID)
-            index = i;
-
-        // increments an index    
-        else i++;
-    }
-    
-    return index;
-}
-
-int
-give_Item_Index_Via_ID_Ordertype (orderType   item_Database[],
-                        long long  itemID,
-                        int        item_Database_Count)
-{
-    // local variable declaration
-    int index;  // receptacle for index of item
-    int i; // indexing variable for later loop
-
-    index = -1;  // initialization of index
-    i = 0;       // initialization of indexing variable
-
-    // looping through the array until it reaches the end
-    // or an instance has been found
-    while (i < item_Database_Count && index == -1)
-    {
-        // flags an instance of item_ID in the array
-        if (item_Database[i].item.product_ID == itemID)
             index = i;
 
         // increments an index    
