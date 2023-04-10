@@ -130,14 +130,15 @@ sort_Users_By_ID (userType  user_Database[],
 {
     userType  temp;
     int       lowest;
-    int       i, j;
+    int       i;
+    int       j;
 
     for (i = 0; i < user_Database_Size - 1; i++)
     {
         lowest = i;
 
-        for (j = 0; j < user_Database_Size; j++)
-            if (user_Database[j].user_ID > user_Database[lowest].user_ID)
+        for (j = i + 1; j < user_Database_Size; j++)
+            if (user_Database[j].user_ID < user_Database[lowest].user_ID)
                 lowest = j;
 
         if (lowest != i)

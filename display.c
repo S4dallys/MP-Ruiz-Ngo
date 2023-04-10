@@ -510,7 +510,7 @@ display_Table_Based_On_Money (userType user_Database[],
         // printed
         else if (sales_Array[index] > 0)
         {
-            printf("\t| %19I64d | %-20s | %-30s | %19I64d |\n",
+            printf("\t| %19I64d | %-20s | %15.2lf |\n",
                    user_Database[index].user_ID,
                    user_Database[index].name,
                    sales_Array[index]);

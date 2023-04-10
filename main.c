@@ -27,7 +27,6 @@ main()
     int  item_Cart_Count;
     int  update_Product_Count;
     int  seller_Product_Count;
-    int  unique_Seller_Count;
 
     int  user_Product_Indices[20];
     int  user_Product_Count;
@@ -121,10 +120,8 @@ main()
     int    j;
     int    k;
     int    unique_Sellers_Count;
-    int    transactions_Count;
     double new_price;
     double sum;
-    int    temp;
 
     // Initialize USER DATABASE
     user_File_Pointer = fopen ("Users.txt", "r");
@@ -927,9 +924,9 @@ main()
                         {
                             cart_File_Pointer = fopen (user_Cart_Name, "wb");
                             fseek(cart_File_Pointer, 0, SEEK_SET);
-                            for (i = 0; i < item_Cart_Count; i++) {
+                            for (i = 0; i < item_Cart_Count; i++) //{
                                 fwrite(&user_Cart[i], sizeof(orderType), 1, cart_File_Pointer);
-                                printf("%d ", user_Cart[i].item.product_ID);}
+                                //printf("%d ", user_Cart[i].item.product_ID);}
                             fclose (cart_File_Pointer);
                         }
 
