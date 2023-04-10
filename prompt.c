@@ -121,7 +121,7 @@ prompt_Char (char    prompt[],
 }
 
 /**
- * prompt_Int displays a provided prompt and accepts a
+ * prompt_StringN displays a provided prompt and accepts a
  * a number of characters from the users and stores it
  * as a string.
  * @param prompt - a string that contains a message to the
