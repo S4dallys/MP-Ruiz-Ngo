@@ -20,14 +20,15 @@ add_Item_To_Cart (itemType    item_Database[],
                   int *       item_Cart_Count,
                   long long   user_ID)
 {
-    long long item_ID;
-    long long quantity;
-    int item_Index;
+    // local variable declaration
+    long long item_ID;   // represents the item ID of the item the user wants to add to cart
+    long long quantity;  // represents how much of that item the user wants to add to cart
+    int item_Index;      // represents the index where the user can find the item in item_Database
 
     // promp for user_ID
     prompt_Long_Long ("ID: ", &item_ID);
 
-    // see if item is already in cart
+    // see if item is already in cart, shows an error if so
     if (give_Item_Index_Via_ID_In_Cart(user_Cart, item_ID, *item_Cart_Count) != -1)
     {
         printf("\tERROR: Product already in cart.\n");
@@ -45,7 +46,7 @@ add_Item_To_Cart (itemType    item_Database[],
 
         if (item_Index != -1)
         {
-            // check if user is buying own product
+            // check if user is buying own product, shows an error if so
             if (item_Database[item_Index].seller_ID == user_ID)
             {
                 printf("\tERROR: Sellers cannot sell to themselves.\n");
@@ -62,13 +63,14 @@ add_Item_To_Cart (itemType    item_Database[],
                     user_Cart[*item_Cart_Count].quantity_Desired = quantity;
                     *item_Cart_Count = *item_Cart_Count + 1;
 
+                    // shows the item has been added to the cart
                     printf("\tItem added to cart.\n");
                     let_Read();
                 }
 
                 else
                 {   
-                    // in case desired quantity is higher than item_Database quantity
+                    // error in case desired quantity is higher than item_Database quantity
                     printf("\tERROR: Quantity requested exceeds stock.\n");
                     let_Read();
                 }
@@ -76,7 +78,7 @@ add_Item_To_Cart (itemType    item_Database[],
         }
         else 
         {
-            // if item not found in database
+            // error message if item not found in database
             printf("\tERROR: Item not found.\n");
             let_Read();
         }
@@ -118,12 +120,13 @@ enumerate_Differing_Product (itemType  item_Database[],
                              int       user_Cart_Count,
                              int       update_Product_Indices[])
 {
-    int i;
-    int counter;
+    // local variable declaration
+    int i;       // index variable for the coming loops
+    int counter; // counts how many updated products there are
 
-    counter = 0;
+    counter = 0; // initialization of counter
 
-    // for each item in cart
+    // loops through every item in the cart
     for (i = 0; i < user_Cart_Count; i++)
     {
         // if item in cart is different from item_Database version
@@ -132,8 +135,10 @@ enumerate_Differing_Product (itemType  item_Database[],
                                                                   item_Database_Count)],
                              user_Cart[i].item))
         {
-            // add it's index (user_Cart) in update_Product_Indices
+            // add its index (user_Cart) in update_Product_Indices
             update_Product_Indices[counter] = i;
+
+            // update the count of updated items
             counter++;
         }
     }
@@ -141,44 +146,76 @@ enumerate_Differing_Product (itemType  item_Database[],
     return counter;
 }
 
+/**
+ * check_Unique_Seller checks if a seller's ID has appeared 
+ * in an array of long long integers.
+ * @param ID_Array - an array of user IDs
+ * @param ID_Database_Size - the number of IDs in ID_Array
+ * @param user_ID - the ID to check if it appears or not in 
+ *                  the array
+ * @return TRUE if the seller is not found in the array; 
+ *         else, FALSE
+*/
 boolean
 check_Unique_Seller (long long  ID_Array[],
                      int        ID_Database_Size,
 				     long long  user_ID)
 {
-    boolean  flag;
-	int      index;
-	
-	flag = TRUE;
+    // local variable declaration
+    boolean  flag;  // represents if an ID is unique to the array
+	int      index; // index variable to be used in the coming loop
+
+    // assume the ID to be unique
+	flag = TRUE; 
+
+    // initialize the indexing variable
 	index = 0;
 	
-	while (index < ID_Database_Size && flag == FALSE)
+    // loop through the entire array except when the ID is found in the array
+	while (index < ID_Database_Size && flag == TRUE)
     {
+        // stops the loop when it finds the ID in the array
 		if (ID_Array[index] == user_ID)
 			flag = FALSE;
-		else
+		
+        // continues looping otherwise
+        else
 			index++;
     }
 
 	return flag;
 }
 
+/**
+ * enumerate_Unique_Sellers counts how many unique sellers 
+ * there are in an order array and puts their IDs in a 
+ * separate array.
+ * @param order_Array - array of order structures
+ * @param order_Database_Count - the number of orders in 
+ *                               order_Array
+ * @param unique_Seller_Array - the array which will store
+ *                              unique seller IDs
+ * @return the number of unique sellers in order_Array
+*/
 int
 enumerate_Unique_Sellers (orderType order_Array[],
                           int       order_Database_Count,
                           long long unique_Seller_Array[])
 {
-    int ctr;
-    int i;
+    // local variable declaration
+    int ctr; // records how many unique sellers there are
+    int i;   // indexing variable to be used in later loop
 
-    ctr = 0;
+    ctr = 0; // initialization of counting variable
 
+    // loops through entire array
     for (i = 0; i < order_Database_Count; i++)
     {
+        // records and tallies unique sellers
         if (check_Unique_Seller(unique_Seller_Array, ctr, order_Array[i].item.seller_ID))
         {
-            unique_Seller_Array[ctr] = order_Array[i].item.seller_ID;
-            ctr++;
+            unique_Seller_Array[ctr] = order_Array[i].item.seller_ID; // records
+            ctr++;                                                    // tallies
         }
     }
 
