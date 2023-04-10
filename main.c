@@ -976,7 +976,7 @@ main()
                                                 // initialize transaction data                       
                                                 transaction.date = date;
                                                 transaction.buyer_ID = user_ID;
-                                                transaction.seller_ID = seller_ID;
+                                                transaction.seller_ID = unique_Sellers_IDs[k];
                                                 transaction.items_Ordered = 0;
 
                                                 // goes through the products of the seller
