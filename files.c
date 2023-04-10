@@ -11,6 +11,7 @@
  * @param user_Database - struct array containing users
  * @param user_Database_Count - number of users in user_Database
  * @return TRUE if the data is correctly formatted and uncorrupted; FALSE, otherwise
+ * Precondition: Files are in correct form and are uncorrupted.
 */
 boolean
 initialize_User_Database (FILE *    user_File_Pointer,
@@ -69,6 +70,7 @@ initialize_User_Database (FILE *    user_File_Pointer,
  * @param item_File_Pointer file pointer set to Items.txt using fopen() function
  * @param item_Database struct array containing items
  * @param item_Database_Count number of users in item_Database
+ * Precondition: Files are in correct form and are uncorrupted.
 */
 void
 initialize_Item_Database (FILE *    item_File_Pointer,
