@@ -39,8 +39,8 @@ check_Unique_Item_ID (itemType   item_Database[],
 	
     // looping through the array until it reaches the end
     // or an instance has been found
-	while (index < item_Database_Size && flag == FALSE)
-
+	while (index < item_Database_Size && flag == TRUE)
+    {
         // flags an instance of item_ID in the array
 		if (item_Database[index].product_ID == item_ID)
 			flag = FALSE;
@@ -48,37 +48,8 @@ check_Unique_Item_ID (itemType   item_Database[],
         // increments the index
 		else
 			index++;
-	
-	return flag;
-}
+    }
 
-boolean
-check_Unique_Seller_ID (long long   item_Database[],
-                        int        item_Database_Size,
-				        long long  item_ID)
-{
-    // local variable declaration
-    boolean  flag;  // represents if an ID is unique to the array
-	int      index; // index variable to be used in the coming loop
-	
-    // assume the ID to be unique
-	flag = TRUE; 
-
-    // initialize the indexing variable
-	index = 0;
-	
-    // looping through the array until it reaches the end
-    // or an instance has been found
-	while (index < item_Database_Size && flag == FALSE)
-
-        // flags an instance of item_ID in the array
-		if (item_Database[index] == item_ID)
-			flag = FALSE;
-
-        // increments the index
-		else
-			index++;
-	
 	return flag;
 }
 
@@ -118,9 +89,7 @@ register_Product (itemType   item_Database[],
         prompt_Long_Long("ID: ", &item.product_ID);
 
         // checks if the item ID is unique
-        valid_Response = check_Unique_Item_ID (item_Database, 
-                                               *item_Database_Count, 
-                                               item.product_ID) && item.product_ID >= 0;
+        valid_Response = check_Unique_Item_ID (item_Database, *item_Database_Count, item.product_ID) && item.product_ID >= 0;
 
     // loop ends when the user gives a unique ID
     } while (!valid_Response);

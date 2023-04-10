@@ -1714,12 +1714,6 @@ cool item
 Atque blanditiis ipsam, sed li
 5 802.000000
 
-3 66
-flag
-random category
-Doloremque accusantium eius ad
-11 394.000000
-
 59 172
 candle
 random category
@@ -1796,7 +1790,7 @@ Mollitia facere veniam qui off
 tire swing
 Toys
 Id reiciendis error, suscipit 
-5 1275.000000
+3 1275.000000
 
 1890 2
 flag
@@ -2390,13 +2384,13 @@ Voluptas veniam consequuntur r
 stop sign
 category X
 Illo quas minima numquam unde 
-18 1412.000000
+16 1412.000000
 
 686 1
 sand paper
 cool item
 Distinctio ab eum provident ra
-10 576.000000
+9 576.000000
 
 962 1
 frizz control
@@ -2536,3 +2530,8 @@ do
 do
 -101 -219.000000
 
+3 3
+smth
+smth
+owowowo
+24 69.000000

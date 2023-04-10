@@ -35,13 +35,13 @@ main()
     int  item_Database_Count;  // amount of users in item_Database
     int  item_Cart_Count;      // amount of orders in the cart
     int  update_Product_Count; // amount of items in the cart which have been updated
-    int  seller_Product_Count; 
-    int  user_Product_Count;   
-    int  unique_Sellers_Count; // amount of unique sellers
+    int  seller_Product_Count; // amount of items a seller is selling
+    int  user_Product_Count;   // amount of items a user is selling
+    int  unique_Sellers_Count; // amount of unique sellers 
 
-    int  user_Product_Indices[20];
-    int  update_Product_Indices[10];   // array of indexes of products updated
-    int  seller_Product_Indices[10];   
+    int  user_Product_Indices[20];     // array of indices of user's products
+    int  update_Product_Indices[10];   // array of indices of products updated
+    int  seller_Product_Indices[10];   // arry of indices of products of a seller
     long long  unique_Sellers_IDs[10]; // array of unique seller IDs
 
 
@@ -50,16 +50,17 @@ main()
     String15   password;       // bin for password
 
     // self-explanatory Boolean variables, used either as sentinel values or loop conditions
-    boolean  done;             // loop condition for main program
-    boolean  user_Done;        // loop condition for user menu
-    boolean  sell_Done;        // loop condition for sell menu
-    boolean  buy_Done;         // loop condition for buy menu
-    boolean  edit_Stock_Done;  // loop condition for edit stock menu
-    boolean  edit_Cart_Done;   // loop condition for edit cart menu
-    boolean  check_Out_Done;   // loop condition for check out menu
-    boolean  admin_Done;       // loop condition for admin menu
-    boolean  valid_Input;      // sentinel value for valid inputs
-    boolean  has_Inputted;     // sentinel value for inputs
+    boolean  done;              // loop condition for main program
+    boolean  user_Done;         // loop condition for user menu
+    boolean  sell_Done;         // loop condition for sell menu
+    boolean  buy_Done;          // loop condition for buy menu
+    boolean  edit_Stock_Done;   // loop condition for edit stock menu
+    boolean  edit_Cart_Done;    // loop condition for edit cart menu
+    boolean  check_Out_Done;    // loop condition for check out menu
+    boolean  admin_Done;        // loop condition for admin menu
+    boolean  valid_Input;       // sentinel value for valid inputs
+    boolean  has_Inputted;      // sentinel value for inputs
+    boolean  edit_Stock_Done_2; // another loop condition for edit stock menu
 
     boolean permissions_Array[MAX_USERS]; // array of Boolean values
 
@@ -321,92 +322,103 @@ main()
                                         }
                                                     
                                     } while (!valid_Input && !has_Inputted);
-                                    
-                                    // displays edit stock menu and asks for a choice
-                                    choice = display_Menu("Edit Stock", edit_Stock_Choices, 6);
 
-                                    // activate commands based on the user's choice      
-                                    switch (choice)
+                                    edit_Stock_Done_2 = FALSE;
+                                    
+                                    do
                                     {
-
-                                    // -------------------------------------------------------------
-                                    // replenishes item based on inputted value
-                                    // Precondition: addend must be positive or 0
-                                    case REPLENISH:
-                                        // asks how much is to be added
-                                        prompt_Long_Long("\nHow many would you like to add? ", 
-                                                          &addend);
-                                                          
-                                        // catches erroneous values (inputs less than 0)
-                                        if (addend > 0)
-                                            // adds if value is valid
-                                            item_Database[item_Index].quantity += addend;
-
-                                        // shows an error mesage otherwise
-                                        else  
+                                        // shows all of user's products
+                                        display_Table_Ala_Show_My_Products (item_Database, 
+                                                                        user_Product_Indices, 
+                                                                        user_Product_Count);
+                                                                        
+                                        // displays edit stock menu and asks for a choice
+                                        choice = display_Menu("Edit Stock", edit_Stock_Choices, 6);
+                                        
+                                        // activate commands based on the user's choice      
+                                        switch (choice)
                                         {
-                                            printf("\tERROR: Zero or Negative amount.\n");
-                                            let_Read();
+
+                                        // -------------------------------------------------------------
+                                        // replenishes item based on inputted value
+                                        // Precondition: addend must be positive or 0
+                                        case REPLENISH:
+                                            // asks how much is to be added
+                                            prompt_Long_Long("\n\tHow many would you like to add? ", 
+                                                            &addend);
+                                                            
+                                            // catches erroneous values (inputs less than 0)
+                                            if (addend > 0)
+                                                // adds if value is valid
+                                                item_Database[item_Index].quantity += addend;
+
+                                            // shows an error mesage otherwise
+                                            else  
+                                            {
+                                                printf("\tERROR: Zero or Negative amount.\n");
+                                                let_Read();
+                                            }
+
+                                            break;
+                                        
+                                        // -------------------------------------------------------------
+                                        // changes price
+                                        case CHANGE_PRICE:
+
+                                            // asks for new price
+                                            prompt_Double("\n\tWhat is the new price? ", 
+                                                        &new_price);
+
+                                            // sees if the price is less than zero
+                                            if (new_price < 0)
+                                                // gives an error message if so
+                                                printf("\tERROR: Item price cannot be less than zero.\n");
+                                            else
+                                                // changes the price otherwise
+                                                item_Database[item_Index].unit_Price = new_price;
+
+                                            break;
+
+                                        // -------------------------------------------------------------  
+                                        // changes item's name   
+                                        case CHANGE_ITEM_NAME:
+                                            // asks for the new name and stores it
+                                            prompt_StringN("\n\tWhat is the new name? ", 
+                                                            item_Database[item_Index].name, 20);
+
+                                            break;
+
+                                        // -------------------------------------------------------------    
+                                        // changes item's category       
+                                        case CHANGE_CATEGORY:
+                                            // asks for a new category and stores it
+                                            prompt_StringN("\n\tWhat is the new category? ", 
+                                                            item_Database[item_Index].category, 
+                                                            15);
+
+                                            break;
+
+                                        // -------------------------------------------------------------    
+                                        // changes item's description          
+                                        case CHANGE_DESCRIPTION:
+                                            // asks for a new description and stores it
+                                            prompt_StringN("\n\tWhat is the new description? ", 
+                                                            item_Database[item_Index].description, 
+                                                            30);
+
+                                            break;
+
+                                        // ------------------------------------------------------------- 
+                                        // finish editing        
+                                        case FINISH_EDITING:
+                                            // ends the loop these command are in
+                                            edit_Stock_Done = TRUE;
+                                            edit_Stock_Done_2 = TRUE;
+
+                                            break;              
                                         }
+                                    } while (!edit_Stock_Done_2);
 
-                                        break;
-                                    
-                                    // -------------------------------------------------------------
-                                    // changes price
-                                    case CHANGE_PRICE:
-
-                                        // asks for new price
-                                        prompt_Double("\nWhat is the new price? ", 
-                                                    &new_price);
-
-                                        // sees if the price is less than zero
-                                        if (new_price < 0)
-                                            // gives an error message if so
-                                            printf("ERROR: Item price cannot be less than zero.\n");
-                                        else
-                                            // changes the price otherwise
-                                            item_Database[item_Index].unit_Price = new_price;
-
-                                        break;
-
-                                    // -------------------------------------------------------------  
-                                    // changes item's name   
-                                    case CHANGE_ITEM_NAME:
-                                        // asks for the new name and stores it
-                                        prompt_StringN("\nWhat is the new name? ", 
-                                                        item_Database[item_Index].name, 20);
-
-                                        break;
-
-                                    // -------------------------------------------------------------    
-                                    // changes item's category       
-                                    case CHANGE_CATEGORY:
-                                        // asks for a new category and stores it
-                                        prompt_StringN("\nWhat is the new category? ", 
-                                                        item_Database[item_Index].category, 
-                                                        15);
-
-                                        break;
-
-                                    // -------------------------------------------------------------    
-                                    // changes item's description          
-                                    case CHANGE_DESCRIPTION:
-                                        // asks for a new description and stores it
-                                        prompt_StringN("\nWhat is the new description? ", 
-                                                        item_Database[item_Index].description, 
-                                                        30);
-
-                                        break;
-
-                                    // ------------------------------------------------------------- 
-                                    // finish editing        
-                                    case FINISH_EDITING:
-                                        // ends the loop this command is in
-                                        edit_Stock_Done = TRUE;
-
-                                        break;              
-                                    }
-                                                
                                 } while (!edit_Stock_Done);
                             }              
                             break;
@@ -1541,8 +1553,8 @@ main()
                                     // continues to read while not end of line
                                     while (!feof(transaction_File_Pointer))
                                     {
-                                        // adds buyer sales to the proper spend receptacle
-                                        sales_Array[search_User (user_Database, 
+                                        // adds buyer spending to the proper spend receptacle
+                                        spend_Array[search_User (user_Database, 
                                                                  user_Database_Count, 
                                                                  transaction.buyer_ID)] += transaction.amount;
 
@@ -1555,7 +1567,7 @@ main()
                                     new_Line();
 
                                     // displays table of buyers and their spending
-                                    display_Table_Based_On_Money (user_Database, user_Database_Count, sales_Array);
+                                    display_Table_Based_On_Money (user_Database, user_Database_Count, spend_Array);
                                     new_Line();
 
                                     // lets user read the table before proceeding

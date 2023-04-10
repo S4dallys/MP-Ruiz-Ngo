@@ -30,11 +30,28 @@ add_Item_To_Cart (itemType    item_Database[],
     // prompt for user_ID
     prompt_Long_Long ("ID: ", &item_ID);
 
+    // find index of item in item_Database
+    item_Index = give_Item_Index_Via_ID (item_Database, item_ID, item_Database_Count);
+
     // see if item is already in cart, shows an error if so
     if (give_Item_Index_Via_ID_In_Cart(user_Cart, item_ID, *item_Cart_Count) != -1)
     {
         printf("\tERROR: Product already in cart.\n");
         printf("\tPlease go to Edit Cart -> Edit Quantity instead for additional orders.\n");
+        let_Read();
+    }
+
+    // check if user is buying own product, shows an error if so
+    else if (item_Database[item_Index].seller_ID == user_ID)
+    {
+        printf("\tERROR: Sellers cannot sell to themselves.\n");
+        let_Read();
+    }
+
+    else if (item_Index == -1)
+    {
+        // error message if item not found in database
+        printf("\tERROR: Item not found.\n");
         let_Read();
     }
 
@@ -54,48 +71,27 @@ add_Item_To_Cart (itemType    item_Database[],
             // checks if quantity is greater than 0
             valid_Input = quantity > 0;
         } while (!valid_Input);
-        
-        // find index of item in item_Database
-        item_Index = give_Item_Index_Via_ID (item_Database, item_ID, item_Database_Count);
 
-        if (item_Index != -1)
+        // product is a valid product to add to cart
+        if (item_Database[item_Index].quantity >= quantity) 
         {
-            // check if user is buying own product, shows an error if so
-            if (item_Database[item_Index].seller_ID == user_ID)
-            {
-                printf("\tERROR: Sellers cannot sell to themselves.\n");
-                let_Read();
-            }
+            // copy product into user_Cart as orderType
+            user_Cart[*item_Cart_Count].item = item_Database[item_Index];
+            user_Cart[*item_Cart_Count].quantity_Desired = quantity;
+            *item_Cart_Count = *item_Cart_Count + 1;
 
-            else
-            {
-                // product is a valid product to add to cart
-                if (item_Database[item_Index].quantity >= quantity) 
-                {
-                    // copy product into user_Cart as orderType
-                    user_Cart[*item_Cart_Count].item = item_Database[item_Index];
-                    user_Cart[*item_Cart_Count].quantity_Desired = quantity;
-                    *item_Cart_Count = *item_Cart_Count + 1;
-
-                    // shows the item has been added to the cart
-                    printf("\tItem added to cart.\n");
-                    let_Read();
-                }
-
-                else
-                {   
-                    // error in case desired quantity is higher than item_Database quantity
-                    printf("\tERROR: Quantity requested exceeds stock.\n");
-                    let_Read();
-                }
-            }
-        }
-        else 
-        {
-            // error message if item not found in database
-            printf("\tERROR: Item not found.\n");
+            // shows the item has been added to the cart
+            printf("\tItem added to cart.\n");
             let_Read();
         }
+
+        else
+        {   
+            // error in case desired quantity is higher than item_Database quantity
+            printf("\tERROR: Quantity requested exceeds stock.\n");
+            let_Read();
+        }
+
     }
 }
 
