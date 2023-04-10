@@ -453,7 +453,7 @@ main()
                                 }
 
                                 // says that nothing follows once user has reached end of list
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
 
                                 // allows user to read outputs before proceeding
                                 let_Read();
@@ -532,7 +532,7 @@ main()
                                 }
 
                                 // show that nothing follows
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
                                 let_Read();
 
                                 break;
@@ -617,7 +617,7 @@ main()
                                 }
 
                                 // show that nothing follows
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
                                 
                                 // lets the user read the outputs before proceeding
                                 let_Read();
@@ -670,7 +670,7 @@ main()
                                 }
 
                                 // show that nothing follows
-                                printf("Nothing follows...\n");
+                                printf("\tNothing follows...\n");
 
                                 // lets the user read the outputs before proceeding
                                 let_Read();

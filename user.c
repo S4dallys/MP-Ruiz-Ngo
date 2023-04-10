@@ -71,7 +71,7 @@ register_User (userType  user_Database[],
     (*user_Database_Count)++;
 
     // says the registration is successful
-    printf("\tUser Registration Successful!");
+    printf("\tUser Registration Successful!\n");
 
     // lets the user read the screen outputs
     let_Read();
