@@ -143,6 +143,7 @@ login_User (userType     user_Database[],
  *                             user_Database
  * @param user_ID - the ID whose uniqueness needs to be
  *                  checked
+ * @return TRUE if ID is unique, FALSE otherwise
 */
 boolean
 check_Unique_User_ID (userType   user_Database[],
@@ -160,7 +161,7 @@ check_Unique_User_ID (userType   user_Database[],
 	index = 0;
 	
     // loop through the entire array except when the ID is found in the array
-	while (index < user_Database_Size && flag == FALSE)
+	while (index < user_Database_Size && flag == TRUE)
     {
         // stops the loop when it finds the ID in the array
 		if (user_Database[index].user_ID == user_ID)

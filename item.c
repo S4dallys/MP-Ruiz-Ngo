@@ -330,33 +330,6 @@ give_Item_Index_Via_ID (itemType   item_Database[],
     return index;
 }
 
-int
-give_Item_Index_Via_ID_Ordertype (orderType   item_Database[],
-                        long long  itemID,
-                        int        item_Database_Count)
-{
-    // local variable declaration
-    int index;  // receptacle for index of item
-    int i; // indexing variable for later loop
-
-    index = -1;  // initialization of index
-    i = 0;       // initialization of indexing variable
-
-    // looping through the array until it reaches the end
-    // or an instance has been found
-    while (i < item_Database_Count && index == -1)
-    {
-        // flags an instance of item_ID in the array
-        if (item_Database[i].item.product_ID == itemID)
-            index = i;
-
-        // increments an index    
-        else i++;
-    }
-    
-    return index;
-}
-
 /**
  * give_Item_Index_Via_ID_In_Cart gives the index of an item 
  * structure within an array of order structures
