@@ -13,7 +13,7 @@
  * @return TRUE if the data is correctly formatted and uncorrupted; FALSE, otherwise
  * Precondition: Files are in correct form and are uncorrupted.
 */
-boolean
+void
 initialize_User_Database (FILE *    user_File_Pointer,
                           userType  user_Database[],
                           int *     user_Database_Count)
